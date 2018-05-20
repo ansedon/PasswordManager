@@ -28,7 +28,11 @@
     <servlet-name>mvc-dispatcher</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+  <!-- session管理监听 -->
+  <listener>
+    <listener-class>interceptor.SessionManageListener</listener-class>
+  </listener>
   <session-config>
-    <session-timeout>0</session-timeout>
+    <session-timeout>30</session-timeout>
   </session-config>
 </web-app>

@@ -1,4 +1,4 @@
-package Json;
+package json;
 
 public class ParentResponse {
     public String result;

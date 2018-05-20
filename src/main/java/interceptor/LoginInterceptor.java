@@ -1,6 +1,6 @@
 package interceptor;
 
-import Json.Session;
+import json.Session;
 import model.UserEntity;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

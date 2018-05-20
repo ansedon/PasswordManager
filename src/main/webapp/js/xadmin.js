@@ -131,11 +131,12 @@ function tabClick(title){
         if(lis[i].innerHTML==title){
             var len=$(lis[i]).parents('li').length;
             if($(lis[i]).parents('li').hasClass('open')){
+                for(var j=0;j<len-1;j++){
+                    $(lis[i]).parents('li')[j].click();
+                }
                 return;
-            }
-            for(var i=0;i<len-1;i++){
-                $(lis[i]).parents('li')[i].click();
-            }
+            }else
+                $(lis[i]).parents('li').click();
         }
     }
 }

@@ -1,4 +1,4 @@
-package Json;
+package json;
 
 public class Session {
     public static String USER="CurrentUser";

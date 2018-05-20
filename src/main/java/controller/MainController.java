@@ -1,6 +1,6 @@
 package controller;
 
-import Json.Session;
+import json.Session;
 import model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,11 +27,6 @@ public class MainController {
     @RequestMapping(value="/member-list",method = RequestMethod.GET)
     public String home1(){
         return "member-list";
-    }
-
-    @RequestMapping(value="/welcome",method = RequestMethod.GET)
-    public String home2(){
-        return "welcome";
     }
 
     @RequestMapping(value = "/getAllUser",method = RequestMethod.POST)
