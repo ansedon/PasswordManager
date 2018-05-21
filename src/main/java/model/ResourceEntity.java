@@ -2,6 +2,7 @@ package model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 @Entity
 @Table(name = "resource", schema = "passworddata", catalog = "")
@@ -17,6 +18,13 @@ public class ResourceEntity {
     private int typeId;
     private Timestamp createTime;
     private Byte isDeleted;
+    private Collection<PasswordEntity> passwordsById;
+    private Collection<PasswordEntity> passwordsById_0;
+    private ResourceTypeEntity resourceTypeByTypeId;
+    private ResourceTypeEntity resourceTypeByTypeId_0;
+    private Collection<ResourceGroupEntity> resourceGroupsById;
+    private Collection<ResourceGroupEntity> resourceGroupsById_0;
+    private Collection<ResourceGroupEntity> resourceGroupsById_1;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -164,5 +172,70 @@ public class ResourceEntity {
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (isDeleted != null ? isDeleted.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "resourceByResourceId")
+    public Collection<PasswordEntity> getPasswordsById() {
+        return passwordsById;
+    }
+
+    public void setPasswordsById(Collection<PasswordEntity> passwordsById) {
+        this.passwordsById = passwordsById;
+    }
+
+    @OneToMany(mappedBy = "resourceByResourceId_0")
+    public Collection<PasswordEntity> getPasswordsById_0() {
+        return passwordsById_0;
+    }
+
+    public void setPasswordsById_0(Collection<PasswordEntity> passwordsById_0) {
+        this.passwordsById_0 = passwordsById_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public ResourceTypeEntity getResourceTypeByTypeId() {
+        return resourceTypeByTypeId;
+    }
+
+    public void setResourceTypeByTypeId(ResourceTypeEntity resourceTypeByTypeId) {
+        this.resourceTypeByTypeId = resourceTypeByTypeId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "type_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public ResourceTypeEntity getResourceTypeByTypeId_0() {
+        return resourceTypeByTypeId_0;
+    }
+
+    public void setResourceTypeByTypeId_0(ResourceTypeEntity resourceTypeByTypeId_0) {
+        this.resourceTypeByTypeId_0 = resourceTypeByTypeId_0;
+    }
+
+    @OneToMany(mappedBy = "resourceByResId")
+    public Collection<ResourceGroupEntity> getResourceGroupsById() {
+        return resourceGroupsById;
+    }
+
+    public void setResourceGroupsById(Collection<ResourceGroupEntity> resourceGroupsById) {
+        this.resourceGroupsById = resourceGroupsById;
+    }
+
+    @OneToMany(mappedBy = "resourceByResId_0")
+    public Collection<ResourceGroupEntity> getResourceGroupsById_0() {
+        return resourceGroupsById_0;
+    }
+
+    public void setResourceGroupsById_0(Collection<ResourceGroupEntity> resourceGroupsById_0) {
+        this.resourceGroupsById_0 = resourceGroupsById_0;
+    }
+
+    @OneToMany(mappedBy = "resourceByResId_1")
+    public Collection<ResourceGroupEntity> getResourceGroupsById_1() {
+        return resourceGroupsById_1;
+    }
+
+    public void setResourceGroupsById_1(Collection<ResourceGroupEntity> resourceGroupsById_1) {
+        this.resourceGroupsById_1 = resourceGroupsById_1;
     }
 }

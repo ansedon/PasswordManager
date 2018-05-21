@@ -2,6 +2,7 @@ package model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 @Entity
 @Table(name = "role", schema = "passworddata", catalog = "")
@@ -15,6 +16,20 @@ public class RoleEntity {
     private Integer modifierId;
     private int privilegeId;
     private Byte isDeleted;
+    private Collection<LoginLogEntity> loginLogsById;
+    private Collection<LoginLogEntity> loginLogsById_0;
+    private Collection<LoginLogEntity> loginLogsById_1;
+    private UserEntity userByCreatorId;
+    private UserEntity userByCreatorId_0;
+    private UserEntity userByCreatorId_1;
+    private UserEntity userByModifierId;
+    private UserEntity userByModifierId_0;
+    private UserEntity userByModifierId_1;
+    private PrivilegeEntity privilegeByPrivilegeId;
+    private PrivilegeEntity privilegeByPrivilegeId_0;
+    private Collection<UserEntity> usersById;
+    private Collection<UserEntity> usersById_0;
+    private Collection<UserEntity> usersById_1;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -138,5 +153,139 @@ public class RoleEntity {
         result = 31 * result + privilegeId;
         result = 31 * result + (isDeleted != null ? isDeleted.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "roleByRoleId")
+    public Collection<LoginLogEntity> getLoginLogsById() {
+        return loginLogsById;
+    }
+
+    public void setLoginLogsById(Collection<LoginLogEntity> loginLogsById) {
+        this.loginLogsById = loginLogsById;
+    }
+
+    @OneToMany(mappedBy = "roleByRoleId_0")
+    public Collection<LoginLogEntity> getLoginLogsById_0() {
+        return loginLogsById_0;
+    }
+
+    public void setLoginLogsById_0(Collection<LoginLogEntity> loginLogsById_0) {
+        this.loginLogsById_0 = loginLogsById_0;
+    }
+
+    @OneToMany(mappedBy = "roleByRoleId_1")
+    public Collection<LoginLogEntity> getLoginLogsById_1() {
+        return loginLogsById_1;
+    }
+
+    public void setLoginLogsById_1(Collection<LoginLogEntity> loginLogsById_1) {
+        this.loginLogsById_1 = loginLogsById_1;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByCreatorId() {
+        return userByCreatorId;
+    }
+
+    public void setUserByCreatorId(UserEntity userByCreatorId) {
+        this.userByCreatorId = userByCreatorId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByCreatorId_0() {
+        return userByCreatorId_0;
+    }
+
+    public void setUserByCreatorId_0(UserEntity userByCreatorId_0) {
+        this.userByCreatorId_0 = userByCreatorId_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByCreatorId_1() {
+        return userByCreatorId_1;
+    }
+
+    public void setUserByCreatorId_1(UserEntity userByCreatorId_1) {
+        this.userByCreatorId_1 = userByCreatorId_1;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id",insertable = false,updatable = false)
+    public UserEntity getUserByModifierId() {
+        return userByModifierId;
+    }
+
+    public void setUserByModifierId(UserEntity userByModifierId) {
+        this.userByModifierId = userByModifierId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id",insertable = false,updatable = false)
+    public UserEntity getUserByModifierId_0() {
+        return userByModifierId_0;
+    }
+
+    public void setUserByModifierId_0(UserEntity userByModifierId_0) {
+        this.userByModifierId_0 = userByModifierId_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id",insertable = false,updatable = false)
+    public UserEntity getUserByModifierId_1() {
+        return userByModifierId_1;
+    }
+
+    public void setUserByModifierId_1(UserEntity userByModifierId_1) {
+        this.userByModifierId_1 = userByModifierId_1;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "privilege_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public PrivilegeEntity getPrivilegeByPrivilegeId() {
+        return privilegeByPrivilegeId;
+    }
+
+    public void setPrivilegeByPrivilegeId(PrivilegeEntity privilegeByPrivilegeId) {
+        this.privilegeByPrivilegeId = privilegeByPrivilegeId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "privilege_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public PrivilegeEntity getPrivilegeByPrivilegeId_0() {
+        return privilegeByPrivilegeId_0;
+    }
+
+    public void setPrivilegeByPrivilegeId_0(PrivilegeEntity privilegeByPrivilegeId_0) {
+        this.privilegeByPrivilegeId_0 = privilegeByPrivilegeId_0;
+    }
+
+    @OneToMany(mappedBy = "roleByRoleId")
+    public Collection<UserEntity> getUsersById() {
+        return usersById;
+    }
+
+    public void setUsersById(Collection<UserEntity> usersById) {
+        this.usersById = usersById;
+    }
+
+    @OneToMany(mappedBy = "roleByRoleId_0")
+    public Collection<UserEntity> getUsersById_0() {
+        return usersById_0;
+    }
+
+    public void setUsersById_0(Collection<UserEntity> usersById_0) {
+        this.usersById_0 = usersById_0;
+    }
+
+    @OneToMany(mappedBy = "roleByRoleId_1")
+    public Collection<UserEntity> getUsersById_1() {
+        return usersById_1;
+    }
+
+    public void setUsersById_1(Collection<UserEntity> usersById_1) {
+        this.usersById_1 = usersById_1;
     }
 }

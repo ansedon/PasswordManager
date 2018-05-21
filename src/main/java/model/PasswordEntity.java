@@ -2,6 +2,7 @@ package model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 @Entity
 @Table(name = "password", schema = "passworddata", catalog = "")
@@ -16,6 +17,16 @@ public class PasswordEntity {
     private Timestamp expireTime;
     private int resourceId;
     private Byte isDeleted;
+    private Collection<OperationEntity> operationsById;
+    private Collection<OperationEntity> operationsById_0;
+    private UserEntity userByCreatorId;
+    private UserEntity userByCreatorId_0;
+    private UserEntity userByCreatorId_1;
+    private UserEntity userByModifierId;
+    private UserEntity userByModifierId_0;
+    private UserEntity userByModifierId_1;
+    private ResourceEntity resourceByResourceId;
+    private ResourceEntity resourceByResourceId_0;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -151,5 +162,103 @@ public class PasswordEntity {
         result = 31 * result + resourceId;
         result = 31 * result + (isDeleted != null ? isDeleted.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "passwordByPawId")
+    public Collection<OperationEntity> getOperationsById() {
+        return operationsById;
+    }
+
+    public void setOperationsById(Collection<OperationEntity> operationsById) {
+        this.operationsById = operationsById;
+    }
+
+    @OneToMany(mappedBy = "passwordByPawId_0")
+    public Collection<OperationEntity> getOperationsById_0() {
+        return operationsById_0;
+    }
+
+    public void setOperationsById_0(Collection<OperationEntity> operationsById_0) {
+        this.operationsById_0 = operationsById_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByCreatorId() {
+        return userByCreatorId;
+    }
+
+    public void setUserByCreatorId(UserEntity userByCreatorId) {
+        this.userByCreatorId = userByCreatorId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByCreatorId_0() {
+        return userByCreatorId_0;
+    }
+
+    public void setUserByCreatorId_0(UserEntity userByCreatorId_0) {
+        this.userByCreatorId_0 = userByCreatorId_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByCreatorId_1() {
+        return userByCreatorId_1;
+    }
+
+    public void setUserByCreatorId_1(UserEntity userByCreatorId_1) {
+        this.userByCreatorId_1 = userByCreatorId_1;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id",insertable = false,updatable = false)
+    public UserEntity getUserByModifierId() {
+        return userByModifierId;
+    }
+
+    public void setUserByModifierId(UserEntity userByModifierId) {
+        this.userByModifierId = userByModifierId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id",insertable = false,updatable = false)
+    public UserEntity getUserByModifierId_0() {
+        return userByModifierId_0;
+    }
+
+    public void setUserByModifierId_0(UserEntity userByModifierId_0) {
+        this.userByModifierId_0 = userByModifierId_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id",insertable = false,updatable = false)
+    public UserEntity getUserByModifierId_1() {
+        return userByModifierId_1;
+    }
+
+    public void setUserByModifierId_1(UserEntity userByModifierId_1) {
+        this.userByModifierId_1 = userByModifierId_1;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "resource_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public ResourceEntity getResourceByResourceId() {
+        return resourceByResourceId;
+    }
+
+    public void setResourceByResourceId(ResourceEntity resourceByResourceId) {
+        this.resourceByResourceId = resourceByResourceId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "resource_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public ResourceEntity getResourceByResourceId_0() {
+        return resourceByResourceId_0;
+    }
+
+    public void setResourceByResourceId_0(ResourceEntity resourceByResourceId_0) {
+        this.resourceByResourceId_0 = resourceByResourceId_0;
     }
 }

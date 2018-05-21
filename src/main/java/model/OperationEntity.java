@@ -12,6 +12,11 @@ public class OperationEntity {
     private String originPaw;
     private Timestamp modifiedTime;
     private int modifierId;
+    private PasswordEntity passwordByPawId;
+    private PasswordEntity passwordByPawId_0;
+    private UserEntity userByModifierId;
+    private UserEntity userByModifierId_0;
+    private UserEntity userByModifierId_1;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -100,5 +105,55 @@ public class OperationEntity {
         result = 31 * result + (modifiedTime != null ? modifiedTime.hashCode() : 0);
         result = 31 * result + modifierId;
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "paw_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public PasswordEntity getPasswordByPawId() {
+        return passwordByPawId;
+    }
+
+    public void setPasswordByPawId(PasswordEntity passwordByPawId) {
+        this.passwordByPawId = passwordByPawId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "paw_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public PasswordEntity getPasswordByPawId_0() {
+        return passwordByPawId_0;
+    }
+
+    public void setPasswordByPawId_0(PasswordEntity passwordByPawId_0) {
+        this.passwordByPawId_0 = passwordByPawId_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByModifierId() {
+        return userByModifierId;
+    }
+
+    public void setUserByModifierId(UserEntity userByModifierId) {
+        this.userByModifierId = userByModifierId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByModifierId_0() {
+        return userByModifierId_0;
+    }
+
+    public void setUserByModifierId_0(UserEntity userByModifierId_0) {
+        this.userByModifierId_0 = userByModifierId_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByModifierId_1() {
+        return userByModifierId_1;
+    }
+
+    public void setUserByModifierId_1(UserEntity userByModifierId_1) {
+        this.userByModifierId_1 = userByModifierId_1;
     }
 }

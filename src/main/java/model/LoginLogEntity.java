@@ -13,8 +13,13 @@ public class LoginLogEntity {
     private String browserInfo;
     private String osInfo;
     private Timestamp createTime;
+    private UserEntity userByUserId;
+    private UserEntity userByUserId_0;
+    private UserEntity userByUserId_1;
+    private RoleEntity roleByRoleId;
+    private RoleEntity roleByRoleId_0;
+    private RoleEntity roleByRoleId_1;
 
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     public int getId() {
@@ -113,5 +118,65 @@ public class LoginLogEntity {
         result = 31 * result + (osInfo != null ? osInfo.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByUserId() {
+        return userByUserId;
+    }
+
+    public void setUserByUserId(UserEntity userByUserId) {
+        this.userByUserId = userByUserId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByUserId_0() {
+        return userByUserId_0;
+    }
+
+    public void setUserByUserId_0(UserEntity userByUserId_0) {
+        this.userByUserId_0 = userByUserId_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByUserId_1() {
+        return userByUserId_1;
+    }
+
+    public void setUserByUserId_1(UserEntity userByUserId_1) {
+        this.userByUserId_1 = userByUserId_1;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public RoleEntity getRoleByRoleId() {
+        return roleByRoleId;
+    }
+
+    public void setRoleByRoleId(RoleEntity roleByRoleId) {
+        this.roleByRoleId = roleByRoleId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public RoleEntity getRoleByRoleId_0() {
+        return roleByRoleId_0;
+    }
+
+    public void setRoleByRoleId_0(RoleEntity roleByRoleId_0) {
+        this.roleByRoleId_0 = roleByRoleId_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public RoleEntity getRoleByRoleId_1() {
+        return roleByRoleId_1;
+    }
+
+    public void setRoleByRoleId_1(RoleEntity roleByRoleId_1) {
+        this.roleByRoleId_1 = roleByRoleId_1;
     }
 }

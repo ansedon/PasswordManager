@@ -1,6 +1,7 @@
 package model;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "privilege", schema = "passworddata", catalog = "")
@@ -15,6 +16,8 @@ public class PrivilegeEntity {
     private Byte groupAdd;
     private Byte groupEdit;
     private Byte groupDelete;
+    private Collection<RoleEntity> rolesById;
+    private Collection<RoleEntity> rolesById_0;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -150,5 +153,23 @@ public class PrivilegeEntity {
         result = 31 * result + (groupEdit != null ? groupEdit.hashCode() : 0);
         result = 31 * result + (groupDelete != null ? groupDelete.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "privilegeByPrivilegeId")
+    public Collection<RoleEntity> getRolesById() {
+        return rolesById;
+    }
+
+    public void setRolesById(Collection<RoleEntity> rolesById) {
+        this.rolesById = rolesById;
+    }
+
+    @OneToMany(mappedBy = "privilegeByPrivilegeId_0")
+    public Collection<RoleEntity> getRolesById_0() {
+        return rolesById_0;
+    }
+
+    public void setRolesById_0(Collection<RoleEntity> rolesById_0) {
+        this.rolesById_0 = rolesById_0;
     }
 }

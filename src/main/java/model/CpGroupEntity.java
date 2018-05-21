@@ -2,10 +2,11 @@ package model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 @Entity
-@Table(name = "group", schema = "passworddata", catalog = "")
-public class GroupEntity {
+@Table(name = "cp_group", schema = "passworddata", catalog = "")
+public class CpGroupEntity {
     private int id;
     private String name;
     private String description;
@@ -16,6 +17,14 @@ public class GroupEntity {
     private Timestamp modifiedTime;
     private Integer modifierId;
     private Byte isDeleted;
+    private UserEntity userByCreatorId;
+    private UserEntity userByCreatorId_0;
+    private UserEntity userByModifierId;
+    private UserEntity userByModifierId_0;
+    private Collection<ResourceGroupEntity> resourceGroupsById;
+    private Collection<ResourceGroupEntity> resourceGroupsById_0;
+    private Collection<UserGroupEntity> userGroupsById;
+    private Collection<UserGroupEntity> userGroupsById_0;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -122,7 +131,7 @@ public class GroupEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GroupEntity that = (GroupEntity) o;
+        CpGroupEntity that = (CpGroupEntity) o;
 
         if (id != that.id) return false;
         if (creatorId != that.creatorId) return false;
@@ -152,5 +161,81 @@ public class GroupEntity {
         result = 31 * result + (modifierId != null ? modifierId.hashCode() : 0);
         result = 31 * result + (isDeleted != null ? isDeleted.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByCreatorId() {
+        return userByCreatorId;
+    }
+
+    public void setUserByCreatorId(UserEntity userByCreatorId) {
+        this.userByCreatorId = userByCreatorId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public UserEntity getUserByCreatorId_0() {
+        return userByCreatorId_0;
+    }
+
+    public void setUserByCreatorId_0(UserEntity userByCreatorId_0) {
+        this.userByCreatorId_0 = userByCreatorId_0;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id",insertable = false,updatable = false)
+    public UserEntity getUserByModifierId() {
+        return userByModifierId;
+    }
+
+    public void setUserByModifierId(UserEntity userByModifierId) {
+        this.userByModifierId = userByModifierId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "modifier_id", referencedColumnName = "id",insertable = false,updatable = false)
+    public UserEntity getUserByModifierId_0() {
+        return userByModifierId_0;
+    }
+
+    public void setUserByModifierId_0(UserEntity userByModifierId_0) {
+        this.userByModifierId_0 = userByModifierId_0;
+    }
+
+    @OneToMany(mappedBy = "cpGroupByGroupId")
+    public Collection<ResourceGroupEntity> getResourceGroupsById() {
+        return resourceGroupsById;
+    }
+
+    public void setResourceGroupsById(Collection<ResourceGroupEntity> resourceGroupsById) {
+        this.resourceGroupsById = resourceGroupsById;
+    }
+
+    @OneToMany(mappedBy = "cpGroupByGroupId_0")
+    public Collection<ResourceGroupEntity> getResourceGroupsById_0() {
+        return resourceGroupsById_0;
+    }
+
+    public void setResourceGroupsById_0(Collection<ResourceGroupEntity> resourceGroupsById_0) {
+        this.resourceGroupsById_0 = resourceGroupsById_0;
+    }
+
+    @OneToMany(mappedBy = "cpGroupByGroupId")
+    public Collection<UserGroupEntity> getUserGroupsById() {
+        return userGroupsById;
+    }
+
+    public void setUserGroupsById(Collection<UserGroupEntity> userGroupsById) {
+        this.userGroupsById = userGroupsById;
+    }
+
+    @OneToMany(mappedBy = "cpGroupByGroupId_0")
+    public Collection<UserGroupEntity> getUserGroupsById_0() {
+        return userGroupsById_0;
+    }
+
+    public void setUserGroupsById_0(Collection<UserGroupEntity> userGroupsById_0) {
+        this.userGroupsById_0 = userGroupsById_0;
     }
 }

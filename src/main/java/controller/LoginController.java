@@ -4,7 +4,6 @@ import interceptor.SessionManageListener;
 import json.ParentResponse;
 import json.Session;
 import model.LoginLogEntity;
-import model.RoleEntity;
 import model.UserEntity;
 import nl.bitwalker.useragentutils.Browser;
 import nl.bitwalker.useragentutils.OperatingSystem;

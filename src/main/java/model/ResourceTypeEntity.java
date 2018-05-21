@@ -2,6 +2,7 @@ package model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 
 @Entity
 @Table(name = "resource_type", schema = "passworddata", catalog = "")
@@ -10,6 +11,8 @@ public class ResourceTypeEntity {
     private String name;
     private String icon;
     private Timestamp createTime;
+    private Collection<ResourceEntity> resourcesById;
+    private Collection<ResourceEntity> resourcesById_0;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -73,5 +76,23 @@ public class ResourceTypeEntity {
         result = 31 * result + (icon != null ? icon.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "resourceTypeByTypeId")
+    public Collection<ResourceEntity> getResourcesById() {
+        return resourcesById;
+    }
+
+    public void setResourcesById(Collection<ResourceEntity> resourcesById) {
+        this.resourcesById = resourcesById;
+    }
+
+    @OneToMany(mappedBy = "resourceTypeByTypeId_0")
+    public Collection<ResourceEntity> getResourcesById_0() {
+        return resourcesById_0;
+    }
+
+    public void setResourcesById_0(Collection<ResourceEntity> resourcesById_0) {
+        this.resourcesById_0 = resourcesById_0;
     }
 }

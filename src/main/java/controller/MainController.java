@@ -29,8 +29,8 @@ public class MainController {
         return "member-list";
     }
 
-    @RequestMapping(value = "/getAllUser",method = RequestMethod.POST)
-    public @ResponseBody List<UserEntity> getAllUser(ModelMap modelMap, HttpSession session){
+    @RequestMapping(value = "/getAllUser",method = RequestMethod.GET)
+    public @ResponseBody List<UserEntity> getAllUser(){
        List<UserEntity> list= userService.findAll();
        //modelMap.addAttribute("user",list);
        return list;
