@@ -84,8 +84,6 @@ public class LoginController {
                 e.printStackTrace();
             }
         }
-        RoleEntity roleEntity = roleService.getRoleEntityById(userEntity.getRoleId());
-
         //登陆日志
         LoginLogEntity loginLogEntity = new LoginLogEntity();
         loginLogEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
