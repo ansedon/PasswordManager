@@ -1,5 +1,6 @@
 package controller;
 
+import json.IdRequest;
 import json.ParentResponse;
 import json.ResourceParam;
 import json.ResourceResponse;
@@ -8,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 import service.ResourceService;
+import tool.ReflectUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,27 +23,103 @@ public class ResourceController {
     @Autowired
     ResourceService resourceService;
 
-    @ResponseBody
     @RequestMapping(value = "/resource/list", method = RequestMethod.GET)
-    public ResponseEntity<Object> getResourceList() {
-        ResourceParam resourceParam = new ResourceParam();
-        resourceParam.page = 0;
-        resourceParam.limit = 10;
-        resourceParam.name = "MySql";
-        resourceParam.groupId=1;
-        resourceParam.typeId=1;
+    public String resource() {
+        return "resource_list";
+    }
+
+    @RequestMapping(value = "/resource/list/edit/{id}",method = RequestMethod.GET)
+    public String edit(@PathVariable("id")int id, ModelMap modelMap){
+        ResourceEntity resourceEntity=resourceService.findResourceEntityById(id);
+        ResourceResponse resourceResponse=new ResourceResponse(resourceEntity);
+        modelMap.put("resourceEntity",resourceResponse);
+        return "resource_edit";
+    }
+
+    @RequestMapping(value = "/resource/list/update",method = RequestMethod.POST)
+    public ResponseEntity<Object> update(@RequestBody ResourceEntity resourceEntity){
+        ParentResponse resp = new ParentResponse();
+        resourceService.update(resourceEntity);
+        resp.result = "OK";
+        resp.msg = "操作成功！";
+        return new ResponseEntity<Object>(resp, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/resource/list/one",method = RequestMethod.POST)
+    public ResponseEntity<Object> getResourceById(@RequestBody IdRequest idRequest){
         ParentResponse resp = new ParentResponse();
         resp.data = new ArrayList<ResourceResponse>();
+        int id=idRequest.id;
+        if(id<=0){
+            resp.result = "Fail";
+            resp.msg = "id错误！";
+        }
+        resp.data.add(new ResourceResponse(resourceService.findResourceEntityById(id)));
+        resp.result = "OK";
+        resp.msg = "操作成功！";
+        return new ResponseEntity<Object>(resp, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/resource/list/all", method = RequestMethod.GET)
+    public ResponseEntity<Object> getResourceList(HttpServletRequest request) {
+        ResourceParam resourceParam = new ResourceParam();
+        ReflectUtils.convert(resourceParam, request);
+        if (resourceParam.page > 0)
+            resourceParam.page -= 1;
+        ParentResponse resp = new ParentResponse();
+        resp.data = new ArrayList<ResourceResponse>();
+        int count = resourceService.countByCondition(resourceParam);
+        if (count > 0)
+            resp.count = count;
         List<ResourceEntity> resourceEntities = resourceService.findByConditions(resourceParam);
         if (resourceEntities != null) {
             for (ResourceEntity res : resourceEntities) {
-                ResourceResponse resourceResponse=new ResourceResponse(res);
+                ResourceResponse resourceResponse = new ResourceResponse(res);
+                resourceResponse.typeName = res.getResourceTypeByTypeId().getName();
                 resp.data.add(resourceResponse);
             }
-            resp.count = resourceEntities.size();
         }
         resp.result = "OK";
         resp.msg = "操作成功！";
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/resource/list/delete", method = RequestMethod.POST)
+    public ParentResponse deleteResource(@RequestBody IdRequest idRequest) {
+        ParentResponse resp = new ParentResponse();
+        int id = idRequest.id;
+        if (id <= 0) {
+            resp.result = "Fail";
+            resp.msg = "删除失败！";
+            return resp;
+        }
+        int result = resourceService.deleteResourceById(id);
+        if (result > 0)
+            resp.result = "OK";
+        else
+            resp.msg = "删除失败！";
+        return resp;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/resource/list/add", method = RequestMethod.POST)
+    public ParentResponse addResource(HttpServletRequest request) {
+        ParentResponse resp = new ParentResponse();
+        int id = (int) request.getAttribute("id");
+        if (id <= 0) {
+            resp.result = "Fail";
+            resp.msg = "删除失败！";
+            return resp;
+        }
+        int result = resourceService.deleteResourceById(id);
+        if (result > 0)
+            resp.result = "OK";
+        else
+            resp.msg = "删除失败！";
+        return resp;
     }
 }

@@ -25,7 +25,7 @@ public class HomeController {
         modelMap.put("user",userEntity);
         LoginLogEntity loginLogEntity=loginLogService.findOneByUserId(userEntity.getId());
         if(loginLogEntity!=null)
-            modelMap.put("lastLoginTime",loginLogEntity.getCreateTime());
+            modelMap.put("lastLoginTime",loginLogEntity.getCreateTime().toString().substring(0,19));
         return "welcome";
     }
 

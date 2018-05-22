@@ -1,10 +1,11 @@
 $(function () {
     //加载弹出层
-    layui.use(['form','element','table'],
+    layui.use(['form','element','table','laydate'],
     function() {
         layer = layui.layer;
         element = layui.element;
     });
+
 
     //触发事件
   var tab = {
@@ -203,3 +204,6 @@ function ajax(url,data,callback){
         }
     })
 }
+
+
+
