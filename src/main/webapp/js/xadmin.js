@@ -151,7 +151,7 @@ function tabClick(title){
     w       弹出层宽度（缺省调默认值）
     h       弹出层高度（缺省调默认值）
 */
-function x_admin_show(title,url,w,h){
+function layer_show(title, url, w, h){
     if (title == null || title == '') {
         title=false;
     };

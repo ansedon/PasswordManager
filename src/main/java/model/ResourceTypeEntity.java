@@ -9,10 +9,11 @@ import java.util.Collection;
 public class ResourceTypeEntity {
     private int id;
     private String name;
-    private String icon;
     private Timestamp createTime;
     private Collection<ResourceEntity> resourcesById;
     private Collection<ResourceEntity> resourcesById_0;
+    private Byte isDeleted;
+    private String description;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -35,16 +36,6 @@ public class ResourceTypeEntity {
     }
 
     @Basic
-    @Column(name = "icon", nullable = false, length = 100)
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    @Basic
     @Column(name = "create_time", nullable = true)
     public Timestamp getCreateTime() {
         return createTime;
@@ -62,8 +53,8 @@ public class ResourceTypeEntity {
         ResourceTypeEntity that = (ResourceTypeEntity) o;
 
         if (id != that.id) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (icon != null ? !icon.equals(that.icon) : that.icon != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
 
         return true;
@@ -73,7 +64,7 @@ public class ResourceTypeEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (icon != null ? icon.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         return result;
     }
@@ -94,5 +85,25 @@ public class ResourceTypeEntity {
 
     public void setResourcesById_0(Collection<ResourceEntity> resourcesById_0) {
         this.resourcesById_0 = resourcesById_0;
+    }
+
+    @Basic
+    @Column(name = "is_deleted", nullable = false)
+    public Byte getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Byte isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    @Basic
+    @Column(name = "description", nullable = false, length = 500)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

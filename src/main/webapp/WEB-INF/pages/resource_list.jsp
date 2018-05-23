@@ -37,16 +37,16 @@
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
             <input type="text" name="name" placeholder="请输入资源名" autocomplete="off" class="layui-input">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
+            <input class="layui-input" placeholder="开始日" name="startTime" id="start">
+            <input class="layui-input" placeholder="截止日" name="endTime" id="end">
             <div class="layui-input-inline">
-                <select name="select" id="select" lay-verify="select"></select>
+                <select name="typeId" id="typeId" lay-verify="select"></select>
             </div>
-            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <xblock>
-        <button class="layui-btn" onclick="x_admin_show('添加','./resource_edit.jsp',600,400)"><i class="layui-icon"></i>添加
+        <button class="layui-btn" onclick="layer_show('添加','/resource/list/add',600,400)"><i class="layui-icon"></i>添加
         </button>
     </xblock>
     <table class="layui-table" id="resourceTable" lay-filter="resourceTable"></table>
@@ -75,7 +75,7 @@
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">description</label>
             <div class="layui-input-block">
-                <textarea type="textarea" id="description" name="description"  lay-verify="required" class="layui-textarea"></textarea>
+                <textarea type="textarea" id="description" name="description" disabled lay-verify="required" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">

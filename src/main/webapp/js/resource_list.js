@@ -14,17 +14,30 @@ $(function  () {
             ,{field: 'createTime', title: 'Create Time',  sort: true}
             ,{field: '', title: 'Opertion',toolbar:'#bar'}
         ]]
-        //第一个实例
+
         table.render({
             elem: '#resourceTable'
             ,url: '/resource/list/all' //数据接口
-            ,where:{typeId:1,groupId:1}
             ,page: true //开启分页
             ,cols: cols
         });
         mymod.renderLaydate('start','end','datetime');
-        mymod.renderSelect('select',[{id:1,name:'a'},{id:2,name:'b'}],'id','name','资源类型');
+        ajax("/resource/type/all",null,function (res) {
+            mymod.renderSelect('typeId',res.data,'id','name','资源类型');
+        })
 
+
+        //监听搜索
+        form.on('submit(search)',function (data) {
+            table.reload('resourceTable',{
+                url: '/resource/list/all' //数据接口
+                ,where:data.field
+                ,page: true //开启分页
+                ,cols: cols
+            })
+            return false;
+        })
+        
         //监听工具条
         table.on('tool(resourceTable)', function(obj){
             var data = obj.data;
@@ -56,7 +69,7 @@ $(function  () {
                     ajax('/resource/list/delete',{id:data.id},function (msg) {
                         layer.close(index);
                         if(msg.result=="OK")
-                            layer.msg("删除成功！",function () {
+                            layer.msg("删除成功！",{time:500},function () {
                             $(".layui-laypage-btn").click();
                         })
                         else
@@ -64,54 +77,8 @@ $(function  () {
                     })
                 });
             } else if(layEvent === 'edit'){ //编辑
-                x_admin_show("编辑资源","/resource/list/edit/"+data.id,500,600);
+                layer_show("编辑资源","/resource/list/edit/"+data.id,500,600);
             }
         });
     });
-
-
-    // /*用户-停用*/
-    // function member_stop(obj, id) {
-    //     layer.confirm('确认要停用吗？', function (index) {
-    //
-    //         if ($(obj).attr('title') == '启用') {
-    //
-    //             //发异步把用户状态进行更改
-    //             $(obj).attr('title', '停用')
-    //             $(obj).find('i').html('&#xe62f;');
-    //
-    //             $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-    //             layer.msg('已停用!', {icon: 5, time: 1000});
-    //
-    //         } else {
-    //             $(obj).attr('title', '启用')
-    //             $(obj).find('i').html('&#xe601;');
-    //
-    //             $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-    //             layer.msg('已启用!', {icon: 5, time: 1000});
-    //         }
-    //
-    //     });
-    // }
-    //
-    // /*用户-删除*/
-    // function member_del(obj, id) {
-    //     layer.confirm('确认要删除吗？', function (index) {
-    //         //发异步删除数据
-    //         $(obj).parents("tr").remove();
-    //         layer.msg('已删除!', {icon: 1, time: 1000});
-    //     });
-    // }
-    //
-    //
-    // function delAll(argument) {
-    //
-    //     var data = tableCheck.getData();
-    //
-    //     layer.confirm('确认要删除吗？' + data, function (index) {
-    //         //捉到所有被选中的，发异步进行删除
-    //         layer.msg('删除成功', {icon: 1});
-    //         $(".layui-form-checked").not('.header').parents('tr').remove();
-    //     });
-    // }
 })

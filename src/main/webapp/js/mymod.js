@@ -1,8 +1,7 @@
 //config的设置是全局的
 layui.config({
-    base: '/js/' //假设这是test.js所在的目录
+    base: '/js/'
 }).extend({ //设定模块别名
-    mymod: 'mymod'
 });
 
 layui.define(['laydate', 'form'], function (exports) {

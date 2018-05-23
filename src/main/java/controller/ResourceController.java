@@ -15,6 +15,7 @@ import service.ResourceService;
 import tool.ReflectUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,11 @@ public class ResourceController {
         return "resource_list";
     }
 
+    @RequestMapping(value = "/resource/list/add",method = RequestMethod.GET)
+    public String add(){
+        return "resource_add";
+    }
+
     @RequestMapping(value = "/resource/list/edit/{id}",method = RequestMethod.GET)
     public String edit(@PathVariable("id")int id, ModelMap modelMap){
         ResourceEntity resourceEntity=resourceService.findResourceEntityById(id);
@@ -39,6 +45,14 @@ public class ResourceController {
     @RequestMapping(value = "/resource/list/update",method = RequestMethod.POST)
     public ResponseEntity<Object> update(@RequestBody ResourceEntity resourceEntity){
         ParentResponse resp = new ParentResponse();
+        if(resourceEntity.getId()!=0){
+            ResourceEntity resourceEntity1=resourceService.findResourceEntityById(resourceEntity.getId());
+            resourceEntity.setCreateTime(resourceEntity1.getCreateTime());
+            resourceEntity.setIsDeleted(resourceEntity1.getIsDeleted());
+        }else{
+            resourceEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            resourceEntity.setIsDeleted((byte)0);
+        }
         resourceService.update(resourceEntity);
         resp.result = "OK";
         resp.msg = "操作成功！";
@@ -73,7 +87,7 @@ public class ResourceController {
         int count = resourceService.countByCondition(resourceParam);
         if (count > 0)
             resp.count = count;
-        List<ResourceEntity> resourceEntities = resourceService.findByConditions(resourceParam);
+        List<ResourceEntity> resourceEntities = resourceService.findByCondition(resourceParam);
         if (resourceEntities != null) {
             for (ResourceEntity res : resourceEntities) {
                 ResourceResponse resourceResponse = new ResourceResponse(res);
@@ -92,24 +106,6 @@ public class ResourceController {
     public ParentResponse deleteResource(@RequestBody IdRequest idRequest) {
         ParentResponse resp = new ParentResponse();
         int id = idRequest.id;
-        if (id <= 0) {
-            resp.result = "Fail";
-            resp.msg = "删除失败！";
-            return resp;
-        }
-        int result = resourceService.deleteResourceById(id);
-        if (result > 0)
-            resp.result = "OK";
-        else
-            resp.msg = "删除失败！";
-        return resp;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/resource/list/add", method = RequestMethod.POST)
-    public ParentResponse addResource(HttpServletRequest request) {
-        ParentResponse resp = new ParentResponse();
-        int id = (int) request.getAttribute("id");
         if (id <= 0) {
             resp.result = "Fail";
             resp.msg = "删除失败！";

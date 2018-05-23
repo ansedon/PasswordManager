@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>编辑资源</title>
+    <title>添加资源</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -25,38 +25,37 @@
 <body>
 <div class="x-body layui-anim layui-anim-up">
     <form class="layui-form">
-        <input type="hidden" name="id" lay-verify="required" value="${resourceEntity.id}" class="layui-input">
+        <input type="hidden" name="id" lay-verify="required" value="0" class="layui-input">
         <div class="layui-form-item">
             <label class="layui-form-label">name</label>
             <div class="layui-input-inline">
-                <input type="text" id="name" name="name" lay-verify="required" class="layui-input"
-                       value="${resourceEntity.name}">
+                <input type="text" id="name" name="name" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">ip</label>
             <div class="layui-input-inline">
-                <input type="text" id="ip" name="ip" lay-verify="required" value="${resourceEntity.ip}"
+                <input type="text" id="ip" name="ip" lay-verify="required"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">type</label>
             <div class="layui-input-inline">
-                <select class="layui-select" name="typeId" id="typeId" lay-verify="selected" data="${resourceEntity.typeId}"></select>
+                <select class="layui-select" name="typeId" id="typeId" lay-verify="selected"></select>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">description</label>
             <div class="layui-input-block">
                 <textarea type="textarea" id="description" name="description"
-                          class="layui-textarea">${resourceEntity.description}</textarea>
+                          class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">url</label>
             <div class="layui-input-inline">
-                <input type="text" id="url" name="url" value="${resourceEntity.url}"
+                <input type="text" id="url" name="url"
                        class="layui-input">
             </div>
         </div>
@@ -64,26 +63,26 @@
             <label class="layui-form-label">location</label>
             <div class="layui-input-inline">
                 <input type="text" id="location" name="location"
-                       value="${resourceEntity.location}" class="layui-input">
+                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">password policy</label>
             <div class="layui-input-inline">
                 <input type="text" id="pwdPolicy" name="pwdPolicy"
-                       value="${resourceEntity.pwdPolicy}" class="layui-input">
+                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">superkey</label>
             <div class="layui-input-block">
                 <textarea type="text" id="superkey" name="superkey"
-                          class="layui-textarea">${resourceEntity.superkey}</textarea>
+                          class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
-            <button class="layui-btn" lay-filter="edit" lay-submit>
-                修改
+            <button class="layui-btn" lay-filter="add" lay-submit>
+                添加
             </button>
             <button class="layui-btn" lay-filter="cancel" lay-submit>
                 取消
@@ -111,10 +110,10 @@
             });
 
             //监听提交
-            form.on('submit(edit)', function (data) {
+            form.on('submit(add)', function (data) {
                 ajax('/resource/list/update', data.field, function (res) {
                     if (res.result == "OK") {
-                        layer.msg('修改成功!', {time: 500}, function () {
+                        layer.msg('添加成功!', {time: 500}, function () {
                             //获得frame索引
                             var index = parent.layer.getFrameIndex(window.name);
                             //关闭当前frame
