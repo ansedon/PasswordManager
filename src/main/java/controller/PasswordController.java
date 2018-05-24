@@ -74,7 +74,7 @@ public class PasswordController {
 
     @ResponseBody
     @RequestMapping(value = "/password/list/all", method = RequestMethod.GET)
-    public ResponseEntity<Object> getTypeList(HttpServletRequest request, HttpSession session) {
+    public ResponseEntity<Object> getPasswordList(HttpServletRequest request, HttpSession session) {
         PasswordParam passwordParam = new PasswordParam();
         ReflectUtils.convert(passwordParam, request);
         if (passwordParam.page > 0)
@@ -106,7 +106,7 @@ public class PasswordController {
 
     @ResponseBody
     @RequestMapping(value = "/password/list/delete", method = RequestMethod.POST)
-    public ParentResponse deleteResourceType(@RequestBody IdRequest idRequest) {
+    public ParentResponse deletePassword(@RequestBody IdRequest idRequest) {
         ParentResponse resp = new ParentResponse();
         int id = idRequest.id;
         if (id <= 0) {

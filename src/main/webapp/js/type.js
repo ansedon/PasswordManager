@@ -50,6 +50,10 @@ $(function  () {
                         return false;
                     })
                 }
+                , cancel: function(){
+                    $("#name").val("");
+                    $("#description").val("");
+                }
             })
         })
 
@@ -119,6 +123,12 @@ $(function  () {
                             $("#add")[0].innerHTML="添加";
                             return false;
                         })
+                    }
+                    , cancel: function(){
+                        $('#id').val(0);
+                        $("#name").val("");
+                        $("#description").val("");
+                        $("#add")[0].innerHTML="添加";
                     }
                 })
             }

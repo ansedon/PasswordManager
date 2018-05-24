@@ -40,7 +40,7 @@ public class ResourceService {
             @Override
             public Predicate toPredicate(Root<ResourceEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> list = new ArrayList<Predicate>();
-                if (param.groupId != 0) {
+                if (param.groupId != 0&&param.groupId!=1) {
                     Join<ResourceEntity, ResourceGroupEntity> join = root.join("resourceGroupsById", JoinType.LEFT);
                     list.add(criteriaBuilder.equal(join.get("groupId"), param.groupId));
                 }
@@ -69,7 +69,7 @@ public class ResourceService {
             @Override
             public Predicate toPredicate(Root<ResourceEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> list = new ArrayList<Predicate>();
-                if (param.groupId != 0) {
+                if (param.groupId != 0&&param.groupId!=1) {
                     Join<ResourceEntity, ResourceGroupEntity> join = root.join("resourceGroupsById", JoinType.LEFT);
                     list.add(criteriaBuilder.equal(join.get("groupId"), param.groupId));
                 }

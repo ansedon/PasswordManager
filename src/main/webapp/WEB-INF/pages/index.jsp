@@ -101,7 +101,7 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a _href="echarts2.html">
+                        <a _href="group/list">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>群组列表</cite>
                         </a>

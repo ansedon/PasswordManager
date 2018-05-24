@@ -40,7 +40,7 @@ public class PasswordService {
                 if (param.id != 0) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), param.id));
                 }
-                if (param.groupId != 0) {
+                if (param.groupId != 0&&param.groupId!=1) {
                     Join<PasswordEntity, ResourceEntity> join = root.join("resourceByResourceId", JoinType.LEFT);
                     Join<ResourceEntity, ResourceGroupEntity> join1 = join.join("resourceGroupsById", JoinType.LEFT);
                     list.add(criteriaBuilder.equal(join1.get("groupId"), param.groupId));
@@ -76,7 +76,7 @@ public class PasswordService {
                 if (param.id != 0) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), param.id));
                 }
-                if (param.groupId != 0) {
+                if (param.groupId != 0&&param.groupId!=1) {
                     Join<PasswordEntity, ResourceEntity> join = root.join("resourceByResourceId", JoinType.LEFT);
                     Join<ResourceEntity, ResourceGroupEntity> join1 = join.join("resourceGroupsById", JoinType.LEFT);
                     list.add(criteriaBuilder.equal(join1.get("groupId"), param.groupId));
