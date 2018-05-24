@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.LoginLogService;
 import service.RoleService;
+import service.UserGroupService;
 import service.UserService;
 import tool.ForceLogoutUtils;
 import tool.IpAddressUtils;
@@ -36,6 +37,9 @@ public class LoginController {
 
     @Autowired
     LoginLogService loginLogService;
+
+    @Autowired
+    UserGroupService userGroupService;
 
     @Value("${privateKey}")
     private String privateKey;
@@ -114,6 +118,7 @@ public class LoginController {
                 ForceLogoutUtils.forceUserLogout(userEntity.getAccount());
         }
         session.setAttribute(Session.USER, userEntity);
+        session.setAttribute(Session.GROUPID,userGroupService.findByUserId(userEntity.getId()).getGroupId());
         SessionManageListener.sessionMap.put(userEntity.getAccount(), session);
         checkLoginResponse.result = "OK";
         return checkLoginResponse;
@@ -124,6 +129,4 @@ public class LoginController {
         session.invalidate();
         return "login";
     }
-
-
 }

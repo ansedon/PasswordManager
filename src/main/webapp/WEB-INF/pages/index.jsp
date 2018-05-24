@@ -53,7 +53,7 @@
         <ul id="nav">
             <li>
                 <a href="javascript:;">
-                    <i class="iconfont">&#xe6b8;</i>
+                    <i class="iconfont">&#xe70c;</i>
                     <cite>资源管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
@@ -80,22 +80,22 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a _href="order-list.html">
+                        <a _href="password/list">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>口令评估</cite>
+                            <cite>口令列表</cite>
                         </a>
                     </li>
                     <li>
                         <a _href="order-list.html">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>口令列表</cite>
+                            <cite>口令评估</cite>
                         </a>
                     </li>
                 </ul>
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="iconfont">&#xe6ce;</i>
+                    <i class="layui-icon">&#xe613;</i>
                     <cite>群组管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>

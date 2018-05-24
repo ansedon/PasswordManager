@@ -1,9 +1,6 @@
 package controller;
 
-import json.IdRequest;
-import json.ParentResponse;
-import json.ResourceParam;
-import json.ResourceResponse;
+import json.*;
 import model.ResourceEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +12,7 @@ import service.ResourceService;
 import tool.ReflectUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,11 +75,12 @@ public class ResourceController {
 
     @ResponseBody
     @RequestMapping(value = "/resource/list/all", method = RequestMethod.GET)
-    public ResponseEntity<Object> getResourceList(HttpServletRequest request) {
+    public ResponseEntity<Object> getResourceList(HttpServletRequest request,HttpSession session) {
         ResourceParam resourceParam = new ResourceParam();
         ReflectUtils.convert(resourceParam, request);
         if (resourceParam.page > 0)
             resourceParam.page -= 1;
+        resourceParam.groupId=(int)session.getAttribute(Session.GROUPID);
         ParentResponse resp = new ParentResponse();
         resp.data = new ArrayList<ResourceResponse>();
         int count = resourceService.countByCondition(resourceParam);
@@ -100,6 +99,27 @@ public class ResourceController {
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/resource/all", method = RequestMethod.POST)
+    public ResponseEntity<Object> getResourceListByGroupId(HttpSession session) {
+        ParentResponse resp = new ParentResponse();
+        resp.data = new ArrayList<ResourceResponse>();
+        int id=(int)session.getAttribute(Session.GROUPID);
+        if(id<=0){
+            resp.result = "Fail";
+            resp.msg = "发生异常，请重试！";
+        }
+        List<ResourceEntity> resourceEntities =resourceService.getResourceEntitiesByGroupId(id);
+        if (resourceEntities != null) {
+            for (ResourceEntity resourceEntity : resourceEntities) {
+                ResourceResponse res = new ResourceResponse(resourceEntity);
+                resp.data.add(res);
+            }
+        }
+        resp.result = "OK";
+        resp.msg = "操作成功！";
+        return new ResponseEntity<Object>(resp, HttpStatus.OK);
+    }
 
     @ResponseBody
     @RequestMapping(value = "/resource/list/delete", method = RequestMethod.POST)

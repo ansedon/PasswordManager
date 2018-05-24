@@ -49,7 +49,7 @@ public class PasswordEntity {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 200)
+    @Column(name = "password", nullable = false, length = 5000)
     public String getPassword() {
         return password;
     }

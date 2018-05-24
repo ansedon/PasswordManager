@@ -26,9 +26,9 @@ public class ResourceService {
         resourceRepository.saveAndFlush(resourceEntity);
     }
 
-//    public List<ResourceEntity> getResourceEntitiesByGroupId(int groupId) {
-//        return resourceRepository.getResourceEntitiesByGroupId(groupId);
-//    }
+    public List<ResourceEntity> getResourceEntitiesByGroupId(int groupId) {
+        return resourceRepository.getResourceEntitiesByGroupId(groupId);
+    }
 
     public int deleteResourceById(int id){
         return resourceRepository.deleteResourceById(id);

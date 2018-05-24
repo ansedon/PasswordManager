@@ -37,11 +37,11 @@
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
             <input type="text" name="name" placeholder="请输入资源名" autocomplete="off" class="layui-input">
-            <input class="layui-input" placeholder="开始日" name="startTime" id="start">
-            <input class="layui-input" placeholder="截止日" name="endTime" id="end">
             <div class="layui-input-inline">
                 <select name="typeId" id="typeId" lay-verify="select"></select>
             </div>
+            <input class="layui-input" placeholder="开始日" name="startTime" id="start">
+            <input class="layui-input" placeholder="截止日" name="endTime" id="end">
             <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
@@ -69,43 +69,44 @@
         <div class="layui-form-item">
             <label class="layui-form-label">type</label>
             <div class="layui-input-inline">
-                <input type="text" id="type" name="type"  lay-verify="required" disabled class="layui-input">
+                <input type="text" id="type" name="type" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">description</label>
             <div class="layui-input-block">
-                <textarea type="textarea" id="description" name="description" disabled lay-verify="required" class="layui-textarea"></textarea>
+                <textarea type="textarea" id="description" name="description" disabled lay-verify="required"
+                          class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">url</label>
             <div class="layui-input-inline">
-                <input type="text"id="url" name="url"  lay-verify="required" disabled class="layui-input">
+                <input type="text" id="url" name="url" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">location</label>
             <div class="layui-input-inline">
-                <input type="text" id="location" name="location"  lay-verify="required" disabled class="layui-input">
+                <input type="text" id="location" name="location" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">password policy</label>
             <div class="layui-input-inline">
-                <input type="text" id="pwdPolicy" name="pwdPolicy"  lay-verify="required" disabled class="layui-input">
+                <input type="text" id="pwdPolicy" name="pwdPolicy" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">superkey</label>
             <div class="layui-input-inline">
-                <input type="text" id="superkey" name="superkey"  lay-verify="required" disabled class="layui-input">
+                <input type="text" id="superkey" name="superkey" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">create time</label>
             <div class="layui-input-inline">
-                <input type="text" id="createTime" name="createTime"  lay-verify="required" disabled class="layui-input">
+                <input type="text" id="createTime" name="createTime" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
     </form>

@@ -1,6 +1,7 @@
 package json;
 
 public class Session {
-    public static String USER="CurrentUser";
-    public static String PRIVILEGE="Privile";
+    public static String USER="CURRENTUSER";
+    public static String PRIVILEGE="PRIVILEGE";
+    public static String GROUPID="GROUPID";
 }
