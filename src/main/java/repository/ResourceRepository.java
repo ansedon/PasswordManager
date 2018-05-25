@@ -12,8 +12,11 @@ import java.util.List;
 
 @Repository
 public interface ResourceRepository extends JpaRepository<ResourceEntity,Integer>,JpaSpecificationExecutor<ResourceEntity>{
-    @Query("select resource from ResourceEntity resource left join ResourceGroupEntity  resourcegroup on resource.id=resourcegroup.resId where resourcegroup.groupId=?1")
+    @Query("select resource from ResourceEntity resource left join ResourceGroupEntity  resourcegroup on resource.id=resourcegroup.resId where resource.isDeleted=0 and resourcegroup.groupId=?1")
     List<ResourceEntity> getResourceEntitiesByGroupId(int groupId);
+
+    @Query("select distinct resource from ResourceEntity resource left join ResourceGroupEntity  resourcegroup on resource.id=resourcegroup.resId where resource.isDeleted=0 and resourcegroup.groupId in ?1")
+    List<ResourceEntity> getResourceEntitiesByGroupIds(List<Integer> groupIds);
 
     @Modifying
     @Transactional
@@ -21,4 +24,6 @@ public interface ResourceRepository extends JpaRepository<ResourceEntity,Integer
     int deleteResourceById(int id);
 
     ResourceEntity findResourceEntityById(int id);
+
+    List<ResourceEntity> findAllByIsDeleted(byte value);
 }

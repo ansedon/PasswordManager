@@ -30,6 +30,14 @@ public class ResourceService {
         return resourceRepository.getResourceEntitiesByGroupId(groupId);
     }
 
+    public List<ResourceEntity> findAll(){
+        return resourceRepository.findAllByIsDeleted((byte)0);
+    }
+
+    public List<ResourceEntity> getResourceEntitiesByGroupIds(List<Integer> groupIds) {
+        return resourceRepository.getResourceEntitiesByGroupIds(groupIds);
+    }
+
     public int deleteResourceById(int id){
         return resourceRepository.deleteResourceById(id);
     }
@@ -39,10 +47,22 @@ public class ResourceService {
         Page<ResourceEntity> resourceEntityPage = resourceRepository.findAll(new Specification<ResourceEntity>() {
             @Override
             public Predicate toPredicate(Root<ResourceEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.distinct(true);
                 List<Predicate> list = new ArrayList<Predicate>();
+                if(param.resIds!=null&&param.resIds.size()>0){
+                    CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("id"));
+                    for (Integer id : param.resIds) {
+                        in.value(id);
+                    }
+                    list.add(criteriaBuilder.not(in));
+                }
                 if (param.groupId != 0&&param.groupId!=1) {
                     Join<ResourceEntity, ResourceGroupEntity> join = root.join("resourceGroupsById", JoinType.LEFT);
-                    list.add(criteriaBuilder.equal(join.get("groupId"), param.groupId));
+                    CriteriaBuilder.In<Object> in = criteriaBuilder.in(join.get("groupId"));
+                    for (Integer id : param.groupList) {
+                        in.value(id);
+                    }
+                    list.add(in);
                 }
                 if (param.typeId != 0) {
                     list.add(criteriaBuilder.equal(root.get("typeId").as(Integer.class), param.typeId));
@@ -69,9 +89,21 @@ public class ResourceService {
             @Override
             public Predicate toPredicate(Root<ResourceEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> list = new ArrayList<Predicate>();
+                criteriaQuery.distinct(true);
                 if (param.groupId != 0&&param.groupId!=1) {
                     Join<ResourceEntity, ResourceGroupEntity> join = root.join("resourceGroupsById", JoinType.LEFT);
-                    list.add(criteriaBuilder.equal(join.get("groupId"), param.groupId));
+                    CriteriaBuilder.In<Object> in = criteriaBuilder.in(join.get("groupId"));
+                    for (Integer id : param.groupList) {
+                        in.value(id);
+                    }
+                    list.add(in);
+                }
+                if(param.resIds!=null&&param.resIds.size()>0){
+                    CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("id"));
+                    for (Integer id : param.resIds) {
+                        in.value(id);
+                    }
+                    list.add(criteriaBuilder.not(in));
                 }
                 if (param.name != null && param.name != "") {
                     list.add(criteriaBuilder.like(root.get("name").as(String.class), '%'+param.name+'%'));

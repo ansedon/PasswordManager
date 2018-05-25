@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface ResourceTypeRepository extends JpaRepository<ResourceTypeEntity,Integer>,JpaSpecificationExecutor<ResourceTypeEntity>{
-    List<ResourceTypeEntity> findAll();
+    List<ResourceTypeEntity> findAllByIsDeleted(byte value);
 
     ResourceTypeEntity findResourceTypeEntityById(int id);
 

@@ -42,7 +42,6 @@ $(function  () {
         table.on('tool(resourceTable)', function(obj){
             var data = obj.data;
             var layEvent = obj.event;
-            var tr = obj.tr;
 
             if(layEvent === 'view'){ //查看
                 layer.open({

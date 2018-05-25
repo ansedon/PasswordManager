@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 import service.GroupService;
 import tool.ReflectUtils;
 
@@ -28,6 +26,12 @@ public class GroupController {
     @RequestMapping(value = "/group/list", method = RequestMethod.GET)
     public String index() {
         return "group";
+    }
+
+    @RequestMapping(value = "/group/list/{childId}",method = RequestMethod.GET)
+    public String grant(@PathVariable("childId")int childId,ModelMap modelMap){
+        modelMap.put("childId",childId);
+        return "resource_allot";
     }
 
     @ResponseBody
@@ -66,11 +70,27 @@ public class GroupController {
             resp.result = "Fail";
             resp.msg = "发生异常，请重试！";
         }
-        List<CpGroupEntity> cpGroupEntities =groupService.findAllByFatherGroupId(id);
-        if (cpGroupEntities != null) {
-            for (CpGroupEntity cpGroupEntity : cpGroupEntities) {
-                GroupResponse res = new GroupResponse(cpGroupEntity);
-                resp.data.add(res);
+        List<Integer> ids=new ArrayList<Integer>();
+        ids.add(id);
+        if(id!=1){
+            resp.data.add(new GroupResponse(groupService.findGroupById(id)));
+            List<CpGroupEntity> lists=groupService.findAllByFatherGroupIds(ids);
+            while(lists!=null&&lists.size()!=0){
+                ids.clear();
+                for(CpGroupEntity g : lists){
+                    ids.add(g.getId());
+                    GroupResponse res = new GroupResponse(g);
+                    resp.data.add(res);
+                }
+                lists=groupService.findAllByFatherGroupIds(ids);
+            }
+        }else{
+            List<CpGroupEntity> cpGroupEntities=groupService.findAll();
+            if (cpGroupEntities != null&&cpGroupEntities.size()!=0) {
+                for (CpGroupEntity cpGroupEntity : cpGroupEntities) {
+                    GroupResponse res = new GroupResponse(cpGroupEntity);
+                    resp.data.add(res);
+                }
             }
         }
         resp.result = "OK";
@@ -85,8 +105,23 @@ public class GroupController {
         ReflectUtils.convert(groupParam, request);
         if (groupParam.page > 0)
             groupParam.page -= 1;
-        if(groupParam.fatherGroupId==0)
-            groupParam.fatherGroupId = (int) session.getAttribute(Session.GROUPID);
+        if(groupParam.fatherGroupId==0){
+            int id = (int) session.getAttribute(Session.GROUPID);
+            if(id!=1){
+                groupParam.ids=new ArrayList<Integer>();
+                List<Integer> ids=new ArrayList<Integer>();
+                ids.add(id);
+                List<CpGroupEntity> lists=groupService.findAllByFatherGroupIds(ids);
+                while(lists!=null&&lists.size()!=0){
+                    ids.clear();
+                    for(CpGroupEntity g : lists){
+                        ids.add(g.getId());
+                        groupParam.ids.add(g.getId());
+                    }
+                    lists=groupService.findAllByFatherGroupIds(ids);
+                }
+            }
+        }
         ParentResponse resp = new ParentResponse();
         resp.data = new ArrayList<GroupResponse>();
         int count = groupService.countByCondition(groupParam);

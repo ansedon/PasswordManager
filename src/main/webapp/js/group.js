@@ -4,8 +4,10 @@ $(function () {
         layer=layui.layer;
         var cols = [[
             {field: 'id', title: 'ID', sort: true, width: 100}
-            , {field: 'name', title: 'Name', sort: true}
-            , {field: 'fatherGroupName', title: 'Father Group'}
+            ,{field: 'name', title: 'Name', sort: true,templet:function(d){
+                return "<a href=\"javascript:void(0)\" class=\"layui-table-link\" onclick=\"layer_show(\'"+d.name+"-资源分配\',\'\/group\/list\/"+d.id+"\')\">"+d.name+"</a>";
+            }}
+        , {field: 'fatherGroupName', title: 'Father Group'}
             , {field: 'description', title: 'Description'}
             , {field: 'location', title: 'Location'}
             , {field: 'creatorName', title: 'Creator'}
@@ -41,6 +43,9 @@ $(function () {
                 content:$('#detail'),
                 resize:true,
                 success:function (layero, index) {
+                    ajax("/group/all", null, function (res) {
+                        mymod.renderSelect('fatherGroupId1', res.data, 'id', 'name', '上级群组');
+                    })
                     //监听提交
                     form.on('submit(add)', function (data) {
                         ajax('/group/list/update', data.field, function (res) {
@@ -111,7 +116,7 @@ $(function () {
                 $("#name").val(data.name);
                 $("#description").val(data.description);
                 ajax("/group/all", null, function (res) {
-                    mymod.renderSelect('fatherGroupId1', res.data, 'id', 'name', '上级群组',data.fatherGroupId);
+                    mymod.renderSelect('fatherGroupId1', res.data, 'id', 'name', '上级群组',data.fatherGroupId,data.id);
                 })
                 $("#location").val(data.location);
                 $("#add")[0].innerHTML="修改";

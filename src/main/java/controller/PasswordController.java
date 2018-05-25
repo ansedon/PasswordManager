@@ -82,6 +82,7 @@ public class PasswordController {
         passwordParam.groupId = (int) session.getAttribute(Session.GROUPID);
         ParentResponse resp = new ParentResponse();
         resp.data = new ArrayList<ResourceTypeResponse>();
+
         int count = passwordService.countByCondition(passwordParam);
         if (count > 0)
             resp.count = count;

@@ -36,6 +36,7 @@ public class PasswordService {
         Page<PasswordEntity> passwordEntityPage = passwordRepository.findAll(new Specification<PasswordEntity>() {
             @Override
             public Predicate toPredicate(Root<PasswordEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.distinct(true);
                 List<Predicate> list = new ArrayList<Predicate>();
                 if (param.id != 0) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), param.id));
@@ -72,6 +73,7 @@ public class PasswordService {
         return (int) passwordRepository.count(new Specification<PasswordEntity>() {
             @Override
             public Predicate toPredicate(Root<PasswordEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.distinct(true);
                 List<Predicate> list = new ArrayList<Predicate>();
                 if (param.id != 0) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), param.id));

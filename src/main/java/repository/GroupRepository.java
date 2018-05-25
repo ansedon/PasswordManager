@@ -12,9 +12,13 @@ import java.util.List;
 
 @Repository
 public interface GroupRepository extends JpaRepository<CpGroupEntity,Integer>,JpaSpecificationExecutor<CpGroupEntity>{
+    List<CpGroupEntity> findAllByIsDeleted(byte value);
+
     CpGroupEntity findCpGroupEntityById(int id);
 
-    List<CpGroupEntity> findAllByFatherGroupId(int id);
+    List<CpGroupEntity> findAllByFatherGroupIdAndIsDeleted(int id,byte value);
+
+    List<CpGroupEntity> findAllByFatherGroupIdInAndIsDeleted(List<Integer>ids,byte value);
 
     @Modifying
     @Transactional

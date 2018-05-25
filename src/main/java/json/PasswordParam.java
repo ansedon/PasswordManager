@@ -1,10 +1,12 @@
 package json;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class PasswordParam {
     public int id;
     public int groupId;
+    public List<Integer> ids;
     public int resId;
     public String account;
     public Timestamp expireTime;

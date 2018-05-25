@@ -25,7 +25,7 @@ public class ResourceTypeService {
     ResourceTypeRepository resourceTypeRepository;
 
     public List<ResourceTypeEntity> findAll(){
-        return resourceTypeRepository.findAll();
+        return resourceTypeRepository.findAllByIsDeleted((byte)0);
     }
 
     public void update(ResourceTypeEntity resourceTypeEntity){
@@ -41,6 +41,7 @@ public class ResourceTypeService {
         Page<ResourceTypeEntity> resourceTypeEntityPage = resourceTypeRepository.findAll(new Specification<ResourceTypeEntity>() {
             @Override
             public Predicate toPredicate(Root<ResourceTypeEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.distinct(true);
                 List<Predicate> list = new ArrayList<Predicate>();
                 if (param.name != null && param.name != "") {
                     list.add(criteriaBuilder.like(root.get("name").as(String.class), '%'+param.name+'%'));
@@ -63,6 +64,7 @@ public class ResourceTypeService {
         return(int) resourceTypeRepository.count(new Specification<ResourceTypeEntity>() {
             @Override
             public Predicate toPredicate(Root<ResourceTypeEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.distinct(true);
                 List<Predicate> list = new ArrayList<Predicate>();
                 if (param.startTime != null ) {
                     list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.startTime));

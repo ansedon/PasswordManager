@@ -24,6 +24,10 @@ public class GroupService {
     @Autowired
     GroupRepository groupRepository;
 
+    public List<CpGroupEntity> findAll(){
+        return groupRepository.findAllByIsDeleted((byte)0);
+    }
+
     public void update(CpGroupEntity groupEntity) {
         groupRepository.saveAndFlush(groupEntity);
     }
@@ -32,8 +36,8 @@ public class GroupService {
         return groupRepository.findCpGroupEntityById(id);
     }
 
-    public List<CpGroupEntity> findAllByFatherGroupId(int id){
-        return groupRepository.findAllByFatherGroupId(id);
+    public List<CpGroupEntity> findAllByFatherGroupIds(List<Integer>ids){
+        return groupRepository.findAllByFatherGroupIdInAndIsDeleted(ids,(byte)0);
     }
 
     public List<CpGroupEntity> findByCondition(GroupParam param) {
@@ -41,7 +45,15 @@ public class GroupService {
         Page<CpGroupEntity> groupEntityPage = groupRepository.findAll(new Specification<CpGroupEntity>() {
             @Override
             public Predicate toPredicate(Root<CpGroupEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.distinct(true);
                 List<Predicate> list = new ArrayList<Predicate>();
+                if(param.ids!=null&&param.ids.size()>0){
+                    CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("id"));
+                    for (Integer id : param.ids) {
+                        in.value(id);
+                    }
+                    list.add(in);
+                }
                 if (param.id != 0) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), param.id));
                 }
@@ -69,9 +81,17 @@ public class GroupService {
         return (int) groupRepository.count(new Specification<CpGroupEntity>() {
             @Override
             public Predicate toPredicate(Root<CpGroupEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.distinct(true);
                 List<Predicate> list = new ArrayList<Predicate>();
                 if (param.fatherGroupId!= 0) {
                     list.add(criteriaBuilder.equal(root.get("fatherGroupId").as(Integer.class), param.fatherGroupId));
+                }
+                if(param.ids!=null&&param.ids.size()>0){
+                        CriteriaBuilder.In<Object> in = criteriaBuilder.in(root.get("id"));
+                        for (Integer id : param.ids) {
+                            in.value(id);
+                        }
+                        list.add(in);
                 }
                 if (param.id != 0) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), param.id));

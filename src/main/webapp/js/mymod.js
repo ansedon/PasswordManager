@@ -6,7 +6,7 @@ layui.config({
 
 layui.define(['laydate', 'form'], function (exports) {
     laydate = layui.laydate;
-    form=layui.form;
+    form = layui.form;
     nowTime = new Date().valueOf();
     max = null;
     var obj = {
@@ -45,17 +45,21 @@ layui.define(['laydate', 'form'], function (exports) {
         },
 
         //初始化下拉选择框
-        renderSelect: function (elementId, data, valueColumn, textColumn,name, selectedValue) {
+        renderSelect: function (elementId, data, valueColumn, textColumn, name, selectedValue,removedValue) {
             if (data != null) {
-                $('#' + elementId).append("<option value='0'>请选择"+name+"</option>");
+                //已渲染
+                if ($('#' + elementId)[0].innerHTML != null) {
+                    $('#' + elementId)[0].innerHTML = '';
+                }
+                $('#' + elementId).append("<option value='0'>请选择" + name + "</option>");
                 for (var i = 0; i < data.length; i++) {
                     if (data[i][valueColumn] == selectedValue) {
                         $('#' + elementId).append("<option value='" + data[i][valueColumn] + "' selected>" + data[i][textColumn] + "</option>");
-                    } else
+                    } else if(data[i][valueColumn] != removedValue)
                         $('#' + elementId).append("<option value='" + data[i][valueColumn] + "'>" + data[i][textColumn] + "</option>");
                 }
+                form.render('select');
             }
-            form.render('select');
         }
     };
 

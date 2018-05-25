@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LoginLogRepository extends JpaRepository<LoginLogEntity,Integer>{
     LoginLogEntity findDistinctFirstByUserIdOrderByCreateTimeDesc(int userId);
-
-
 }
