@@ -116,7 +116,7 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a _href="admin-list.html">
+                        <a _href="manage/user">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>用户管理</cite>
                         </a>

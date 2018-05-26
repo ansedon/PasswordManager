@@ -50,6 +50,11 @@ public class PasswordController {
             passwordEntity.setResourceId(passwordEntity1.getResourceId());
             passwordEntity.setCreateTime(passwordEntity1.getCreateTime());
             passwordEntity.setIsDeleted(passwordEntity1.getIsDeleted());
+            try {
+                passwordEntity.setPassword(RSAUtils.encryptByPublicKey(passwordEntity.getPassword(),publicKey));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if(passwordEntity.getAccount()==null){
                 passwordEntity.setAccount(passwordEntity1.getAccount());
                 passwordEntity.setPassword(passwordEntity1.getPassword());
