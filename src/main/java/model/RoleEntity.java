@@ -30,6 +30,7 @@ public class RoleEntity {
     private Collection<UserEntity> usersById;
     private Collection<UserEntity> usersById_0;
     private Collection<UserEntity> usersById_1;
+    private int level;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -287,5 +288,15 @@ public class RoleEntity {
 
     public void setUsersById_1(Collection<UserEntity> usersById_1) {
         this.usersById_1 = usersById_1;
+    }
+
+    @Basic
+    @Column(name = "level", nullable = false)
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

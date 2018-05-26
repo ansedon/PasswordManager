@@ -22,6 +22,10 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    public int countAll(){
+        return userRepository.countAllByIsDeleted((byte)0);
+    }
+
     public UserEntity findByAccount(String account) {
         return userRepository.findByAccountAndIsDeleted(account, (byte) 0);
     }
@@ -30,8 +34,8 @@ public class UserService {
         return userRepository.findAllByIsDeleted((byte) 0);
     }
 
-    public void update(UserEntity userEntity) {
-        userRepository.saveAndFlush(userEntity);
+    public UserEntity update(UserEntity userEntity) {
+        return userRepository.saveAndFlush(userEntity);
     }
 
     public UserEntity findUserEntityById(int id) {

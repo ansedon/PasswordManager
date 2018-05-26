@@ -18,6 +18,9 @@ public class PrivilegeEntity {
     private Byte groupDelete;
     private Collection<RoleEntity> rolesById;
     private Collection<RoleEntity> rolesById_0;
+    private Byte userAdd;
+    private Byte userEdit;
+    private Byte userDelete;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -171,5 +174,35 @@ public class PrivilegeEntity {
 
     public void setRolesById_0(Collection<RoleEntity> rolesById_0) {
         this.rolesById_0 = rolesById_0;
+    }
+
+    @Basic
+    @Column(name = "user_add", nullable = true)
+    public Byte getUserAdd() {
+        return userAdd;
+    }
+
+    public void setUserAdd(Byte userAdd) {
+        this.userAdd = userAdd;
+    }
+
+    @Basic
+    @Column(name = "user_edit", nullable = true)
+    public Byte getUserEdit() {
+        return userEdit;
+    }
+
+    public void setUserEdit(Byte userEdit) {
+        this.userEdit = userEdit;
+    }
+
+    @Basic
+    @Column(name = "user_delete", nullable = true)
+    public Byte getUserDelete() {
+        return userDelete;
+    }
+
+    public void setUserDelete(Byte userDelete) {
+        this.userDelete = userDelete;
     }
 }

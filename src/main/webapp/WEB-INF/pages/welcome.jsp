@@ -10,6 +10,9 @@
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="stylesheet" href="./css/font.css">
         <link rel="stylesheet" href="./css/xadmin.css">
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script src="./lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/xadmin.js"></script>
     </head>
     <body>
     <div class="x-body layui-anim layui-anim-up">
@@ -24,45 +27,31 @@
                                 <div carousel-item="">
                                     <ul class="layui-row layui-col-space10 layui-this">
                                         <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
+                                            <a onclick="tabClick('资源列表')" class="x-admin-backlog-body">
+                                                <h3>资源数</h3>
                                                 <p>
-                                                    <cite>66</cite></p>
+                                                    <cite>${resNum}</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>会员数</h3>
+                                            <a onclick="tabClick('口令列表')" class="x-admin-backlog-body">
+                                                <h3>口令数</h3>
                                                 <p>
-                                                    <cite>12</cite></p>
+                                                    <cite>${psNum}</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>回复数</h3>
+                                            <a onclick="tabClick('群组列表')" class="x-admin-backlog-body">
+                                                <h3>部门数</h3>
                                                 <p>
-                                                    <cite>99</cite></p>
+                                                    <cite>${groupNum}</cite></p>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>商品数</h3>
+                                            <a onclick="tabClick('用户管理')" class="x-admin-backlog-body">
+                                                <h3>用户数</h3>
                                                 <p>
-                                                    <cite>67</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>67</cite></p>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs2">
-                                            <a href="javascript:;" class="x-admin-backlog-body">
-                                                <h3>文章数</h3>
-                                                <p>
-                                                    <cite>6766</cite></p>
+                                                    <cite>${userNum}</cite></p>
                                             </a>
                                         </li>
                                     </ul>
@@ -80,12 +69,7 @@
                     <tbody>
                         <tr>
                             <td >
-                                <a class="x-a" href="/" target="_blank">新版Password Manager上线了</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td >
-                                <a class="x-a" href="/" target="_blank">交流qq群:(519492808)</a>
+                                <a class="x-a" onclick="tabClick('口令列表')">17条口令已经失效！</a>
                             </td>
                         </tr>
                     </tbody>
@@ -98,11 +82,11 @@
                 <table class="layui-table">
                     <tbody>
                         <tr>
-                            <th>xxx版本</th>
-                            <td>1.0.180420</td></tr>
+                            <th>服务器版本</th>
+                            <td>2.4</td></tr>
                         <tr>
                             <th>服务器地址</th>
-                            <td>x.xuebingsi.com</td></tr>
+                            <td>x.xxx.com</td></tr>
                         <tr>
                             <th>操作系统</th>
                             <td>WINNT</td></tr>
@@ -134,24 +118,24 @@
                 </table>
             </div>
         </fieldset>
-        <fieldset class="layui-elem-field">
-            <legend>开发团队</legend>
-            <div class="layui-field-box">
-                <table class="layui-table">
-                    <tbody>
-                        <tr>
-                            <th>版权所有</th>
-                            <td>xxxxx(xxxx)
-                                <a href="http://www.xxx.com/" class='x-a' target="_blank">访问官网</a></td>
-                        </tr>
-                        <tr>
-                            <th>开发者</th>
-                            <td>马志斌(113664000@qq.com)</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </fieldset>
-        <blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本系统由x-admin提供技术支持。</blockquote>
+        <%--<fieldset class="layui-elem-field">--%>
+            <%--<legend>开发团队</legend>--%>
+            <%--<div class="layui-field-box">--%>
+                <%--<table class="layui-table">--%>
+                    <%--<tbody>--%>
+                        <%--<tr>--%>
+                            <%--<th>版权所有</th>--%>
+                            <%--<td>xxxxx(xxxx)--%>
+                                <%--<a href="http://www.xxx.com/" class='x-a' target="_blank">访问官网</a></td>--%>
+                        <%--</tr>--%>
+                        <%--<tr>--%>
+                            <%--<th>开发者</th>--%>
+                            <%--<td>马志斌(113664000@qq.com)</td></tr>--%>
+                    <%--</tbody>--%>
+                <%--</table>--%>
+            <%--</div>--%>
+        <%--</fieldset>--%>
+        <%--<blockquote class="layui-elem-quote layui-quote-nm">感谢layui,百度Echarts,jquery,本系统由x-admin提供技术支持。</blockquote>--%>
     </div>
         <script>
         var _hmt = _hmt || [];

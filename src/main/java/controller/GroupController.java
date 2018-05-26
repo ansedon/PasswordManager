@@ -60,6 +60,7 @@ public class GroupController {
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
 
+    //获取当前群组下的其他群组
     @ResponseBody
     @RequestMapping(value = "/group/all", method = RequestMethod.POST)
     public ResponseEntity<Object> getChildGroup(HttpSession session) {

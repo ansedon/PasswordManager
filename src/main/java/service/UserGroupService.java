@@ -13,4 +13,12 @@ public class UserGroupService {
     public UserGroupEntity findByUserId(int userId){
         return userGroupRepository.findByUserId(userId);
     }
+
+    public void update(UserGroupEntity userGroupEntity){
+        userGroupRepository.update(userGroupEntity.getUserId(),userGroupEntity.getGroupId());
+    }
+
+    public  UserGroupEntity insert(UserGroupEntity userGroupEntity){
+        return userGroupRepository.saveAndFlush(userGroupEntity);
+    }
 }

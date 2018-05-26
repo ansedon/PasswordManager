@@ -24,21 +24,20 @@
     <div class="left_open">
         <i title="展开左侧栏" class="iconfont">&#xe699;</i>
     </div>
-    <ul class="layui-nav left fast-add" lay-filter="">
-        <li class="layui-nav-item">
-            <a href="javascript:;">+新增</a>
-            <dl class="layui-nav-child"> <!-- 二级菜单 -->
-                <dd><a onclick="layer_show('资讯','http://www.baidu.com')"><i class="iconfont">&#xe6a2;</i>资讯</a></dd>
-                <dd><a onclick="layer_show('图片','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>图片</a></dd>
-                <dd><a onclick="tabClick('资源列表')"><i class="iconfont">&#xe6b8;</i>用户</a></dd>
-            </dl>
-        </li>
-    </ul>
+    <%--<ul class="layui-nav left fast-add" lay-filter="">--%>
+        <%--<li class="layui-nav-item">--%>
+            <%--<a href="javascript:;">+新增</a>--%>
+            <%--<dl class="layui-nav-child"> <!-- 二级菜单 -->--%>
+                <%--<dd><a onclick="layer_show('资讯','http://www.baidu.com')"><i class="iconfont">&#xe6a2;</i>资讯</a></dd>--%>
+                <%--<dd><a onclick="layer_show('图片','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>图片</a></dd>--%>
+                <%--<dd><a onclick="tabClick('资源列表')"><i class="iconfont">&#xe6b8;</i>用户</a></dd>--%>
+            <%--</dl>--%>
+        <%--</li>--%>
+    <%--</ul>--%>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
             <a href="javascript:;">${user.account}</a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
-                <!--<dd><a onclick="layer_show('个人信息','member-list')">个人信息</a></dd>-->
                 <dd><a href="/logout">退出</a></dd>
             </dl>
         </li>
@@ -127,12 +126,12 @@
                             <cite>角色管理</cite>
                         </a>
                     </li>
-                    <li>
-                        <a _href="admin-cate.html">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>权限管理</cite>
-                        </a>
-                    </li>
+                    <%--<li>--%>
+                        <%--<a _href="admin-cate.html">--%>
+                            <%--<i class="iconfont">&#xe6a7;</i>--%>
+                            <%--<cite>权限管理</cite>--%>
+                        <%--</a>--%>
+                    <%--</li>--%>
                 </ul>
             </li>
         </ul>

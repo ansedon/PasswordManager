@@ -26,4 +26,6 @@ public interface ResourceRepository extends JpaRepository<ResourceEntity,Integer
     ResourceEntity findResourceEntityById(int id);
 
     List<ResourceEntity> findAllByIsDeleted(byte value);
+
+    int countAllByIsDeleted(byte value);
 }

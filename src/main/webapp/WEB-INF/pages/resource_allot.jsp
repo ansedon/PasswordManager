@@ -58,7 +58,7 @@
                 , {field: '', title: 'Opertion', toolbar: '#bar1'}
             ]]
 
-            table.render({
+            var table1=table.render({
                 elem: '#table'
                 , url: '/resource/list/allot' //数据接口
                 ,where:{groupId:$('#id').val()}
@@ -67,7 +67,7 @@
                 ,limit:5
             });
 
-            table.render({
+            var table2=table.render({
                 elem: '#table1'
                 , url: '/resource/list/remove' //数据接口
                 ,where:{groupId:$('#id').val()}
@@ -83,7 +83,8 @@
                     ajax('/resource/list/change',{groupId:$('#id').val(),resId:data.id,isRemove:0},function (msg) {
                         if(msg.result=="OK")
                             layer.msg("分配成功！",{time:500},function () {
-                                $(".layui-laypage-btn").click();
+                                table1.reload();
+                                table2.reload();
                             })
                         else
                             layer.msg(msg.msg);
@@ -98,7 +99,8 @@
                     ajax('/resource/list/change',{groupId:$('#id').val(),resId:data.id,isRemove:1},function (msg) {
                         if(msg.result=="OK")
                             layer.msg("移除成功！",{time:500},function () {
-                                $(".layui-laypage-btn").click();
+                                table1.reload();
+                                table2.reload();
                             })
                         else
                             layer.msg(msg.msg);

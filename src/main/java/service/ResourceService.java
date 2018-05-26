@@ -22,6 +22,10 @@ public class ResourceService {
     @Autowired
     ResourceRepository resourceRepository;
 
+    public int countAll(){
+        return resourceRepository.countAllByIsDeleted((byte)0);
+    }
+
     public void update(ResourceEntity resourceEntity){
         resourceRepository.saveAndFlush(resourceEntity);
     }

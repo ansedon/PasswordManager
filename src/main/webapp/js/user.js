@@ -1,13 +1,14 @@
 $(function () {
     layui.use(['form', 'table', 'laydate'], function () {
         var form = layui.form, laydate = layui.laydate, table = layui.table, mymod = layui.mymod;
-        layer=layui.layer;
+        layer = layui.layer;
         var cols = [[
             {field: 'id', title: 'ID', sort: true, width: 100}
             , {field: 'account', title: 'Account', sort: true}
-            , {field: 'password', title: 'Password',minWidth:200, templet: "#psTpl"}
+            , {field: 'password', title: 'Password', minWidth: 200, templet: "#psTpl"}
             , {field: 'email', title: 'Email', sort: true}
             , {field: 'roleName', title: 'Role Name', sort: true}
+            , {field: 'groupName', title: 'Group Name', sort: true}
             , {field: 'phone', title: 'Phone', sort: true}
             , {field: 'location', title: 'Location', sort: true}
             , {field: 'createTime', title: 'Create Time', sort: true}
@@ -23,17 +24,16 @@ $(function () {
 
         mymod.renderLaydate('start', 'end', 'datetime');
 
-        ajax("/role/all", null, function (res) {
-            mymod.renderSelect('roleId', res.data, 'id', 'name', '资源名称');
+        ajax("/manage/role/select", {self:1}, function (res) {
+            mymod.renderSelect('roleId', res.data, 'id', 'name', '角色名称');
         })
-
-        ajax("/resource/all",null, function (res) {
-            mymod.renderSelect('resId1', res.data, 'id', 'name', '资源名称');
+        ajax("/group/all", {self:1}, function (res) {
+            mymod.renderSelect('groupId', res.data, 'id', 'name', '群组名称');
         })
 
         form.verify({
             selected: function (value) {
-                if (value== 0) {
+                if (value == 0) {
                     return '请选择一项';
                 }
             }
@@ -41,20 +41,29 @@ $(function () {
 
         $('#addBtn').click(function () {
             layer.open({
-                type:1,
-                title:'添加口令',
-                content:$('#addTab'),
-                resize:true,
-                success:function (layero, index) {
+                type: 1,
+                title: '添加用户',
+                content: $('#detail'),
+                resize: true,
+                success: function (layero, index) {
+                    ajax("/manage/role/select", {self:0}, function (res) {
+                        mymod.renderSelect('roleId1', res.data, 'id', 'name', '角色名称');
+                    })
+                    ajax("/group/all", null, function (res) {
+                        mymod.renderSelect('groupId1', res.data, 'id', 'name', '群组名称');
+                    })
+                    $('#add')[0].innerHTML="添加";
                     //监听提交
-                    form.on('submit(add1)', function (data) {
-                        data.field.expireTime = new Date(data.field.expireTime).getTime();
-                        ajax('/password/list/update', data.field, function (res) {
+                    form.on('submit(add)', function (data) {
+                        ajax('/manage/user/update', data.field, function (res) {
                             if (res.result == "OK") {
                                 layer.msg('添加成功!', {time: 500}, function () {
-                                    $("#account1").val("");
-                                    $("#password1").val("");
-                                    $("#expireTime1").val("");
+                                    $("#account").val("");
+                                    $("#password").val("");
+                                    $("#email").val("");
+                                    $("#phone").val("");
+                                    $("#location").val("");
+                                    $('#add')[0].innerHTML="修改";
                                     $(".layui-laypage-btn").click();
                                     //关闭当前frame
                                     layer.close(index);
@@ -66,21 +75,34 @@ $(function () {
                         return false;
                     });
 
-                    $('#cancel1').click(function () {
+                    $('#cancel').click(function () {
                         layer.close(index);
-                        $("#account1").val("");
-                        $("#password1").val("");
-                        $("#expireTime1").val("");
+                        $("#account").val("");
+                        $("#password").val("");
+                        $("#email").val("");
+                        $("#phone").val("");
+                        $("#location").val("");
+                        $('#add')[0].innerHTML="修改";
                         return false;
                     })
+                }
+                ,cancel:function (index) {
+                    layer.close(index);
+                    $("#account").val("");
+                    $("#password").val("");
+                    $("#email").val("");
+                    $("#phone").val("");
+                    $("#location").val("");
+                    $('#add')[0].innerHTML="修改";
+                    return false;
                 }
             })
         })
 
         //监听搜索
         form.on('submit(search)', function (data) {
-            table.reload('passwordTable', {
-                url: '/password/list/all' //数据接口
+            table.reload('userTable', {
+                url: '/manage/user/all' //数据接口
                 , where: data.field
                 , page: true //开启分页
                 , cols: cols
@@ -89,12 +111,12 @@ $(function () {
         })
 
         //监听工具条
-        table.on('tool(passwordTable)', function (obj) {
+        table.on('tool(userTable)', function (obj) {
             var data = obj.data;
             var layEvent = obj.event;
             if (layEvent === 'delete') { //删除
                 layer.confirm('是否删除？', {icon: 3, title: '提示'}, function (index) {
-                    ajax('/password/list/delete', {id: data.id}, function (msg) {
+                    ajax('/manage/user/delete', {id: data.id}, function (msg) {
                         layer.close(index);
                         if (msg.result == "OK")
                             layer.msg("删除成功！", {time: 500}, function () {
@@ -108,17 +130,25 @@ $(function () {
                 $('#id').val(data.id);
                 $("#account").val(data.account);
                 $("#password").val(data.password);
-                $("#expireTime").val(data.expireTime);
+                $("#email").val(data.email);
+                $("#phone").val(data.phone);
+                $("#location").val(data.location);
                 layer.open({
                     type: 1,
-                    title: '编辑口令',
+                    title: '编辑用户',
                     content: $('#detail'),
-                    resize:true,
+                    resize: true,
                     success: function (layero, index) {
+                        ajax("/manage/role/select", {self:1}, function (res) {
+                            mymod.renderSelect('roleId1', res.data, 'id', 'name', '角色名称', data.roleId);
+                        })
+                        ajax("/group/all", null, function (res) {
+                            mymod.renderSelect('groupId1', res.data, 'id', 'name', '群组名称',data.groupId);
+                        })
                         //监听提交
                         form.on('submit(add)', function (data) {
                             data.field.expireTime = new Date(data.field.expireTime).getTime();
-                            ajax('/password/list/update', data.field, function (res) {
+                            ajax('/manage/user/update', data.field, function (res) {
                                 if (res.result == "OK") {
                                     layer.msg('修改成功!', {time: 500}, function () {
                                         //关闭当前frame
@@ -126,7 +156,9 @@ $(function () {
                                         $('#id').val(0);
                                         $("#account").val("");
                                         $("#password").val("");
-                                        $("#expireTime").val("");
+                                        $("#email").val("");
+                                        $("#phone").val("");
+                                        $("#location").val("");
                                         $(".layui-laypage-btn").click();
                                     })
                                 } else {
@@ -141,9 +173,21 @@ $(function () {
                             $('#id').val(0);
                             $("#account").val("");
                             $("#password").val("");
-                            $("#expireTime").val("");
+                            $("#email").val("");
+                            $("#phone").val("");
+                            $("#location").val("");
                             return false;
                         })
+                    }
+                    ,cancel:function (index) {
+                        layer.close(index);
+                        $('#id').val(0);
+                        $("#account").val("");
+                        $("#password").val("");
+                        $("#email").val("");
+                        $("#phone").val("");
+                        $("#location").val("");
+                        return false;
                     }
                 })
             }
@@ -164,50 +208,13 @@ function showPassword(that) {
     }
 }
 
-function show(that,id) {
-    if ($("#password"+id).attr('isShow') == 0) {
-        $("#password"+id).attr('type', 'text');
-        $("#password"+id).attr('isShow', 1);
+function show(that) {
+    if ($("#password").attr('isShow') == 0) {
+        $("#password").attr('type', 'text');
+        $("#password").attr('isShow', 1);
     }
     else {
-        $("#password"+id).attr('type', 'password');
-        $("#password"+id).attr('isShow', 0);
+        $("#password").attr('type', 'password');
+        $("#password").attr('isShow', 0);
     }
-}
-
-function resetExpireTime(id) {
-    $('#id2').val(id);
-    layer.open({
-        type: 1,
-        title: '设置失效日期',
-        content: $('#resetExpireTime'),
-        resize:true,
-        success: function (layero, index) {
-            //监听提交
-            form.on('submit(add2)', function (data) {
-                data.field.expireTime = new Date(data.field.expireTime).getTime();
-                ajax('/password/list/update', data.field, function (res) {
-                    if (res.result == "OK") {
-                        layer.msg('修改成功!', {time: 500}, function () {
-                            //关闭当前frame
-                            layer.close(index);
-                            $('#id2').val(0);
-                            $("#expireTime2").val("");
-                            $(".layui-laypage-btn").click();
-                        })
-                    } else {
-                        layer.msg(res.msg, {time: 500});
-                    }
-                })
-                return false;
-            });
-
-            $('#cancel2').click(function () {
-                layer.close(index);
-                $('#id2').val(0);
-                $("#expireTime2").val("");
-                return false;
-            })
-        }
-    })
 }

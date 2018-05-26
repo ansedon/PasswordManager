@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import service.LoginLogService;
+import service.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,6 +16,14 @@ import javax.servlet.http.HttpSession;
 public class HomeController {
     @Autowired
     LoginLogService loginLogService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    PasswordService passwordService;
+    @Autowired
+    ResourceService resourceService;
+    @Autowired
+    GroupService groupService;
 
     @RequestMapping(value="/welcome",method = RequestMethod.GET)
     public String welcome(ModelMap modelMap, HttpSession session){
@@ -23,6 +31,10 @@ public class HomeController {
         if(userEntity==null)
             return "login";
         modelMap.put("user",userEntity);
+        modelMap.put("resNum",resourceService.countAll());
+        modelMap.put("psNum",passwordService.countAll());
+        modelMap.put("groupNum",groupService.countAll());
+        modelMap.put("userNum",userService.countAll());
         LoginLogEntity loginLogEntity=loginLogService.findOneByUserId(userEntity.getId());
         if(loginLogEntity!=null)
             modelMap.put("lastLoginTime",loginLogEntity.getCreateTime().toString().substring(0,19));

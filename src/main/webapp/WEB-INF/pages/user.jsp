@@ -40,6 +40,9 @@
       <div class="layui-input-inline">
         <select name="roleId" id="roleId" lay-verify="select"></select>
       </div>
+      <div class="layui-input-inline">
+        <select name="groupId" id="groupId" lay-verify="select"></select>
+      </div>
       <input class="layui-input" placeholder="开始日" name="startTime" id="start">
       <input class="layui-input" placeholder="截止日" name="endTime" id="end">
       <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
@@ -64,9 +67,9 @@
     <div class="layui-col-md12 x-so">
       <label class="layui-form-label">密码</label>
       <div class="layui-input-inline">
-        <input type="password" id="password0" name="password" lay-verify="required" class="layui-input"
+        <input type="password" id="password" name="password" lay-verify="required" class="layui-input"
                isshow="0">
-        <a class="layui-btn" onclick="show(this,0)">
+        <a class="layui-btn" onclick="show(this)">
           <i class="iconfont">&#xe6e6;</i>
         </a>
       </div>
@@ -74,19 +77,25 @@
     <div class="layui-form-item">
       <label class="layui-form-label">邮箱</label>
       <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="email" name="email">
+        <input type="text" class="layui-input" id="email" name="email" lay-verify="email">
       </div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">手机号</label>
       <div class="layui-input-inline">
-        <input type="text" class="layui-input" id="phone" name="phone">
+        <input type="text" class="layui-input" id="phone" name="phone" lay-verify="phone">
       </div>
     </div>
     <div class="layui-form-item">
       <label class="layui-form-label">所属角色</label>
       <div class="layui-input-inline">
-        <select name="roleId" id="roleId1" lay-verify="select"></select>
+        <select name="roleId" id="roleId1" lay-verify="selected"></select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">所属群组</label>
+      <div class="layui-input-inline">
+        <select name="groupId" id="groupId1" lay-verify="selected"></select>
       </div>
     </div>
     <div class="layui-form-item">

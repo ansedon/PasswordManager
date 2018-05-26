@@ -12,6 +12,8 @@ public class UserResponse {
     public String createTime;
     public int roleId;
     public String roleName;
+    public int groupId;
+    public String groupName;
 
     public UserResponse(UserEntity userEntity){
         this.id=userEntity.getId();

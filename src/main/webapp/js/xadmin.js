@@ -127,7 +127,7 @@ $(function () {
 })
 
 function tabClick(title){
-    var lis=document.getElementsByTagName("cite");
+    var lis=window.parent.document.getElementsByTagName("cite");
     for(var i=0;i<lis.length;i++){
         if(lis[i].innerHTML==title){
             var len=$(lis[i]).parents('li').length;

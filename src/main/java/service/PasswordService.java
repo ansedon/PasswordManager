@@ -23,6 +23,10 @@ public class PasswordService {
     @Autowired
     PasswordRepository passwordRepository;
 
+    public int countAll(){
+        return passwordRepository.countAllByIsDeleted((byte)0);
+    }
+
     public void update(PasswordEntity passwordEntity) {
         passwordRepository.saveAndFlush(passwordEntity);
     }

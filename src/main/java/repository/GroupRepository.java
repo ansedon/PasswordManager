@@ -24,4 +24,6 @@ public interface GroupRepository extends JpaRepository<CpGroupEntity,Integer>,Jp
     @Transactional
     @Query("update CpGroupEntity g set g.isDeleted=1 where g.id=?1")
     int deleteGroupById(int id);
+
+    int countAllByIsDeleted(byte value);
 }

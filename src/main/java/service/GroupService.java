@@ -24,6 +24,10 @@ public class GroupService {
     @Autowired
     GroupRepository groupRepository;
 
+    public int countAll(){
+        return groupRepository.countAllByIsDeleted((byte)0);
+    }
+
     public List<CpGroupEntity> findAll(){
         return groupRepository.findAllByIsDeleted((byte)0);
     }

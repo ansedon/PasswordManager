@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer>, JpaS
     @Transactional
     @Query("update UserEntity user set user.isDeleted=1 where user.id=?1")
     int deleteUserById(int id);
+
+    int countAllByIsDeleted(byte value);
 }

@@ -16,4 +16,6 @@ public interface PasswordRepository extends JpaRepository<PasswordEntity,Integer
     @Transactional
     @Query("update PasswordEntity ps set ps.isDeleted=1 where ps.id=?1")
     int deletePasswordById(int id);
+
+    int countAllByIsDeleted(byte value);
 }

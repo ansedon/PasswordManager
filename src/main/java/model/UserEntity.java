@@ -44,8 +44,19 @@ public class UserEntity {
     private Collection<UserGroupEntity> userGroupsById;
     private Collection<UserGroupEntity> userGroupsById_0;
     private Collection<UserGroupEntity> userGroupsById_1;
+    private int groupId;
+
+    @Transient
+    public int getGroupId(){
+        return groupId;
+    }
+
+    public void setGroupId(int groupId){
+        this.groupId=groupId;
+    }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
