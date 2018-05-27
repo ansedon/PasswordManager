@@ -93,7 +93,7 @@
       </div>
     </div>
     <div class="layui-form-item">
-      <label class="layui-form-label">所属群组</label>
+      <label class="layui-form-label">所属部门</label>
       <div class="layui-input-inline">
         <select name="groupId" id="groupId1" lay-verify="selected"></select>
       </div>
@@ -114,59 +114,6 @@
     </div>
   </form>
 </div>
-
-<%--<div id="addTab" style="display: none;padding-top:20px;">--%>
-  <%--<form class="layui-form">--%>
-    <%--<div class="layui-form-item">--%>
-      <%--<label class="layui-form-label">账号</label>--%>
-      <%--<div class="layui-input-inline">--%>
-        <%--<input type="text" id="account" name="account" lay-verify="required" class="layui-input">--%>
-      <%--</div>--%>
-    <%--</div>--%>
-    <%--<div class="layui-col-md12 x-so">--%>
-      <%--<label class="layui-form-label">密码</label>--%>
-      <%--<div class="layui-input-inline">--%>
-        <%--<input type="password" id="password0" name="password" lay-verify="required" class="layui-input"--%>
-               <%--isshow="0">--%>
-        <%--<a class="layui-btn" onclick="show(this,0)">--%>
-          <%--<i class="iconfont">&#xe6e6;</i>--%>
-        <%--</a>--%>
-      <%--</div>--%>
-    <%--</div>--%>
-    <%--<div class="layui-form-item">--%>
-      <%--<label class="layui-form-label">邮箱</label>--%>
-      <%--<div class="layui-input-inline">--%>
-        <%--<input type="text" class="layui-input" id="email" name="email">--%>
-      <%--</div>--%>
-    <%--</div>--%>
-    <%--<div class="layui-form-item">--%>
-      <%--<label class="layui-form-label">手机号</label>--%>
-      <%--<div class="layui-input-inline">--%>
-        <%--<input type="text" class="layui-input" id="phone" name="phone">--%>
-      <%--</div>--%>
-    <%--</div>--%>
-    <%--<div class="layui-form-item">--%>
-      <%--<label class="layui-form-label">所属角色</label>--%>
-      <%--<div class="layui-input-inline">--%>
-        <%--<select name="roleId" id="roleId1" lay-verify="select"></select>--%>
-      <%--</div>--%>
-    <%--</div>--%>
-    <%--<div class="layui-form-item">--%>
-      <%--<label class="layui-form-label">位置</label>--%>
-      <%--<div class="layui-input-inline">--%>
-        <%--<input type="text" class="layui-input" id="location" name="location">--%>
-      <%--</div>--%>
-    <%--</div>--%>
-    <%--<div class="layui-form-item" style="text-align:center">--%>
-      <%--<button class="layui-btn" lay-filter="add" lay-submit id="add">--%>
-        <%--添加--%>
-      <%--</button>--%>
-      <%--<button class="layui-btn" id="cancel">--%>
-        <%--取消--%>
-      <%--</button>--%>
-    <%--</div>--%>
-  <%--</form>--%>
-<%--</div>--%>
 
 <script id="bar" type="text/html">
   <a title="编辑" lay-event="edit">

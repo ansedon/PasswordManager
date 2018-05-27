@@ -8,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
           content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="/lib/jstree/themes/default/style.min.css"/>
     <link rel="stylesheet" href="/css/font.css">
     <link rel="stylesheet" href="/css/xadmin.css">
     <script type="text/javascript" src="/js/jquery.min.js"></script>
@@ -15,6 +16,7 @@
     <script type="text/javascript" src="/js/xadmin.js"></script>
     <script type="text/javascript" src="/js/mymod.js"></script>
     <script type="text/javascript" src="/js/group.js"></script>
+    <script type="text/javascript" src="/lib/jstree/jstree.min.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -34,49 +36,91 @@
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
 </div>
 <div class="x-body">
-    <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
-            <input type="text" name="name" placeholder="请输入群组名" autocomplete="off" class="layui-input">
-            <div class="layui-input-inline">
-                <select name="fatherGroupId" id="fatherGroupId"></select>
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md2">
+            <div class="layui-form-item" style="text-align:center">
+                <h2>部门结构</h2>
             </div>
-            <input class="layui-input" placeholder="开始日" name="startTime" id="start">
-            <input class="layui-input" placeholder="截止日" name="endTime" id="end">
-            <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
-        </form>
+            <div id="jstree"></div>
+        </div>
+        <div class="layui-col-md10">
+            <xblock>
+                <button class="layui-btn" id="addBtn">添加</button>
+                <button class="layui-btn" id="edit">
+                    修改
+                </button>
+                <button class="layui-btn layui-btn-danger" id="delete">
+                    删除
+                </button>
+                <button class="layui-btn" id="allot">
+                    分配资源
+                </button>
+            </xblock>
+            <form class="layui-form layui-form-pane">
+                <input type="hidden" name="id" id="nodeId" class="layui-input">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="name" name="name" disabled class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">部门介绍</label>
+                    <div class="layui-input-block">
+                        <textarea type="text" id="description" name="description" disabled
+                                  class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门位置</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="location" name="location" disabled class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="creatorName" name="creatorName" disabled class="layui-input">
+                    </div>
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="createTime" name="createTime" disabled class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">最后修改者</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="modifier" name="modifier" disabled class="layui-input">
+                    </div>
+                    <label class="layui-form-label">修改时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="modifiedTime" name="modifiedTime" disabled class="layui-input">
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    <xblock>
-        <button class="layui-btn" id="addBtn"><i class="layui-icon"></i>添加
-        </button>
-    </xblock>
-    <table class="layui-table" id="groupTable" lay-filter="groupTable"></table>
 </div>
-
-<div id="detail" style="display: none;padding-top:20px;">
+<div id="detail" style="display:none;padding-top: 20px">
     <form class="layui-form">
-        <input type="hidden" name="id" id="id" value="0" class="layui-input">
+        <input type="hidden" name="id" id="id1" value="0" class="layui-input">
         <div class="layui-form-item">
-            <label class="layui-form-label">群组名</label>
+            <label class="layui-form-label">部门名称</label>
             <div class="layui-input-inline">
-                <input type="text" id="name" name="name" class="layui-input">
+                <input type="text" id="name1" name="name" lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">部门介绍</label>
+            <div class="layui-input-inline">
+                        <textarea type="text" id="description1" name="description"
+                                  class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">上级群组</label>
+            <label class="layui-form-label">部门位置</label>
             <div class="layui-input-inline">
-                <select type="text" id="fatherGroupId1" name="fatherGroupId" lay-verify="selected" class="layui-input"></select>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">说明</label>
-            <div class="layui-input-inline">
-                <textarea type="text" id="description" name="description" class="layui-textarea"></textarea>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">位置</label>
-            <div class="layui-input-inline">
-                <input type="text" id="location" name="location"  class="layui-input">
+                <input type="text" id="location1" name="location" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item" style="text-align:center">
@@ -89,15 +133,5 @@
         </div>
     </form>
 </div>
-
-<script id="bar" type="text/html">
-    <a title="编辑" lay-event="edit">
-        <i class="layui-icon">&#xe642;</i>
-    </a>
-    <a title="删除" lay-event="delete">
-        <i class="layui-icon">&#xe640;</i>
-    </a>
-</script>
-
 </body>
 </html>

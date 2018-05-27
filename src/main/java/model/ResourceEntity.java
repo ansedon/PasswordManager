@@ -13,7 +13,7 @@ public class ResourceEntity {
     private String description;
     private String url;
     private String location;
-    private Integer pwdPolicy;
+    private String pwdPolicy;
     private String superkey;
     private int typeId;
     private Timestamp createTime;
@@ -88,11 +88,11 @@ public class ResourceEntity {
 
     @Basic
     @Column(name = "pwd_policy", nullable = true)
-    public Integer getPwdPolicy() {
+    public String getPwdPolicy() {
         return pwdPolicy;
     }
 
-    public void setPwdPolicy(Integer pwdPolicy) {
+    public void setPwdPolicy(String pwdPolicy) {
         this.pwdPolicy = pwdPolicy;
     }
 

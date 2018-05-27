@@ -159,10 +159,10 @@ function layer_show(title, url, w, h){
         url="404";
     };
     if (w == null || w == '') {
-        w=($(window).width()*0.9);
+        w=($(window).width()*0.8);
     };
     if (h == null || h == '') {
-        h=($(window).height() - 50);
+        h=($(window).height() - 150);
     };
     layer.open({
         type: 2,

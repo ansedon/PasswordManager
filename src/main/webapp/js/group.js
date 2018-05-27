@@ -1,174 +1,192 @@
 $(function () {
     layui.use(['form', 'table', 'laydate'], function () {
         var form = layui.form, laydate = layui.laydate, table = layui.table, mymod = layui.mymod;
-        layer=layui.layer;
-        var cols = [[
-            {field: 'id', title: 'ID', sort: true, width: 100}
-            ,{field: 'name', title: 'Name', sort: true,templet:function(d){
-                return "<a href=\"javascript:void(0)\" class=\"layui-table-link\" onclick=\"layer_show(\'"+d.name+"-资源分配\',\'\/group\/list\/"+d.id+"\')\">"+d.name+"</a>";
-            }}
-        , {field: 'fatherGroupName', title: 'Father Group'}
-            , {field: 'description', title: 'Description'}
-            , {field: 'location', title: 'Location'}
-            , {field: 'creatorName', title: 'Creator'}
-            , {field: 'createTime', title: 'Create Time', sort: true}
-            , {field: '', title: 'Opertion', toolbar: '#bar'}
-        ]]
+        layer = layui.layer;
 
-        table.render({
-            elem: '#groupTable'
-            , url: '/group/list/all' //数据接口
-            , page: true //开启分页
-            , cols: cols
-        });
 
-        mymod.renderLaydate('start', 'end', 'datetime');
-
-        ajax("/group/all", null, function (res) {
-            mymod.renderSelect('fatherGroupId', res.data, 'id', 'name', '上级群组');
-        })
-
-        form.verify({
-            selected: function (value) {
-                if (value== 0) {
-                    return '请选择一项';
+        $("#jstree").jstree({
+            'core': {
+                'themes': {
+                    'icons': false,
+                    'responsive': false
+                },
+                'check_callback': true,
+                'data': function (obj, callback) {
+                    ajax("/group/tree", '', function (res) {
+                        callback.call(this, res);
+                    })
                 }
-            }
+            },
+            'types': {
+                'default': { //设置默认的icon 图
+                    "icon": "layui-icon layui-icon-face-smile",
+                }
+            },
+            'state': {"key": "demo2"},
+            'plugins': ["dnd", "state", "types", "wholerow", "themes"]
         });
+
+        $('#jstree').on("changed.jstree", function (e, data) {
+            var id = data.instance.get_node(data.selected).id;
+            $('#nodeId').val(id);
+            if (id != false && id != undefined)
+                ajax('/group/list/one', {id: id}, function (res) {
+                    $('#name').val(res.data[0].name);
+                    $('#description').val(res.data[0].description);
+                    $('#location').val(res.data[0].location);
+                    $('#createTime').val(res.data[0].createTime);
+                    $('#creatorName').val(res.data[0].creatorName);
+                    $('#modifiedTime').val(res.data[0].modifiedTime);
+                    $('#modifier').val(res.data[0].modifierName);
+                })
+        });
+
+        //拖拽事件
+        $("#jstree").on('move_node.jstree', function (e, data) {
+            layer.confirm('确定移动部门？', {icon: 3, title: '提示'}, function (index) {
+                var d = {id: data.node.id, fatherGroupId: data.parent};
+                ajax('/group/list/update', d, function (res) {
+                    layer.msg("移动成功", {time: 500});
+                })
+            }, function (index) {
+                ajax("/group/tree", '', function (json) {
+                    $("#jstree").jstree(true).settings.core.data = json;
+                    $("#jstree").jstree(true).refresh();
+                })
+            });
+        })
 
         $('#addBtn').click(function () {
             layer.open({
-                type:1,
-                title:'添加群组',
-                content:$('#detail'),
-                resize:true,
-                success:function (layero, index) {
-                    ajax("/group/all", null, function (res) {
-                        mymod.renderSelect('fatherGroupId1', res.data, 'id', 'name', '上级群组');
-                    })
+                type: 1,
+                title: '添加部门',
+                content: $('#detail'),
+                resize: true,
+                success: function (layero, index) {
                     //监听提交
                     form.on('submit(add)', function (data) {
+                        data.field['fatherGroupId'] = $('#nodeId').val();
                         ajax('/group/list/update', data.field, function (res) {
                             if (res.result == "OK") {
                                 layer.msg('添加成功!', {time: 500}, function () {
-                                    $("#name").val("");
-                                    $("#description").val("");
-                                    $("#fatherGroupId1").val(0);
-                                    $("#location").val("");
-                                    $(".layui-laypage-btn").click();
+                                    $("#name1").val("");
+                                    $("#description1").val("");
+                                    $("#location1").val("");
                                     //关闭当前frame
                                     layer.close(index);
                                 })
                             } else {
+                                $("#name1").val("");
+                                $("#description1").val("");
+                                $("#location1").val("");
+                                //关闭当前frame
+                                layer.close(index);
                                 layer.msg(res.msg, {time: 500});
                             }
+                            ajax("/group/tree", '', function (json) {
+                                $("#jstree").jstree(true).settings.core.data = json;
+                                $("#jstree").jstree(true).refresh();
+                            })
                         })
                         return false;
                     });
 
                     $('#cancel').click(function () {
+                        $("#name1").val("");
+                        $("#description1").val("");
+                        $("#location1").val("");
+                        //关闭当前frame
                         layer.close(index);
-                        $("#name").val("");
-                        $("#description").val("");
-                        $("#fatherGroupId1").val(0);
-                        $("#location").val("");
                         return false;
                     })
                 }
-                , cancel: function(){
-                    $("#name").val("");
-                    $("#description").val("");
-                    $("#fatherGroupId1").val(0);
-                    $("#location").val("");
+                , cancel: function () {
+                    $("#name1").val("");
+                    $("#description1").val("");
+                    $("#location1").val("");
                 }
             })
         })
 
-        //监听搜索
-        form.on('submit(search)', function (data) {
-            table.reload('groupTable', {
-                url: '/group/list/all' //数据接口
-                , where: data.field
-                , page: true //开启分页
-                , cols: cols
+        $('#edit').click(function () {
+            layer.open({
+                type: 1,
+                title: '修改部门信息',
+                content: $('#detail'),
+                resize: true,
+                success: function (layero, index) {
+                    $('#id1').val($('#nodeId').val());
+                    $('#name1').val($('#name').val());
+                    $('#description1').val($('#description').val());
+                    $('#location1').val($('#location').val());
+                    $('#add')[0].innerHTML = "修改";
+                    //监听提交
+                    form.on('submit(add)', function (data) {
+                        ajax('/group/list/update', data.field, function (res) {
+                            if (res.result == "OK") {
+                                layer.msg('添加成功!', {time: 500}, function () {
+                                    $("#name1").val("");
+                                    $("#description1").val("");
+                                    $("#location1").val("");
+                                    $('#add')[0].innerHTML = "添加";
+                                    //关闭当前frame
+                                    layer.close(index);
+                                })
+                            } else {
+                                $("#name1").val("");
+                                $("#description1").val("");
+                                $("#location1").val("");
+                                $('#add')[0].innerHTML = "添加";
+                                //关闭当前frame
+                                layer.close(index);
+                                layer.msg(res.msg, {time: 500});
+                            }
+                            ajax("/group/tree", '', function (json) {
+                                $("#jstree").jstree(true).settings.core.data = json;
+                                $("#jstree").jstree(true).refresh();
+                            })
+                        })
+                        return false;
+                    });
+
+                    $('#cancel').click(function () {
+                        $("#name1").val("");
+                        $("#description1").val("");
+                        $("#location1").val("");
+                        $('#add')[0].innerHTML = "添加";
+                        //关闭当前frame
+                        layer.close(index);
+                        return false;
+                    })
+                }
+                , cancel: function () {
+                    $("#name1").val("");
+                    $("#description1").val("");
+                    $("#location1").val("");
+                    $('#add')[0].innerHTML = "添加";
+                }
             })
-            return false;
         })
 
-        //监听工具条
-        table.on('tool(groupTable)', function (obj) {
-            var data = obj.data;
-            var layEvent = obj.event;
-            if (layEvent === 'delete') { //删除
-                layer.confirm('是否删除？', {icon: 3, title: '提示'}, function (index) {
-                    ajax('/group/list/delete', {id: data.id}, function (msg) {
-                        layer.close(index);
-                        if (msg.result == "OK")
-                            layer.msg("删除成功！", {time: 500}, function () {
-                                $(".layui-laypage-btn").click();
-                            })
-                        else
-                            layer.msg(msg.msg);
+        $('#delete').click(function () {
+            layer.confirm('是否删除？', {icon: 3, title: '提示'}, function (index) {
+                ajax('/group/list/delete', {id: $('#nodeId').val()}, function (msg) {
+                    layer.close(index);
+                    if (msg.result == "OK")
+                        layer.msg("删除成功！", {time: 500})
+                    else
+                        layer.msg(msg.msg);
+                    ajax("/group/tree", '', function (json) {
+                        $("#jstree").jstree(true).settings.core.data = json;
+                        $("#jstree").jstree(true).refresh();
                     })
-                });
-            } else if (layEvent === 'edit') { //编辑
-                $("#id").val(data.id);
-                $("#name").val(data.name);
-                $("#description").val(data.description);
-                ajax("/group/all", null, function (res) {
-                    mymod.renderSelect('fatherGroupId1', res.data, 'id', 'name', '上级群组',data.fatherGroupId,data.id);
                 })
-                $("#location").val(data.location);
-                $("#add")[0].innerHTML="修改";
-                layer.open({
-                    type: 1,
-                    title: '编辑群组',
-                    content: $('#detail'),
-                    resize:true,
-                    success: function (layero, index) {
-                        //监听提交
-                        form.on('submit(add)', function (data) {
-                            ajax('/group/list/update', data.field, function (res) {
-                                if (res.result == "OK") {
-                                    layer.msg('修改成功!', {time: 500}, function () {
-                                        //关闭当前frame
-                                        layer.close(index);
-                                        $('#id').val(0);
-                                        $("#name").val("");
-                                        $("#description").val("");
-                                        $("#fatherGroupId1").val(0);
-                                        $("#location").val("");
-                                        $("add").val("添加");
-                                        $(".layui-laypage-btn").click();
-                                    })
-                                } else {
-                                    layer.msg(res.msg, {time: 500});
-                                }
-                            })
-                            return false;
-                        });
+            });
+        })
 
-                        $('#cancel').click(function () {
-                            layer.close(index);
-                            $('#id').val(0);
-                            $("#name").val("");
-                            $("#description").val("");
-                            $("#fatherGroupId1").val(0);
-                            $("#location").val("");
-                            $("#add")[0].innerHTML="添加";
-                            return false;
-                        })
-                    }
-                    , cancel: function(){
-                        $('#id').val(0);
-                        $("#name").val("");
-                        $("#description").val("");
-                        $("#fatherGroupId1").val(0);
-                        $("#location").val("");
-                        $("#add")[0].innerHTML="添加";
-                    }
-                })
-            }
-        });
-    });
+        $('#allot').click(function () {
+           layer_show($('#name').val()+"-资源分配",'/group/list/'+$('#nodeId').val());
+        })
+
+    })
 })

@@ -4,10 +4,10 @@ $(function  () {
 
         var cols=[[
             {field: 'id', title: 'ID',  sort: true,width:100}
-            ,{field: 'name', title: 'Name',sort:true}
-            ,{field: 'description', title: 'Description'}
-            ,{field: 'createTime', title: 'Create Time',  sort: true}
-            ,{field: '', title: 'Opertion',toolbar:'#bar',width:100}
+            ,{field: 'name', title: '类型名称',sort:true}
+            ,{field: 'description', title: '类型说明'}
+            ,{field: 'createTime', title: '创建时间',  sort: true}
+            ,{field: '', title: '操作',toolbar:'#bar',width:100}
         ]]
 
         table.render({

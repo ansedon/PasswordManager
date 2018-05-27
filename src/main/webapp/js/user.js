@@ -4,15 +4,15 @@ $(function () {
         layer = layui.layer;
         var cols = [[
             {field: 'id', title: 'ID', sort: true, width: 100}
-            , {field: 'account', title: 'Account', sort: true}
-            , {field: 'password', title: 'Password', minWidth: 200, templet: "#psTpl"}
-            , {field: 'email', title: 'Email', sort: true}
-            , {field: 'roleName', title: 'Role Name', sort: true}
-            , {field: 'groupName', title: 'Group Name', sort: true}
-            , {field: 'phone', title: 'Phone', sort: true}
-            , {field: 'location', title: 'Location', sort: true}
-            , {field: 'createTime', title: 'Create Time', sort: true}
-            , {field: '', title: 'Opertion', toolbar: '#bar'}
+            , {field: 'account', title: '账号', sort: true}
+            , {field: 'password', title: '密码', minWidth: 200, templet: "#psTpl"}
+            , {field: 'email', title: '电子邮箱', sort: true}
+            , {field: 'roleName', title: '角色名称', sort: true}
+            , {field: 'groupName', title: '所在部门', sort: true}
+            , {field: 'phone', title: '手机号', sort: true}
+            , {field: 'location', title: '位置', sort: true}
+            , {field: 'createTime', title: '创建时间', sort: true}
+            , {field: '', title: '操作', toolbar: '#bar'}
         ]]
 
         table.render({

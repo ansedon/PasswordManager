@@ -14,6 +14,7 @@ public class GroupResponse {
     public String createTime;
     public String modifiedTime;
     public Integer modifierId;
+    public String modifierName;
 
     public GroupResponse(CpGroupEntity cpGroupEntity){
         this.id= cpGroupEntity.getId();

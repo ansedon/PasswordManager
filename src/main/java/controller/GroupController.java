@@ -23,6 +23,44 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
+    @ResponseBody
+    @RequestMapping(value = "/group/tree",method = RequestMethod.POST)
+    public ResponseEntity<Object> getGroupTree(HttpSession session){
+//        int groupId=(int)session.getAttribute(Session.GROUPID);
+        int groupId=2;
+        List<CpGroupEntity>groupEntities=groupService.findAll();
+        List<GroupTree> tree=new ArrayList<>();
+        List<Integer> groupIds=new ArrayList<>();
+        List<Integer> ids=new ArrayList<>();
+        ids.add(groupId);
+        if(groupId!=1){
+            groupIds.add(groupId);
+            List<CpGroupEntity> list=groupService.findAllByFatherGroupIds(ids);
+            while(list!=null&&list.size()>0){
+                for(CpGroupEntity cpGroupEntity:list){
+                    ids.clear();
+                    groupIds.add(cpGroupEntity.getId());
+                    ids.add(cpGroupEntity.getId());
+                }
+                list=groupService.findAllByFatherGroupIds(ids);
+            }
+        }
+        for(CpGroupEntity cpGroupEntity:groupEntities){
+            GroupTree groupTree=new GroupTree(cpGroupEntity);
+            groupTree.state=new TreeState();
+            groupTree.state.disabled=true;
+            if(groupId!=1){
+                if(groupIds.contains(cpGroupEntity.getId()))
+                    groupTree.state.disabled=false;
+                if(cpGroupEntity.getId()==groupId)
+                    groupTree.state.selected=true;
+            }
+            groupTree.state.opened=true;
+            tree.add(groupTree);
+        }
+        return new ResponseEntity<Object>(tree,HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/group/list", method = RequestMethod.GET)
     public String index() {
         return "group";
@@ -35,10 +73,26 @@ public class GroupController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/group/list/one", method = RequestMethod.POST)
+    public ResponseEntity<Object> getGroupById(@RequestBody IdRequest idRequest) {
+        ParentResponse resp = new ParentResponse();
+        resp.data=new ArrayList<GroupResponse>();
+        CpGroupEntity cpGroupEntity=groupService.findGroupById(idRequest.id);
+        GroupResponse groupResponse=new GroupResponse(cpGroupEntity);
+        groupResponse.creatorName=cpGroupEntity.getUserByCreatorId().getAccount();
+        groupResponse.modifierName=cpGroupEntity.getUserByModifierId().getAccount();
+        resp.data.add(groupResponse);
+        resp.result = "OK";
+        resp.msg = "操作成功！";
+        return new ResponseEntity<Object>(resp, HttpStatus.OK);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/group/list/update", method = RequestMethod.POST)
     public ResponseEntity<Object> update(@RequestBody CpGroupEntity groupEntity, HttpSession session) {
         ParentResponse resp = new ParentResponse();
         UserEntity user = (UserEntity) session.getAttribute(Session.USER);
+        //修改
         if (groupEntity.getId() != 0) {
             CpGroupEntity groupEntity1 = groupService.findGroupById(groupEntity.getId());
             groupEntity.setCreatorId(groupEntity1.getCreatorId());
@@ -46,10 +100,17 @@ public class GroupController {
             groupEntity.setModifierId(user.getId());
             groupEntity.setCreateTime(groupEntity1.getCreateTime());
             groupEntity.setIsDeleted(groupEntity1.getIsDeleted());
-        } else {
+            if(groupEntity.getFatherGroupId()==null||groupEntity.getFatherGroupId()==0){
+                groupEntity.setFatherGroupId(groupEntity1.getFatherGroupId());
+            }else{
+                //拖拽改变父部门
+                groupEntity.setName(groupEntity1.getName());
+                groupEntity.setDescription(groupEntity1.getDescription());
+                groupEntity.setLocation(groupEntity1.getLocation());
+            }
+        } else {//添加
             groupEntity.setCreatorId(user.getId());
             groupEntity.setModifierId(user.getId());
-            groupEntity.setFatherGroupId((int) session.getAttribute(Session.GROUPID));
             groupEntity.setModifiedTime(new Timestamp(System.currentTimeMillis()));
             groupEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
             groupEntity.setIsDeleted((byte) 0);

@@ -9,7 +9,7 @@ public class ResourceResponse{
     public String description;
     public String url;
     public String location;
-    public Integer pwdPolicy;
+    public String pwdPolicy;
     public String superkey;
     public int typeId;
     public String typeName;
@@ -77,11 +77,11 @@ public class ResourceResponse{
         this.location = location;
     }
 
-    public Integer getPwdPolicy() {
+    public String getPwdPolicy() {
         return pwdPolicy;
     }
 
-    public void setPwdPolicy(Integer pwdPolicy) {
+    public void setPwdPolicy(String pwdPolicy) {
         this.pwdPolicy = pwdPolicy;
     }
 

@@ -27,7 +27,7 @@
     <form class="layui-form">
         <input type="hidden" name="id" lay-verify="required" value="${resourceEntity.id}" class="layui-input">
         <div class="layui-form-item">
-            <label class="layui-form-label">name</label>
+            <label class="layui-form-label">资源名称</label>
             <div class="layui-input-inline">
                 <input type="text" id="name" name="name" lay-verify="required" class="layui-input"
                        value="${resourceEntity.name}">
@@ -41,13 +41,13 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">type</label>
+            <label class="layui-form-label">资源类型</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="typeId" id="typeId" lay-verify="selected" data="${resourceEntity.typeId}"></select>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">description</label>
+            <label class="layui-form-label">资源说明</label>
             <div class="layui-input-block">
                 <textarea type="textarea" id="description" name="description"
                           class="layui-textarea">${resourceEntity.description}</textarea>
@@ -61,21 +61,21 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">location</label>
+            <label class="layui-form-label">位置</label>
             <div class="layui-input-inline">
                 <input type="text" id="location" name="location"
                        value="${resourceEntity.location}" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">password policy</label>
+            <label class="layui-form-label">密码政策</label>
             <div class="layui-input-inline">
                 <input type="text" id="pwdPolicy" name="pwdPolicy"
                        value="${resourceEntity.pwdPolicy}" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">superkey</label>
+            <label class="layui-form-label">密钥</label>
             <div class="layui-input-block">
                 <textarea type="text" id="superkey" name="superkey"
                           class="layui-textarea">${resourceEntity.superkey}</textarea>

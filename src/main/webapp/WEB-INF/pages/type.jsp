@@ -54,13 +54,13 @@
     <form class="layui-form">
         <input type="hidden" name="id" id="id" value="0" class="layui-input">
         <div class="layui-form-item">
-            <label class="layui-form-label">name</label>
+            <label class="layui-form-label">类型名称</label>
             <div class="layui-input-inline">
                 <input type="text" id="name" name="name" placeholder="请输入资源类型名称" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">description</label>
+            <label class="layui-form-label">类型说明</label>
             <div class="layui-input-inline">
                 <textarea type="text" id="description" name="description" placeholder="请输入资源类型说明" class="layui-textarea"></textarea>
             </div>
@@ -89,7 +89,6 @@
     <a title="删除" lay-event="delete">
         <i class="layui-icon">&#xe640;</i>
     </a>
-
 </script>
 </body>
 </html>

@@ -4,12 +4,12 @@ $(function () {
         layer=layui.layer;
         var cols = [[
             {field: 'id', title: 'ID', sort: true, width: 100}
-            , {field: 'account', title: 'Account', sort: true}
-            , {field: 'password', title: 'Password',minWidth:200, templet: "#psTpl"}
-            , {field: 'resourceName', title: 'Resource Name', sort: true}
-            , {field: 'modifierName', title: 'Modifier Name', sort: true}
+            , {field: 'account', title: '账户', sort: true}
+            , {field: 'password', title: '口令',minWidth:200, templet: "#psTpl"}
+            , {field: 'resourceName', title: '资源名称', sort: true}
+            , {field: 'modifierName', title: '修改时间', sort: true}
             , {
-                field: 'expireTime', title: 'Expire Time', sort: true, templet: function (d) {
+                field: 'expireTime', title: '失效时间', sort: true, templet: function (d) {
                     if (d.expireTime == null)
                         return "永久有效";
                     else if(new Date(d.expireTime)<new Date())
@@ -17,8 +17,8 @@ $(function () {
                     return d.expireTime;
                 }
             }
-            , {field: 'createTime', title: 'Create Time', sort: true}
-            , {field: '', title: 'Opertion', toolbar: '#bar'}
+            , {field: 'createTime', title: '创建时间', sort: true}
+            , {field: '', title: '操作', toolbar: '#bar'}
         ]]
 
         table.render({

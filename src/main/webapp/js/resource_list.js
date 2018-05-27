@@ -3,16 +3,16 @@ $(function  () {
         var form=layui.form,laydate = layui.laydate,table = layui.table,mymod=layui.mymod;
         var cols=[[
             {field: 'id', title: 'ID',  sort: true,width:100}
-            ,{field: 'name', title: 'Name',sort:true}
-            ,{field: 'ip', title: 'IP', sort: true}
-            ,{field: 'typeName', title: 'Type',sort:true}
+            ,{field: 'name', title: '资源名称',sort:true}
+            ,{field: 'ip', title: 'IP地址', sort: true}
+            ,{field: 'typeName', title: '资源类型',sort:true}
             ,{field: 'url', title: 'URL',templet:function(d){
                 if(d.url!=null)
                     return "<a href=\""+d.url+"\" class=\"layui-table-link\" target=\"_blank,_parent\">"+d.url+"</a>"
                 return "";
             }}
-            ,{field: 'createTime', title: 'Create Time',  sort: true}
-            ,{field: '', title: 'Opertion',toolbar:'#bar'}
+            ,{field: 'createTime', title: '创建时间',  sort: true}
+            ,{field: '', title: '操作',toolbar:'#bar'}
         ]]
 
         table.render({
@@ -76,7 +76,7 @@ $(function  () {
                     })
                 });
             } else if(layEvent === 'edit'){ //编辑
-                layer_show("编辑资源","/resource/list/edit/"+data.id,500,600);
+                layer_show("编辑资源","/resource/list/edit/"+data.id);
             }
         });
     });

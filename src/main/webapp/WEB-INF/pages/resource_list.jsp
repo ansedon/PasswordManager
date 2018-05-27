@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>欢迎页面-Password Manager</title>
+    <title>Password Manager</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -46,7 +46,7 @@
         </form>
     </div>
     <xblock>
-        <button class="layui-btn" onclick="layer_show('添加','/resource/list/add',600,400)"><i class="layui-icon"></i>添加
+        <button class="layui-btn" onclick="layer_show('添加','/resource/list/add')"><i class="layui-icon"></i>添加
         </button>
     </xblock>
     <table class="layui-table" id="resourceTable" lay-filter="resourceTable"></table>
@@ -55,7 +55,7 @@
 <div id="detail" style="display: none;padding-top:20px;">
     <form class="layui-form">
         <div class="layui-form-item">
-            <label class="layui-form-label">name</label>
+            <label class="layui-form-label">资源名称</label>
             <div class="layui-input-inline">
                 <input type="text" id="name" name="name" lay-verify="required" disabled class="layui-input">
             </div>
@@ -67,13 +67,13 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">type</label>
+            <label class="layui-form-label">资源类型</label>
             <div class="layui-input-inline">
                 <input type="text" id="type" name="type" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">description</label>
+            <label class="layui-form-label">资源说明</label>
             <div class="layui-input-block">
                 <textarea type="textarea" id="description" name="description" disabled lay-verify="required"
                           class="layui-textarea"></textarea>
@@ -86,25 +86,25 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">location</label>
+            <label class="layui-form-label">位置</label>
             <div class="layui-input-inline">
                 <input type="text" id="location" name="location" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">password policy</label>
+            <label class="layui-form-label">口令政策</label>
             <div class="layui-input-inline">
                 <input type="text" id="pwdPolicy" name="pwdPolicy" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">superkey</label>
+            <label class="layui-form-label">密钥</label>
             <div class="layui-input-inline">
                 <input type="text" id="superkey" name="superkey" lay-verify="required" disabled class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">create time</label>
+            <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
                 <input type="text" id="createTime" name="createTime" lay-verify="required" disabled class="layui-input">
             </div>
