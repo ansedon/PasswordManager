@@ -29,7 +29,7 @@ public class GroupController {
 //        int groupId=(int)session.getAttribute(Session.GROUPID);
         int groupId=2;
         List<CpGroupEntity>groupEntities=groupService.findAll();
-        List<GroupTree> tree=new ArrayList<>();
+        List<TreeResponse> tree=new ArrayList<>();
         List<Integer> groupIds=new ArrayList<>();
         List<Integer> ids=new ArrayList<>();
         ids.add(groupId);
@@ -46,17 +46,17 @@ public class GroupController {
             }
         }
         for(CpGroupEntity cpGroupEntity:groupEntities){
-            GroupTree groupTree=new GroupTree(cpGroupEntity);
-            groupTree.state=new TreeState();
-            groupTree.state.disabled=true;
+            TreeResponse treeResponse =new TreeResponse(cpGroupEntity);
+            treeResponse.state=new TreeState();
+            treeResponse.state.disabled=true;
             if(groupId!=1){
                 if(groupIds.contains(cpGroupEntity.getId()))
-                    groupTree.state.disabled=false;
+                    treeResponse.state.disabled=false;
                 if(cpGroupEntity.getId()==groupId)
-                    groupTree.state.selected=true;
+                    treeResponse.state.selected=true;
             }
-            groupTree.state.opened=true;
-            tree.add(groupTree);
+            treeResponse.state.opened=true;
+            tree.add(treeResponse);
         }
         return new ResponseEntity<Object>(tree,HttpStatus.OK);
     }

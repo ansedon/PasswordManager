@@ -1,9 +1,6 @@
 package controller;
 
-import json.IdRequest;
-import json.ParentParam;
-import json.ParentResponse;
-import json.ResourceTypeResponse;
+import json.*;
 import model.ResourceTypeEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +14,7 @@ import service.ResourceTypeService;
 import tool.ReflectUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +30,37 @@ public class ResourceTypeController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/resource/type/one",method = RequestMethod.POST)
+    public ResponseEntity<Object> getTypeById(@RequestBody IdRequest idRequest){
+        ResourceTypeEntity resourceTypeEntity= resourceTypeService.findResourceTypeEntityById(idRequest.id);
+        ResourceTypeResponse resp=new ResourceTypeResponse(resourceTypeEntity);
+        return new ResponseEntity<Object>(resp, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/resource/type/tree",method = RequestMethod.POST)
+    public ResponseEntity<Object> getGroupTree(HttpSession session){
+        List<ResourceTypeEntity> typeEntities=resourceTypeService.findAll();
+        List<TreeResponse> tree=new ArrayList<>();
+        ResourceTypeEntity resourceTypeEntity=new ResourceTypeEntity();
+        resourceTypeEntity.setId(0);
+        resourceTypeEntity.setFatherTypeId(-1);
+        resourceTypeEntity.setName("root");
+        TreeResponse resp=new TreeResponse(resourceTypeEntity);
+        resp.state=new TreeState();
+        resp.state.opened=true;
+        tree.add(resp);
+        for(ResourceTypeEntity typeEntity:typeEntities){
+            TreeResponse treeResponse =new TreeResponse(typeEntity);
+            treeResponse.state=new TreeState();
+            treeResponse.state.disabled=false;
+            treeResponse.state.opened=true;
+            tree.add(treeResponse);
+        }
+        return new ResponseEntity<Object>(tree,HttpStatus.OK);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/resource/type/update",method = RequestMethod.POST)
     public ResponseEntity<Object> update(@RequestBody ResourceTypeEntity resourceTypeEntity){
         ParentResponse resp = new ParentResponse();
@@ -39,6 +68,14 @@ public class ResourceTypeController {
             ResourceTypeEntity resourceTypeEntity1=resourceTypeService.findResourceTypeEntityById(resourceTypeEntity.getId());
             resourceTypeEntity.setCreateTime(resourceTypeEntity1.getCreateTime());
             resourceTypeEntity.setIsDeleted(resourceTypeEntity1.getIsDeleted());
+            if(resourceTypeEntity.getFatherTypeId()==-1){
+                resourceTypeEntity.setFatherTypeId(0);
+            }else if(resourceTypeEntity.getFatherTypeId()==0){
+                resourceTypeEntity.setFatherTypeId(resourceTypeEntity1.getFatherTypeId());
+            }else{
+                resourceTypeEntity.setName(resourceTypeEntity1.getName());
+                resourceTypeEntity.setDescription((resourceTypeEntity1.getDescription()));
+            }
         }else{
             resourceTypeEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
             resourceTypeEntity.setIsDeleted((byte)0);

@@ -17,11 +17,6 @@ $(function () {
                     })
                 }
             },
-            'types': {
-                'default': { //设置默认的icon 图
-                    "icon": "layui-icon layui-icon-face-smile",
-                }
-            },
             'state': {"key": "demo2"},
             'plugins': ["dnd", "state", "types", "wholerow", "themes"]
         });
@@ -124,7 +119,7 @@ $(function () {
                     form.on('submit(add)', function (data) {
                         ajax('/group/list/update', data.field, function (res) {
                             if (res.result == "OK") {
-                                layer.msg('添加成功!', {time: 500}, function () {
+                                layer.msg('修改成功!', {time: 500}, function () {
                                     $("#name1").val("");
                                     $("#description1").val("");
                                     $("#location1").val("");

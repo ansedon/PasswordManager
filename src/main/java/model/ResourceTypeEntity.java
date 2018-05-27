@@ -14,6 +14,7 @@ public class ResourceTypeEntity {
     private Collection<ResourceEntity> resourcesById_0;
     private Byte isDeleted;
     private String description;
+    private int fatherTypeId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -98,12 +99,22 @@ public class ResourceTypeEntity {
     }
 
     @Basic
-    @Column(name = "description", nullable = false, length = 500)
+    @Column(name = "description", nullable = true, length = 500)
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Basic
+    @Column(name = "father_type_id", nullable = false)
+    public int getFatherTypeId() {
+        return fatherTypeId;
+    }
+
+    public void setFatherTypeId(int fatherTypeId) {
+        this.fatherTypeId = fatherTypeId;
     }
 }
