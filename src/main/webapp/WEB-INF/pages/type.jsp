@@ -84,7 +84,7 @@
     <form class="layui-form">
         <input type="hidden" name="id" id="id1" value="0" class="layui-input">
         <div class="layui-form-item">
-            <label class="layui-form-label">类型名称</label>
+            <label class="layui-form-label"><span class="x-red">*</span>类型名称</label>
             <div class="layui-input-inline">
                 <input type="text" id="name1" name="name" placeholder="请输入资源类型名称" lay-verify="required"
                        class="layui-input">

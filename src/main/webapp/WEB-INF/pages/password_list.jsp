@@ -56,13 +56,13 @@
     <form class="layui-form">
         <input type="hidden" name="id" id="id" value="0" class="layui-input">
         <div class="layui-form-item">
-            <label class="layui-form-label">账号</label>
+            <label class="layui-form-label"><span class="x-red">*</span>账号</label>
             <div class="layui-input-inline">
                 <input type="text" id="account" name="account" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-col-md12 x-so">
-            <label class="layui-form-label">口令</label>
+            <label class="layui-form-label"><span class="x-red">*</span>口令</label>
             <div class="layui-input-inline">
                 <input type="password" id="password0" name="password" lay-verify="required" class="layui-input"
                        isshow="0">
@@ -91,13 +91,13 @@
 <div id="addTab" style="display: none;padding-top:20px;">
     <form class="layui-form">
         <div class="layui-form-item">
-            <label class="layui-form-label">账号</label>
+            <label class="layui-form-label"><span class="x-red">*</span>账号</label>
             <div class="layui-input-inline">
                 <input type="text" id="account1" name="account" lay-verify="required" class="layui-input">
             </div>
         </div>
         <div class="layui-col-md12 x-so">
-            <label class="layui-form-label">口令</label>
+            <label class="layui-form-label"><span class="x-red">*</span>口令</label>
             <div class="layui-input-inline">
                 <input type="password" id="password1" name="password" lay-verify="required" class="layui-input"
                        isshow="0">
@@ -107,7 +107,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">所属资源</label>
+            <label class="layui-form-label"><span class="x-red">*</span>所属资源</label>
             <div class="layui-input-inline">
                 <select name="resourceId" id="resId1" lay-verify="selected"></select>
             </div>

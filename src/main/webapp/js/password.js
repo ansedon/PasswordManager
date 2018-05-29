@@ -4,7 +4,9 @@ $(function () {
         layer=layui.layer;
         var cols = [[
             {field: 'id', title: 'ID', sort: true, width: 100}
-            , {field: 'account', title: '账户', sort: true}
+            , {field: 'account', title: '账户', sort: true,templet:function (d) {
+                return "<a class='layui-table-link' onclick='layer_show(\""+d.account+"-修改记录\",\"/password/operation/"+d.id+"\")'>"+d.account+"</a>"
+            }}
             , {field: 'password', title: '口令',minWidth:200, templet: "#psTpl"}
             , {field: 'resourceName', title: '资源名称', sort: true}
             , {field: 'modifierName', title: '修改时间', sort: true}

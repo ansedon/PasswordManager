@@ -15,7 +15,7 @@ $(function () {
                     })
                 }
             },
-            'state': {"key": "demo2"},
+            'state': {"key": "demo1"},
             'plugins': ["dnd", "state", "wholerow", "themes"]
         });
 

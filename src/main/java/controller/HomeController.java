@@ -32,8 +32,10 @@ public class HomeController {
             return "login";
         modelMap.put("user",userEntity);
         modelMap.put("resNum",resourceService.countAll());
-        modelMap.put("psNum",passwordService.countAll());
+        modelMap.put("psNum",passwordService.countAll(0));
+        modelMap.put("psNumDeleted",passwordService.countAll(1));
         modelMap.put("groupNum",groupService.countAll());
+        modelMap.put("psExpired",passwordService.countExpired());
         modelMap.put("userNum",userService.countAll());
         LoginLogEntity loginLogEntity=loginLogService.findOneByUserId(userEntity.getId());
         if(loginLogEntity!=null)

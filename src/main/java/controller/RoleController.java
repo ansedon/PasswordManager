@@ -1,16 +1,16 @@
 package controller;
 
 import json.*;
+import model.PrivilegeEntity;
 import model.RoleEntity;
 import model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import service.PrivilegeService;
 import service.RoleService;
 import tool.ReflectUtils;
 
@@ -25,9 +25,26 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    PrivilegeService privilegeService;
+
     @RequestMapping(value = "/manage/role", method = RequestMethod.GET)
     public String index() {
         return "role";
+    }
+
+    @RequestMapping(value = "/manage/role/add", method = RequestMethod.GET)
+    public String add() {
+        return "role_add";
+    }
+
+    @RequestMapping(value = "/manage/role/edit/{id}", method = RequestMethod.GET)
+    public String edit(@PathVariable("id")int id, ModelMap modelMap) {
+        RoleEntity roleEntity=roleService.getRoleEntityById(id);
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
+        modelMap.put("role",roleEntity);
+        modelMap.put("privilege",privilegeEntity);
+        return "role_edit";
     }
 
     @ResponseBody
@@ -49,6 +66,10 @@ public class RoleController {
             roleEntity.setModifierId(user.getId());
             roleEntity.setIsDeleted((byte) 0);
         }
+        //更新权限
+        PrivilegeEntity privilegeEntity=new PrivilegeEntity(roleEntity);
+        privilegeEntity=privilegeService.update(privilegeEntity);
+        roleEntity.setPrivilegeId(privilegeEntity.getId());
         roleService.update(roleEntity);
         resp.result = "OK";
         resp.msg = "操作成功！";

@@ -32,7 +32,159 @@ public class RoleEntity {
     private Collection<UserEntity> usersById_1;
     private int level;
 
+    private int typeAdd;
+    private int typeEdit;
+    private int typeDelete;
+    private int resAdd;
+    private int resEdit;
+    private int resDelete;
+    private int pawAdd;
+    private int pawEdit;
+    private int pawDelete;
+    private int userAdd;
+    private int userEdit;
+    private int userDelete;
+    private int groupAdd;
+    private int groupEdit;
+    private int groupDelete;
+
+    @Transient
+    public int getTypeAdd() {
+        return typeAdd;
+    }
+
+    public void setTypeAdd(int typeAdd) {
+        this.typeAdd = typeAdd;
+    }
+
+    @Transient
+    public int getTypeEdit() {
+        return typeEdit;
+    }
+
+    public void setTypeEdit(int typeEdit) {
+        this.typeEdit = typeEdit;
+    }
+
+    @Transient
+    public int getTypeDelete() {
+        return typeDelete;
+    }
+
+    public void setTypeDelete(int typeDelete) {
+        this.typeDelete = typeDelete;
+    }
+
+    @Transient
+    public int getResAdd() {
+        return resAdd;
+    }
+
+    public void setResAdd(int resAdd) {
+        this.resAdd = resAdd;
+    }
+
+    @Transient
+    public int getResEdit() {
+        return resEdit;
+    }
+
+    public void setResEdit(int resEdit) {
+        this.resEdit = resEdit;
+    }
+
+    @Transient
+    public int getResDelete() {
+        return resDelete;
+    }
+
+    public void setResDelete(int resDelete) {
+        this.resDelete = resDelete;
+    }
+
+    @Transient
+    public int getPawAdd() {
+        return pawAdd;
+    }
+
+    public void setPawAdd(int pawAdd) {
+        this.pawAdd = pawAdd;
+    }
+
+    @Transient
+    public int getPawEdit() {
+        return pawEdit;
+    }
+
+    public void setPawEdit(int pawEdit) {
+        this.pawEdit = pawEdit;
+    }
+
+    @Transient
+    public int getPawDelete() {
+        return pawDelete;
+    }
+
+    public void setPawDelete(int pawDelete) {
+        this.pawDelete = pawDelete;
+    }
+
+    @Transient
+    public int getUserAdd() {
+        return userAdd;
+    }
+
+    public void setUserAdd(int userAdd) {
+        this.userAdd = userAdd;
+    }
+
+    @Transient
+    public int getUserEdit() {
+        return userEdit;
+    }
+
+    public void setUserEdit(int userEdit) {
+        this.userEdit = userEdit;
+    }
+
+    @Transient
+    public int getUserDelete() {
+        return userDelete;
+    }
+
+    public void setUserDelete(int userDelete) {
+        this.userDelete = userDelete;
+    }
+
+    @Transient
+    public int getGroupAdd() {
+        return groupAdd;
+    }
+
+    public void setGroupAdd(int groupAdd) {
+        this.groupAdd = groupAdd;
+    }
+
+    @Transient
+    public int getGroupEdit() {
+        return groupEdit;
+    }
+
+    public void setGroupEdit(int groupEdit) {
+        this.groupEdit = groupEdit;
+    }
+
+    @Transient
+    public int getGroupDelete() {
+        return groupDelete;
+    }
+
+    public void setGroupDelete(int groupDelete) {
+        this.groupDelete = groupDelete;
+    }
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

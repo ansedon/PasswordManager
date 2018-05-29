@@ -27,21 +27,21 @@
     <form class="layui-form">
         <input type="hidden" name="id" lay-verify="required" value="${resourceEntity.id}" class="layui-input">
         <div class="layui-form-item">
-            <label class="layui-form-label">资源名称</label>
+            <label class="layui-form-label"><span class="x-red">*</span>资源名称</label>
             <div class="layui-input-inline">
                 <input type="text" id="name" name="name" lay-verify="required" class="layui-input"
                        value="${resourceEntity.name}">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">ip</label>
+            <label class="layui-form-label"><span class="x-red">*</span>ip</label>
             <div class="layui-input-inline">
                 <input type="text" id="ip" name="ip" lay-verify="required" value="${resourceEntity.ip}"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">资源类型</label>
+            <label class="layui-form-label"><span class="x-red">*</span>资源类型</label>
             <div class="layui-input-inline">
                 <select class="layui-select" name="typeId" id="typeId" lay-verify="selected" data="${resourceEntity.typeId}"></select>
             </div>

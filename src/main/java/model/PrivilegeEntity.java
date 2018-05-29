@@ -21,8 +21,34 @@ public class PrivilegeEntity {
     private Byte userAdd;
     private Byte userEdit;
     private Byte userDelete;
+    private Byte typeAdd;
+    private Byte typeEdit;
+    private Byte typeDelete;
+
+    public PrivilegeEntity(){
+
+    }
+
+    public PrivilegeEntity(RoleEntity roleEntity){
+        this.resAdd=(byte)roleEntity.getResAdd();
+        this.resEdit=(byte)roleEntity.getResEdit();
+        this.resDelete=(byte)roleEntity.getResDelete();
+        this.typeAdd=(byte)roleEntity.getTypeAdd();
+        this.typeEdit=(byte)roleEntity.getTypeEdit();
+        this.typeDelete=(byte)roleEntity.getTypeDelete();
+        this.pawAdd=(byte)roleEntity.getPawAdd();
+        this.pawEdit=(byte)roleEntity.getPawEdit();
+        this.pawDelete=(byte)roleEntity.getPawDelete();
+        this.userAdd=(byte)roleEntity.getUserAdd();
+        this.userEdit=(byte)roleEntity.getUserEdit();
+        this.userDelete=(byte)roleEntity.getUserDelete();
+        this.groupAdd=(byte)roleEntity.getGroupAdd();
+        this.groupEdit=(byte)roleEntity.getGroupEdit();
+        this.groupDelete=(byte)roleEntity.getGroupDelete();
+    }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -204,5 +230,35 @@ public class PrivilegeEntity {
 
     public void setUserDelete(Byte userDelete) {
         this.userDelete = userDelete;
+    }
+
+    @Basic
+    @Column(name = "type_add", nullable = true)
+    public Byte getTypeAdd() {
+        return typeAdd;
+    }
+
+    public void setTypeAdd(Byte typeAdd) {
+        this.typeAdd = typeAdd;
+    }
+
+    @Basic
+    @Column(name = "type_edit", nullable = true)
+    public Byte getTypeEdit() {
+        return typeEdit;
+    }
+
+    public void setTypeEdit(Byte typeEdit) {
+        this.typeEdit = typeEdit;
+    }
+
+    @Basic
+    @Column(name = "type_delete", nullable = true)
+    public Byte getTypeDelete() {
+        return typeDelete;
+    }
+
+    public void setTypeDelete(Byte typeDelete) {
+        this.typeDelete = typeDelete;
     }
 }

@@ -23,8 +23,12 @@ public class PasswordService {
     @Autowired
     PasswordRepository passwordRepository;
 
-    public int countAll(){
-        return passwordRepository.countAllByIsDeleted((byte)0);
+    public int countExpired(){
+        return passwordRepository.countAllByIsDeletedAndExpireTimeBefore((byte)0,new Timestamp(System.currentTimeMillis()));
+    }
+
+    public int countAll(int isDeleted) {
+        return passwordRepository.countAllByIsDeleted((byte) isDeleted);
     }
 
     public void update(PasswordEntity passwordEntity) {
@@ -36,7 +40,11 @@ public class PasswordService {
     }
 
     public List<PasswordEntity> findByCondition(PasswordParam param) {
-        Pageable pageable = new PageRequest(param.page, param.limit, new Sort(Sort.Direction.DESC, "createTime"));
+        Pageable pageable;
+        if (param.isDeleted == 1)
+            pageable = new PageRequest(param.page, param.limit, new Sort(Sort.Direction.DESC, "modifiedTime"));
+        else
+            pageable = new PageRequest(param.page, param.limit, new Sort(Sort.Direction.DESC, "createTime"));
         Page<PasswordEntity> passwordEntityPage = passwordRepository.findAll(new Specification<PasswordEntity>() {
             @Override
             public Predicate toPredicate(Root<PasswordEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -45,7 +53,7 @@ public class PasswordService {
                 if (param.id != 0) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), param.id));
                 }
-                if (param.groupId != 0&&param.groupId!=1) {
+                if (param.groupId != 0 && param.groupId != 1) {
                     Join<PasswordEntity, ResourceEntity> join = root.join("resourceByResourceId", JoinType.LEFT);
                     Join<ResourceEntity, ResourceGroupEntity> join1 = join.join("resourceGroupsById", JoinType.LEFT);
                     list.add(criteriaBuilder.equal(join1.get("groupId"), param.groupId));
@@ -59,13 +67,22 @@ public class PasswordService {
                 if (param.account != null && param.account != "") {
                     list.add(criteriaBuilder.like(root.get("account").as(String.class), '%' + param.account + '%'));
                 }
-                if (param.startTime != null) {
-                    list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.startTime));
+                if (param.isDeleted == 1) {
+                    if (param.startTime != null) {
+                        list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("modifiedTime").as(Timestamp.class), param.startTime));
+                    }
+                    if (param.endTime != null) {
+                        list.add(criteriaBuilder.lessThanOrEqualTo(root.get("modifiedTime").as(Timestamp.class), param.endTime));
+                    }
+                } else {
+                    if (param.startTime != null) {
+                        list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.startTime));
+                    }
+                    if (param.endTime != null) {
+                        list.add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.endTime));
+                    }
                 }
-                if (param.endTime != null) {
-                    list.add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.endTime));
-                }
-                list.add(criteriaBuilder.equal(root.get("isDeleted").as(Byte.class), 0));
+                list.add(criteriaBuilder.equal(root.get("isDeleted").as(Byte.class), (byte) param.isDeleted));
                 Predicate[] p = new Predicate[list.size()];
                 return criteriaBuilder.and(list.toArray(p));
             }
@@ -82,7 +99,7 @@ public class PasswordService {
                 if (param.id != 0) {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), param.id));
                 }
-                if (param.groupId != 0&&param.groupId!=1) {
+                if (param.groupId != 0 && param.groupId != 1) {
                     Join<PasswordEntity, ResourceEntity> join = root.join("resourceByResourceId", JoinType.LEFT);
                     Join<ResourceEntity, ResourceGroupEntity> join1 = join.join("resourceGroupsById", JoinType.LEFT);
                     list.add(criteriaBuilder.equal(join1.get("groupId"), param.groupId));
@@ -96,13 +113,22 @@ public class PasswordService {
                 if (param.account != null && param.account != "") {
                     list.add(criteriaBuilder.like(root.get("account").as(String.class), '%' + param.account + '%'));
                 }
-                if (param.endTime != null) {
-                    list.add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.endTime));
+                if (param.isDeleted == 1) {
+                    if (param.endTime != null) {
+                        list.add(criteriaBuilder.lessThanOrEqualTo(root.get("modifiedTime").as(Timestamp.class), param.endTime));
+                    }
+                    if (param.startTime != null) {
+                        list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("modifiedTime").as(Timestamp.class), param.startTime));
+                    }
+                } else {
+                    if (param.startTime != null) {
+                        list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.startTime));
+                    }
+                    if (param.endTime != null) {
+                        list.add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.endTime));
+                    }
                 }
-                if (param.startTime != null) {
-                    list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.startTime));
-                }
-                list.add(criteriaBuilder.equal(root.get("isDeleted").as(Byte.class), 0));
+                list.add(criteriaBuilder.equal(root.get("isDeleted").as(Byte.class), (byte) param.isDeleted));
                 Predicate[] p = new Predicate[list.size()];
                 return criteriaBuilder.and(list.toArray(p));
             }
@@ -111,5 +137,9 @@ public class PasswordService {
 
     public int deletePasswordById(int id) {
         return passwordRepository.deletePasswordById(id);
+    }
+
+    public int retrivePasswordById(int id) {
+        return passwordRepository.retirvePasswordById(id);
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity,Integer>,JpaSpecificationExecutor<RoleEntity>{
-    RoleEntity getRoleEntityById(int id);
+    RoleEntity findById(int id);
 
     @Modifying
     @Transactional

@@ -97,6 +97,9 @@
                         <input type="text" id="modifiedTime" name="modifiedTime" disabled class="layui-input">
                     </div>
                 </div>
+                <div class="layui-form-item">
+
+                </div>
             </form>
         </div>
     </div>
@@ -105,7 +108,7 @@
     <form class="layui-form">
         <input type="hidden" name="id" id="id1" value="0" class="layui-input">
         <div class="layui-form-item">
-            <label class="layui-form-label">部门名称</label>
+            <label class="layui-form-label"><span class="x-red">*</span>部门名称</label>
             <div class="layui-input-inline">
                 <input type="text" id="name1" name="name" lay-verify="required" class="layui-input">
             </div>

@@ -27,9 +27,6 @@ $(function () {
         ajax("/manage/role/select", {self:1}, function (res) {
             mymod.renderSelect('roleId', res.data, 'id', 'name', '角色名称');
         })
-        ajax("/group/all", {self:1}, function (res) {
-            mymod.renderSelect('groupId', res.data, 'id', 'name', '群组名称');
-        })
 
         form.verify({
             selected: function (value) {
@@ -37,6 +34,38 @@ $(function () {
                     return '请选择一项';
                 }
             }
+        });
+
+        $("#jstree").jstree({
+            'core': {
+                'themes': {
+                    'icons': false,
+                    'responsive': false
+                },
+                'check_callback': true,
+                'data': function (obj, callback) {
+                    ajax("/group/tree", '', function (res) {
+                        callback.call(this, res);
+                    })
+                }
+            },
+            'state': {"key": "demo0"},
+            'plugins': ["state", "wholerow", "themes"]
+        });
+
+        $('#jstree').on("changed.jstree", function (e, data) {
+            var id = data.instance.get_node(data.selected).id;
+            if(id<=0)
+                $('#groupId').val(0);
+            else
+                $('#groupId').val(id);
+            table.render({
+                elem: '#userTable'
+                , url: '/manage/user/all' //数据接口
+                ,where:{groupId:$('#groupId').val()}
+                ,page: true //开启分页
+                ,cols: cols
+            });
         });
 
         $('#addBtn').click(function () {
@@ -50,7 +79,7 @@ $(function () {
                         mymod.renderSelect('roleId1', res.data, 'id', 'name', '角色名称');
                     })
                     ajax("/group/all", null, function (res) {
-                        mymod.renderSelect('groupId1', res.data, 'id', 'name', '群组名称');
+                        mymod.renderSelect('groupId1', res.data, 'id', 'name', '部门名称');
                     })
                     $('#add')[0].innerHTML="添加";
                     //监听提交
@@ -143,7 +172,7 @@ $(function () {
                             mymod.renderSelect('roleId1', res.data, 'id', 'name', '角色名称', data.roleId);
                         })
                         ajax("/group/all", null, function (res) {
-                            mymod.renderSelect('groupId1', res.data, 'id', 'name', '群组名称',data.groupId);
+                            mymod.renderSelect('groupId1', res.data, 'id', 'name', '部门名称',data.groupId);
                         })
                         //监听提交
                         form.on('submit(add)', function (data) {

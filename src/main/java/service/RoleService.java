@@ -25,7 +25,7 @@ public class RoleService {
     RoleRepository roleRepository;
 
     public RoleEntity getRoleEntityById(int id){
-        return roleRepository.getRoleEntityById(id);
+        return roleRepository.findById(id);
     }
 
     public void update(RoleEntity roleEntity) {
@@ -49,7 +49,7 @@ public class RoleService {
                         list.add(criteriaBuilder.greaterThan(root.get("level"), param.level));
                 }
                 if (param.name != null && param.name != "") {
-                    list.add(criteriaBuilder.like(root.get("account").as(String.class), '%' + param.name + '%'));
+                    list.add(criteriaBuilder.like(root.get("name").as(String.class), '%' + param.name + '%'));
                 }
                 if (param.startTime != null) {
                     list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.startTime));
@@ -75,7 +75,7 @@ public class RoleService {
                     list.add(criteriaBuilder.equal(root.get("id").as(Integer.class), param.id));
                 }
                 if (param.name != null && param.name != "") {
-                    list.add(criteriaBuilder.like(root.get("account").as(String.class), '%' + param.name + '%'));
+                    list.add(criteriaBuilder.like(root.get("name").as(String.class), '%' + param.name + '%'));
                 }
                 if (param.level != 0) {
                     if(param.level==1)

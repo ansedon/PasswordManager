@@ -144,6 +144,21 @@ public class UserController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "manage/user/select", method = RequestMethod.POST)
+    public ResponseEntity<Object> getUser() {
+        ParentResponse resp = new ParentResponse();
+        resp.data = new ArrayList<UserResponse>();
+        List<UserEntity> userEntities=userService.findAll();
+        for(UserEntity userEntity:userEntities){
+            UserResponse userResponse=new UserResponse(userEntity);
+            resp.data.add(userResponse);
+        }
+        resp.result = "OK";
+        resp.msg = "操作成功！";
+        return new ResponseEntity<Object>(resp, HttpStatus.OK);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/manage/user/delete", method = RequestMethod.POST)
     public ParentResponse deletePassword(@RequestBody IdRequest idRequest) {
         ParentResponse resp = new ParentResponse();

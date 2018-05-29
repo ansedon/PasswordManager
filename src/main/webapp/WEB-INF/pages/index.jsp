@@ -85,6 +85,12 @@
                         </a>
                     </li>
                     <li>
+                        <a _href="password/retrive">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>口令找回</cite>
+                        </a>
+                    </li>
+                    <li>
                         <a _href="order-list.html">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>口令评估</cite>
@@ -95,14 +101,14 @@
             <li>
                 <a href="javascript:;">
                     <i class="layui-icon">&#xe613;</i>
-                    <cite>群组管理</cite>
+                    <cite>部门管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
                     <li>
                         <a _href="group/list">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>群组列表</cite>
+                            <cite>部门列表</cite>
                         </a>
                     </li>
                 </ul>
@@ -121,17 +127,17 @@
                         </a>
                     </li>
                     <li>
-                        <a _href="admin-role.html">
+                        <a _href="manage/role">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>角色管理</cite>
                         </a>
                     </li>
-                    <%--<li>--%>
-                        <%--<a _href="admin-cate.html">--%>
-                            <%--<i class="iconfont">&#xe6a7;</i>--%>
-                            <%--<cite>权限管理</cite>--%>
-                        <%--</a>--%>
-                    <%--</li>--%>
+                    <li>
+                        <a _href="manage/loginlog">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>登录日志</cite>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

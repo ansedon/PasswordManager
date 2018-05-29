@@ -14,4 +14,5 @@ public class PasswordParam {
     public Timestamp endTime;
     public int page;
     public int limit;
+    public int isDeleted;
 }

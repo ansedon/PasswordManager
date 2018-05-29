@@ -8,6 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport"
         content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+  <link rel="stylesheet" href="/lib/jstree/themes/default/style.min.css"/>
   <link rel="stylesheet" href="/css/font.css">
   <link rel="stylesheet" href="/css/xadmin.css">
   <script type="text/javascript" src="/js/jquery.min.js"></script>
@@ -15,6 +16,7 @@
   <script type="text/javascript" src="/js/xadmin.js"></script>
   <script type="text/javascript" src="/js/mymod.js"></script>
   <script type="text/javascript" src="/js/user.js"></script>
+  <script type="text/javascript" src="/lib/jstree/jstree.min.js"></script>
   <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
   <!--[if lt IE 9]>
   <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -34,38 +36,46 @@
     <i class="layui-icon" style="line-height:30px">ဂ</i></a>
 </div>
 <div class="x-body">
-  <div class="layui-row">
-    <form class="layui-form layui-col-md12 x-so">
-      <input type="text" name="account" placeholder="请输入账户" autocomplete="off" class="layui-input">
-      <div class="layui-input-inline">
-        <select name="roleId" id="roleId" lay-verify="select"></select>
+  <div class="layui-row layui-col-space10">
+    <div class="layui-col-md2">
+      <div class="layui-form-item" style="text-align:center">
+        <h2>部门结构</h2>
       </div>
-      <div class="layui-input-inline">
-        <select name="groupId" id="groupId" lay-verify="select"></select>
+      <div id="jstree"></div>
+    </div>
+    <div class="layui-col-md10">
+      <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+          <input type="text" name="account" placeholder="请输入账户" autocomplete="off" class="layui-input">
+          <div class="layui-input-inline">
+            <select name="roleId" id="roleId" lay-verify="select"></select>
+          </div>
+          <input type="hidden" class="layui-input" name="groupId" value="0" id="groupId">
+          <input class="layui-input" placeholder="开始日" name="startTime" id="start">
+          <input class="layui-input" placeholder="截止日" name="endTime" id="end">
+          <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+        </form>
       </div>
-      <input class="layui-input" placeholder="开始日" name="startTime" id="start">
-      <input class="layui-input" placeholder="截止日" name="endTime" id="end">
-      <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
-    </form>
+      <xblock>
+        <button class="layui-btn" id="addBtn"><i class="layui-icon"></i>添加
+        </button>
+      </xblock>
+      <table class="layui-table" id="userTable" lay-filter="userTable"></table>
+    </div>
   </div>
-  <xblock>
-    <button class="layui-btn" id="addBtn"><i class="layui-icon"></i>添加
-    </button>
-  </xblock>
-  <table class="layui-table" id="userTable" lay-filter="userTable"></table>
 </div>
 
 <div id="detail" style="display: none;padding-top:20px;">
   <form class="layui-form">
     <input type="hidden" name="id" id="id" value="0" class="layui-input">
     <div class="layui-form-item">
-      <label class="layui-form-label">账号</label>
+      <label class="layui-form-label"><span class="x-red">*</span>账号</label>
       <div class="layui-input-inline">
         <input type="text" id="account" name="account" lay-verify="required" class="layui-input">
       </div>
     </div>
     <div class="layui-col-md12 x-so">
-      <label class="layui-form-label">密码</label>
+      <label class="layui-form-label"><span class="x-red">*</span>密码</label>
       <div class="layui-input-inline">
         <input type="password" id="password" name="password" lay-verify="required" class="layui-input"
                isshow="0">
@@ -75,25 +85,25 @@
       </div>
     </div>
     <div class="layui-form-item">
-      <label class="layui-form-label">邮箱</label>
+      <label class="layui-form-label"><span class="x-red">*</span>邮箱</label>
       <div class="layui-input-inline">
         <input type="text" class="layui-input" id="email" name="email" lay-verify="email">
       </div>
     </div>
     <div class="layui-form-item">
-      <label class="layui-form-label">手机号</label>
+      <label class="layui-form-label"><span class="x-red">*</span>手机号</label>
       <div class="layui-input-inline">
         <input type="text" class="layui-input" id="phone" name="phone" lay-verify="phone">
       </div>
     </div>
     <div class="layui-form-item">
-      <label class="layui-form-label">所属角色</label>
+      <label class="layui-form-label"><span class="x-red">*</span>所属角色</label>
       <div class="layui-input-inline">
         <select name="roleId" id="roleId1" lay-verify="selected"></select>
       </div>
     </div>
     <div class="layui-form-item">
-      <label class="layui-form-label">所属部门</label>
+      <label class="layui-form-label"><span class="x-red">*</span>所属部门</label>
       <div class="layui-input-inline">
         <select name="groupId" id="groupId1" lay-verify="selected"></select>
       </div>
@@ -119,9 +129,12 @@
   <a title="编辑" lay-event="edit">
     <i class="layui-icon">&#xe642;</i>
   </a>
+
+  {{#  if(d.id != 1){ }}
   <a title="删除" lay-event="delete">
     <i class="layui-icon">&#xe640;</i>
   </a>
+  {{#  } }}
 </script>
 
 <script id="psTpl" type="text/html">

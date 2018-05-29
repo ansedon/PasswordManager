@@ -1,6 +1,7 @@
 $(function  () {
     layui.use(['form','table', 'laydate'], function () {
         var form=layui.form,laydate = layui.laydate,table = layui.table,mymod=layui.mymod;
+
         var cols=[[
             {field: 'id', title: 'ID',  sort: true,width:100}
             ,{field: 'name', title: '资源名称',sort:true}
@@ -18,6 +19,7 @@ $(function  () {
         table.render({
             elem: '#resourceTable'
             ,url: '/resource/list/all' //数据接口
+            ,where:{typeId:$('#typeId').val()}
             ,page: true //开启分页
             ,cols: cols
         });
@@ -26,6 +28,37 @@ $(function  () {
             mymod.renderSelect('typeId',res.data,'id','name','资源类型');
         })
 
+        $("#jstree").jstree({
+            'core': {
+                'themes': {
+                    'icons': false,
+                    'responsive': false
+                },
+                'check_callback': true,
+                'data': function (obj, callback) {
+                    ajax("/resource/type/tree", '', function (res) {
+                        callback.call(this, res);
+                    })
+                }
+            },
+            'state': {"key": "demo0"},
+            'plugins': ["state", "wholerow", "themes"]
+        });
+
+        $('#jstree').on("changed.jstree", function (e, data) {
+            var id = data.instance.get_node(data.selected).id;
+            if(id<=0)
+                $('#typeId').val(0);
+            else
+                $('#typeId').val(id);
+            table.render({
+                elem: '#resourceTable'
+                ,url: '/resource/list/all' //数据接口
+                ,where:{typeId:$('#typeId').val()}
+                ,page: true //开启分页
+                ,cols: cols
+            });
+        });
 
         //监听搜索
         form.on('submit(search)',function (data) {

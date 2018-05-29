@@ -45,17 +45,17 @@
 
             var cols = [[
                 {field: 'id', title: 'ID', sort: true, width: 100}
-                , {field: 'name', title: 'Name', sort: true}
+                , {field: 'name', title: '资源名称', sort: true}
                 , {field: 'ip', title: 'IP', sort: true}
-                , {field: 'typeName', title: 'Type', sort: true}
-                , {field: '', title: 'Opertion', toolbar: '#bar'}
+                , {field: 'typeName', title: '资源类型', sort: true}
+                , {field: '', title: '操作', toolbar: '#bar'}
             ]]
             var cols1 = [[
                 {field: 'id', title: 'ID', sort: true, width: 100}
-                , {field: 'name', title: 'Name', sort: true}
+                , {field: 'name', title: '资源名称', sort: true}
                 , {field: 'ip', title: 'IP', sort: true}
-                , {field: 'typeName', title: 'Type', sort: true}
-                , {field: '', title: 'Opertion', toolbar: '#bar1'}
+                , {field: 'typeName', title: '资源类型', sort: true}
+                , {field: '', title: '操作', toolbar: '#bar1'}
             ]]
 
             var table1=table.render({

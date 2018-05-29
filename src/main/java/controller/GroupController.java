@@ -26,8 +26,7 @@ public class GroupController {
     @ResponseBody
     @RequestMapping(value = "/group/tree",method = RequestMethod.POST)
     public ResponseEntity<Object> getGroupTree(HttpSession session){
-//        int groupId=(int)session.getAttribute(Session.GROUPID);
-        int groupId=2;
+        int groupId=(int)session.getAttribute(Session.GROUPID);
         List<CpGroupEntity>groupEntities=groupService.findAll();
         List<TreeResponse> tree=new ArrayList<>();
         List<Integer> groupIds=new ArrayList<>();
@@ -54,7 +53,8 @@ public class GroupController {
                     treeResponse.state.disabled=false;
                 if(cpGroupEntity.getId()==groupId)
                     treeResponse.state.selected=true;
-            }
+            }else
+                treeResponse.state.disabled=false;
             treeResponse.state.opened=true;
             tree.add(treeResponse);
         }
