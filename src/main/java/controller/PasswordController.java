@@ -14,11 +14,20 @@ import org.springframework.web.bind.annotation.*;
 import service.OperationService;
 import service.PasswordService;
 import service.UserService;
+import tool.PasswordUtils.Nbvcxz;
+import tool.PasswordUtils.resources.Configuration;
+import tool.PasswordUtils.resources.ConfigurationBuilder;
+import tool.PasswordUtils.resources.Dictionary;
+import tool.PasswordUtils.resources.DictionaryBuilder;
+import tool.PasswordUtils.scoring.Result;
 import tool.RSAUtils;
 import tool.ReflectUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +47,87 @@ public class PasswordController {
 
     @Autowired
     UserService userService;
+
+    @RequestMapping(value = "/password/eval", method = RequestMethod.GET)
+    public String eval() {
+        return "password_eval";
+    }
+
+    public static class PasswordRequest {
+        public String password;
+        public String exclude;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/password/eval/one", method = RequestMethod.POST)
+    public ParentResponse evalPassword(@RequestBody PasswordRequest passwordRequest) {
+        ParentResponse resp = new ParentResponse();
+        if (passwordRequest.password == null || passwordRequest.password == "") {
+            resp.result = "Fail";
+            resp.msg = "口令为空！";
+            return resp;
+        }
+        String password = passwordRequest.password.trim();
+        List<Dictionary> dictionaryList = ConfigurationBuilder.getDefaultDictionaries();
+        if (passwordRequest.exclude != null && passwordRequest.exclude != "") {
+            String[] stringList = passwordRequest.exclude.split(",|，");
+            DictionaryBuilder dictionaryBuilder = new DictionaryBuilder()
+                    .setDictionaryName("exclude")
+                    .setExclusion(true);
+            for (int i = 0; i < stringList.length; i++) {
+                dictionaryBuilder.addWord(stringList[i], 0);
+            }
+            dictionaryList.add(dictionaryBuilder.createDictionary());
+        }
+        Configuration configuration = new ConfigurationBuilder()
+                .setMinimumEntropy(40d)
+                .setDictionaries(dictionaryList)
+                .createConfiguration();
+
+        Nbvcxz nbvcxz = new Nbvcxz(configuration);
+        Result result = nbvcxz.estimate(password);
+        resp.result = "OK";
+        resp.msg = "";
+        resp.count = result.getEntropy().intValue();
+        if (result.getFeedback().getSuggestion().size() == 0)
+            resp.msg = "无";
+        else {
+            List<String> strs = result.getFeedback().getSuggestion();
+            for (int i = 0; i < strs.size(); i++) {
+                String s = (i + 1) + ". " + strs.get(i) + "\n";
+                resp.msg += s;
+            }
+        }
+        return resp;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/password/eval/save", method = RequestMethod.POST)
+    public ParentResponse saveExclude(@RequestBody PasswordRequest passwordRequest,HttpServletRequest request) {
+        ParentResponse resp = new ParentResponse();
+        if (passwordRequest.exclude == null || passwordRequest.exclude == "") {
+            resp.result = "Fail";
+            resp.msg = "排除字典为空！";
+            return resp;
+        }
+        String exclude = passwordRequest.exclude.trim();
+        String[] stringList = exclude.split(",|，");
+        String path=this.getClass().getResource("/dictionaries/customs.txt").getPath();
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(path, true);
+            for (String s : stringList)
+                fos.write((s + "\n").getBytes());
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        resp.result = "OK";
+        resp.msg = "添加成功！";
+        return resp;
+    }
 
     @RequestMapping(value = "/password/retrive", method = RequestMethod.GET)
     public String retrive() {
@@ -62,8 +152,6 @@ public class PasswordController {
         return resp;
     }
 
-
-
     @RequestMapping(value = "/password/operation/{id}", method = RequestMethod.GET)
     public String operation(@PathVariable("id") int id, ModelMap modelMap) {
         modelMap.put("id", id);
@@ -82,17 +170,17 @@ public class PasswordController {
             resp.msg = "参数错误！";
             return resp;
         }
-        List<OperationEntity> operationEntities = operationService.findByPawId(idRequest.id);
+        List<OperationEntity> operationEntities = operationService.findByPwdId(idRequest.id);
         for (OperationEntity operationEntity : operationEntities) {
             OperationResponse operationResponse = new OperationResponse(operationEntity);
             String ps = "";
             try {
-                ps = RSAUtils.decryptByPrivateKey(operationEntity.getOriginPaw(), privateKey);
+                ps = RSAUtils.decryptByPrivateKey(operationEntity.getOriginPwd(), privateKey);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             if (ps != "")
-                operationResponse.originPaw = ps;
+                operationResponse.originPwd = ps;
             operationResponse.modifierName = userService.findUserEntityById(operationEntity.getModifierId()).getAccount();
             resp.data.add(operationResponse);
         }
@@ -142,9 +230,9 @@ public class PasswordController {
                     passwordService.update(passwordEntity);
                     //插入修改记录
                     OperationEntity operationEntity = new OperationEntity();
-                    operationEntity.setPawId(passwordEntity.getId());
+                    operationEntity.setPwdId(passwordEntity.getId());
                     operationEntity.setOriginAccount(originAccount);
-                    operationEntity.setOriginPaw(originPs);
+                    operationEntity.setOriginPwd(originPs);
                     operationEntity.setModifierId(user.getId());
                     operationEntity.setModifiedTime(new Timestamp(System.currentTimeMillis()));
                     operationService.update(operationEntity);
@@ -184,9 +272,9 @@ public class PasswordController {
         passwordService.update(passwordEntity);
         //插入修改记录
         OperationEntity operationEntity = new OperationEntity();
-        operationEntity.setPawId(passwordEntity1.getId());
+        operationEntity.setPwdId(passwordEntity1.getId());
         operationEntity.setOriginAccount(passwordEntity1.getAccount());
-        operationEntity.setOriginPaw(passwordEntity1.getPassword());
+        operationEntity.setOriginPwd(passwordEntity1.getPassword());
         operationEntity.setModifierId(user.getId());
         operationEntity.setModifiedTime(new Timestamp(System.currentTimeMillis()));
         operationService.update(operationEntity);

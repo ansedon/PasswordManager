@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface OperationRepository extends JpaRepository<OperationEntity,Integer>{
-    List<OperationEntity> findAllByPawIdOrderByModifiedTimeDesc(int id);
+    List<OperationEntity> findAllByPwdIdOrderByModifiedTimeDesc(int id);
 }

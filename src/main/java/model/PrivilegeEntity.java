@@ -10,9 +10,9 @@ public class PrivilegeEntity {
     private Byte resAdd;
     private Byte resEdit;
     private Byte resDelete;
-    private Byte pawAdd;
-    private Byte pawEdit;
-    private Byte pawDelete;
+    private Byte pwdAdd;
+    private Byte pwdEdit;
+    private Byte pwdDelete;
     private Byte groupAdd;
     private Byte groupEdit;
     private Byte groupDelete;
@@ -36,9 +36,9 @@ public class PrivilegeEntity {
         this.typeAdd=(byte)roleEntity.getTypeAdd();
         this.typeEdit=(byte)roleEntity.getTypeEdit();
         this.typeDelete=(byte)roleEntity.getTypeDelete();
-        this.pawAdd=(byte)roleEntity.getPawAdd();
-        this.pawEdit=(byte)roleEntity.getPawEdit();
-        this.pawDelete=(byte)roleEntity.getPawDelete();
+        this.pwdAdd=(byte)roleEntity.getPwdAdd();
+        this.pwdEdit=(byte)roleEntity.getPwdEdit();
+        this.pwdDelete=(byte)roleEntity.getPwdDelete();
         this.userAdd=(byte)roleEntity.getUserAdd();
         this.userEdit=(byte)roleEntity.getUserEdit();
         this.userDelete=(byte)roleEntity.getUserDelete();
@@ -89,33 +89,33 @@ public class PrivilegeEntity {
     }
 
     @Basic
-    @Column(name = "paw_add", nullable = true)
-    public Byte getPawAdd() {
-        return pawAdd;
+    @Column(name = "pwd_add", nullable = true)
+    public Byte getPwdAdd() {
+        return pwdAdd;
     }
 
-    public void setPawAdd(Byte pawAdd) {
-        this.pawAdd = pawAdd;
-    }
-
-    @Basic
-    @Column(name = "paw_edit", nullable = true)
-    public Byte getPawEdit() {
-        return pawEdit;
-    }
-
-    public void setPawEdit(Byte pawEdit) {
-        this.pawEdit = pawEdit;
+    public void setPwdAdd(Byte pwdAdd) {
+        this.pwdAdd = pwdAdd;
     }
 
     @Basic
-    @Column(name = "paw_delete", nullable = true)
-    public Byte getPawDelete() {
-        return pawDelete;
+    @Column(name = "pwd_edit", nullable = true)
+    public Byte getPwdEdit() {
+        return pwdEdit;
     }
 
-    public void setPawDelete(Byte pawDelete) {
-        this.pawDelete = pawDelete;
+    public void setPwdEdit(Byte pwdEdit) {
+        this.pwdEdit = pwdEdit;
+    }
+
+    @Basic
+    @Column(name = "pwd_delete", nullable = true)
+    public Byte getPwdDelete() {
+        return pwdDelete;
+    }
+
+    public void setPwdDelete(Byte pwdDelete) {
+        this.pwdDelete = pwdDelete;
     }
 
     @Basic
@@ -159,9 +159,9 @@ public class PrivilegeEntity {
         if (resAdd != null ? !resAdd.equals(that.resAdd) : that.resAdd != null) return false;
         if (resEdit != null ? !resEdit.equals(that.resEdit) : that.resEdit != null) return false;
         if (resDelete != null ? !resDelete.equals(that.resDelete) : that.resDelete != null) return false;
-        if (pawAdd != null ? !pawAdd.equals(that.pawAdd) : that.pawAdd != null) return false;
-        if (pawEdit != null ? !pawEdit.equals(that.pawEdit) : that.pawEdit != null) return false;
-        if (pawDelete != null ? !pawDelete.equals(that.pawDelete) : that.pawDelete != null) return false;
+        if (pwdAdd != null ? !pwdAdd.equals(that.pwdAdd) : that.pwdAdd != null) return false;
+        if (pwdEdit != null ? !pwdEdit.equals(that.pwdEdit) : that.pwdEdit != null) return false;
+        if (pwdDelete != null ? !pwdDelete.equals(that.pwdDelete) : that.pwdDelete != null) return false;
         if (groupAdd != null ? !groupAdd.equals(that.groupAdd) : that.groupAdd != null) return false;
         if (groupEdit != null ? !groupEdit.equals(that.groupEdit) : that.groupEdit != null) return false;
         if (groupDelete != null ? !groupDelete.equals(that.groupDelete) : that.groupDelete != null) return false;
@@ -175,9 +175,9 @@ public class PrivilegeEntity {
         result = 31 * result + (resAdd != null ? resAdd.hashCode() : 0);
         result = 31 * result + (resEdit != null ? resEdit.hashCode() : 0);
         result = 31 * result + (resDelete != null ? resDelete.hashCode() : 0);
-        result = 31 * result + (pawAdd != null ? pawAdd.hashCode() : 0);
-        result = 31 * result + (pawEdit != null ? pawEdit.hashCode() : 0);
-        result = 31 * result + (pawDelete != null ? pawDelete.hashCode() : 0);
+        result = 31 * result + (pwdAdd != null ? pwdAdd.hashCode() : 0);
+        result = 31 * result + (pwdEdit != null ? pwdEdit.hashCode() : 0);
+        result = 31 * result + (pwdDelete != null ? pwdDelete.hashCode() : 0);
         result = 31 * result + (groupAdd != null ? groupAdd.hashCode() : 0);
         result = 31 * result + (groupEdit != null ? groupEdit.hashCode() : 0);
         result = 31 * result + (groupDelete != null ? groupDelete.hashCode() : 0);

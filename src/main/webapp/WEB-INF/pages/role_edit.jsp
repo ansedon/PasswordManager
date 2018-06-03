@@ -84,9 +84,9 @@
                         口令
                     <td>
                         <div class="layui-input-block">
-                            <input name="pawAdd" lay-skin="primary" type="checkbox" title="添加" value="1" <c:if test="${privilege.pawAdd=='1'}">checked</c:if>>
-                            <input name="pawEdit" lay-skin="primary" type="checkbox" value="1" title="修改" <c:if test="${privilege.pawEdit=='1'}">checked</c:if>>
-                            <input name="pawDelete" lay-skin="primary" type="checkbox" value="1" title="删除" <c:if test="${privilege.pawDelete=='1'}">checked</c:if>>
+                            <input name="pwdAdd" lay-skin="primary" type="checkbox" title="添加" value="1" <c:if test="${privilege.pwdAdd=='1'}">checked</c:if>>
+                            <input name="pwdEdit" lay-skin="primary" type="checkbox" value="1" title="修改" <c:if test="${privilege.pwdEdit=='1'}">checked</c:if>>
+                            <input name="pwdDelete" lay-skin="primary" type="checkbox" value="1" title="删除" <c:if test="${privilege.pwdDelete=='1'}">checked</c:if>>
                         </div>
                     </td>
                 </tr>

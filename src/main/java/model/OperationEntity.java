@@ -7,13 +7,13 @@ import java.sql.Timestamp;
 @Table(name = "operation", schema = "passworddata", catalog = "")
 public class OperationEntity {
     private int id;
-    private int pawId;
+    private int pwdId;
     private String originAccount;
-    private String originPaw;
+    private String originPwd;
     private Timestamp modifiedTime;
     private int modifierId;
-    private PasswordEntity passwordByPawId;
-    private PasswordEntity passwordByPawId_0;
+    private PasswordEntity passwordByPwdId;
+    private PasswordEntity passwordByPwdId_0;
     private UserEntity userByModifierId;
     private UserEntity userByModifierId_0;
     private UserEntity userByModifierId_1;
@@ -29,13 +29,13 @@ public class OperationEntity {
     }
 
     @Basic
-    @Column(name = "paw_id", nullable = false)
-    public int getPawId() {
-        return pawId;
+    @Column(name = "pwd_id", nullable = false)
+    public int getPwdId() {
+        return pwdId;
     }
 
-    public void setPawId(int pawId) {
-        this.pawId = pawId;
+    public void setPwdId(int pwdId) {
+        this.pwdId = pwdId;
     }
 
     @Basic
@@ -49,13 +49,13 @@ public class OperationEntity {
     }
 
     @Basic
-    @Column(name = "origin_paw", nullable = false, length = 200)
-    public String getOriginPaw() {
-        return originPaw;
+    @Column(name = "origin_pwd", nullable = false, length = 200)
+    public String getOriginPwd() {
+        return originPwd;
     }
 
-    public void setOriginPaw(String originPaw) {
-        this.originPaw = originPaw;
+    public void setOriginPwd(String originPwd) {
+        this.originPwd = originPwd;
     }
 
     @Basic
@@ -86,11 +86,11 @@ public class OperationEntity {
         OperationEntity that = (OperationEntity) o;
 
         if (id != that.id) return false;
-        if (pawId != that.pawId) return false;
+        if (pwdId != that.pwdId) return false;
         if (modifierId != that.modifierId) return false;
         if (originAccount != null ? !originAccount.equals(that.originAccount) : that.originAccount != null)
             return false;
-        if (originPaw != null ? !originPaw.equals(that.originPaw) : that.originPaw != null) return false;
+        if (originPwd != null ? !originPwd.equals(that.originPwd) : that.originPwd != null) return false;
         if (modifiedTime != null ? !modifiedTime.equals(that.modifiedTime) : that.modifiedTime != null) return false;
 
         return true;
@@ -99,32 +99,32 @@ public class OperationEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + pawId;
+        result = 31 * result + pwdId;
         result = 31 * result + (originAccount != null ? originAccount.hashCode() : 0);
-        result = 31 * result + (originPaw != null ? originPaw.hashCode() : 0);
+        result = 31 * result + (originPwd != null ? originPwd.hashCode() : 0);
         result = 31 * result + (modifiedTime != null ? modifiedTime.hashCode() : 0);
         result = 31 * result + modifierId;
         return result;
     }
 
     @ManyToOne
-    @JoinColumn(name = "paw_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    public PasswordEntity getPasswordByPawId() {
-        return passwordByPawId;
+    @JoinColumn(name = "pwd_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public PasswordEntity getPasswordByPwdId() {
+        return passwordByPwdId;
     }
 
-    public void setPasswordByPawId(PasswordEntity passwordByPawId) {
-        this.passwordByPawId = passwordByPawId;
+    public void setPasswordByPwdId(PasswordEntity passwordByPwdId) {
+        this.passwordByPwdId = passwordByPwdId;
     }
 
     @ManyToOne
-    @JoinColumn(name = "paw_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
-    public PasswordEntity getPasswordByPawId_0() {
-        return passwordByPawId_0;
+    @JoinColumn(name = "pwd_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    public PasswordEntity getPasswordByPwdId_0() {
+        return passwordByPwdId_0;
     }
 
-    public void setPasswordByPawId_0(PasswordEntity passwordByPawId_0) {
-        this.passwordByPawId_0 = passwordByPawId_0;
+    public void setPasswordByPwdId_0(PasswordEntity passwordByPwdId_0) {
+        this.passwordByPwdId_0 = passwordByPwdId_0;
     }
 
     @ManyToOne

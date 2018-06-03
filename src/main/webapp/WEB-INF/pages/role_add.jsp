@@ -83,9 +83,9 @@
                         口令
                     <td>
                         <div class="layui-input-block">
-                            <input name="pawAdd" lay-skin="primary" type="checkbox" title="添加" value="1">
-                            <input name="pawEdit" lay-skin="primary" type="checkbox" value="1" title="修改">
-                            <input name="pawDelete" lay-skin="primary" type="checkbox" value="1" title="删除">
+                            <input name="pwdAdd" lay-skin="primary" type="checkbox" title="添加" value="1">
+                            <input name="pwdEdit" lay-skin="primary" type="checkbox" value="1" title="修改">
+                            <input name="pwdDelete" lay-skin="primary" type="checkbox" value="1" title="删除">
                         </div>
                     </td>
                 </tr>

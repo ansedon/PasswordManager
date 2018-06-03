@@ -164,7 +164,7 @@ public class PasswordEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "passwordByPawId")
+    @OneToMany(mappedBy = "passwordByPwdId")
     public Collection<OperationEntity> getOperationsById() {
         return operationsById;
     }
@@ -173,7 +173,7 @@ public class PasswordEntity {
         this.operationsById = operationsById;
     }
 
-    @OneToMany(mappedBy = "passwordByPawId_0")
+    @OneToMany(mappedBy = "passwordByPwdId_0")
     public Collection<OperationEntity> getOperationsById_0() {
         return operationsById_0;
     }

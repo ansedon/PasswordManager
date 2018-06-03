@@ -38,9 +38,9 @@ public class RoleEntity {
     private int resAdd;
     private int resEdit;
     private int resDelete;
-    private int pawAdd;
-    private int pawEdit;
-    private int pawDelete;
+    private int pwdAdd;
+    private int pwdEdit;
+    private int pwdDelete;
     private int userAdd;
     private int userEdit;
     private int userDelete;
@@ -103,30 +103,30 @@ public class RoleEntity {
     }
 
     @Transient
-    public int getPawAdd() {
-        return pawAdd;
+    public int getPwdAdd() {
+        return pwdAdd;
     }
 
-    public void setPawAdd(int pawAdd) {
-        this.pawAdd = pawAdd;
-    }
-
-    @Transient
-    public int getPawEdit() {
-        return pawEdit;
-    }
-
-    public void setPawEdit(int pawEdit) {
-        this.pawEdit = pawEdit;
+    public void setPwdAdd(int pwdAdd) {
+        this.pwdAdd = pwdAdd;
     }
 
     @Transient
-    public int getPawDelete() {
-        return pawDelete;
+    public int getPwdEdit() {
+        return pwdEdit;
     }
 
-    public void setPawDelete(int pawDelete) {
-        this.pawDelete = pawDelete;
+    public void setPwdEdit(int pwdEdit) {
+        this.pwdEdit = pwdEdit;
+    }
+
+    @Transient
+    public int getPwdDelete() {
+        return pwdDelete;
+    }
+
+    public void setPwdDelete(int pwdDelete) {
+        this.pwdDelete = pwdDelete;
     }
 
     @Transient

@@ -16,7 +16,7 @@ public class OperationService {
         operationRepository.saveAndFlush(operationEntity);
     }
 
-    public List<OperationEntity> findByPawId(int id){
-        return operationRepository.findAllByPawIdOrderByModifiedTimeDesc(id);
+    public List<OperationEntity> findByPwdId(int id){
+        return operationRepository.findAllByPwdIdOrderByModifiedTimeDesc(id);
     }
 }

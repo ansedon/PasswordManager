@@ -32,7 +32,7 @@
 </script>
 
 <script id="psTpl" type="text/html">
-    <span data="{{d.originPaw}}">******</span>
+    <span data="{{d.originPwd}}">******</span>
     <a onclick="showPassword(this)">
         <i class="iconfont">&#xe6e6;</i>
     </a>
@@ -62,7 +62,7 @@
             var cols = [[
                 {field: 'id', title: 'ID', sort: true, width: 100}
                 , {field: 'originAccount', title: '原账号', sort: true}
-                , {field: 'originPaw', title: '原密码', sort: true, templet: '#psTpl'}
+                , {field: 'originPwd', title: '原密码', sort: true, templet: '#psTpl'}
                 , {field: 'modifierName', title: '修改人', sort: true}
                 , {field: 'modifiedTime', title: '修改时间'}
                 , {field: '', title: '操作', toolbar: '#bar'}
@@ -82,7 +82,7 @@
                     ajax('/password/list/recover', {
                         id: $('#id').val(),
                         account: data.originAccount,
-                        password: data.originPaw
+                        password: data.originPwd
                     }, function (msg) {
                         if (msg.result == "OK")
                             layer.msg("恢复成功！", {time: 500}, function () {
