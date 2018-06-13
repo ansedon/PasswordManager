@@ -106,7 +106,7 @@ public class ConfigurationBuilder
     public static List<Dictionary> getDefaultDictionaries()
     {
         List<Dictionary> tmpDictionaries = new ArrayList<>();
-        tmpDictionaries.add(new Dictionary("customs",DictionaryUtil.loadRankedDictionary(DictionaryUtil.customs),false));
+        tmpDictionaries.add(new Dictionary("customs",DictionaryUtil.loadRankedDictionary(DictionaryUtil.customs),true));
         tmpDictionaries.add(new Dictionary("passwords", DictionaryUtil.loadRankedDictionary(DictionaryUtil.passwords), false));
         tmpDictionaries.add(new Dictionary("male_names", DictionaryUtil.loadRankedDictionary(DictionaryUtil.male_names), false));
         tmpDictionaries.add(new Dictionary("female_names", DictionaryUtil.loadRankedDictionary(DictionaryUtil.female_names), false));

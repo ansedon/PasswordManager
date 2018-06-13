@@ -121,7 +121,7 @@
                             $(".layui-laypage-btn",parent.document).click();
                         })
                     } else {
-                        layer.msg(res.msg, {time: 500});
+                        layer.msg(res.msg, {time: 1000});
                     }
                 })
                 return false;

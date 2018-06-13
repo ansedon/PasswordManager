@@ -15,4 +15,6 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity,Integ
     @Modifying
     @Query("update UserGroupEntity user set user.groupId=?2 where user.userId=?1")
     void update(int userId,int groupId);
+
+    int countAllByGroupId(int id);
 }

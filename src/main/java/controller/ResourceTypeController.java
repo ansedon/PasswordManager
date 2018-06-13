@@ -1,16 +1,23 @@
 package controller;
 
 import json.*;
+import model.PrivilegeEntity;
 import model.ResourceTypeEntity;
+import model.RoleEntity;
+import model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import service.PrivilegeService;
+import service.ResourceService;
 import service.ResourceTypeService;
+import service.RoleService;
 import tool.ReflectUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,10 +29,25 @@ import java.util.List;
 @Controller
 public class ResourceTypeController {
     @Autowired
+    ResourceService resourceService;
+
+    @Autowired
     ResourceTypeService resourceTypeService;
 
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+    PrivilegeService privilegeService;
+
     @RequestMapping(value="/resource/type",method = RequestMethod.GET)
-    public String index(){
+    public String index(ModelMap modelMap, HttpSession session){
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
+        modelMap.addAttribute("user",session.getAttribute(Session.USER));
+        modelMap.addAttribute("role",roleEntity);
+        modelMap.addAttribute("privilege",privilegeEntity);
         return "type";
     }
 
@@ -62,9 +84,18 @@ public class ResourceTypeController {
 
     @ResponseBody
     @RequestMapping(value = "/resource/type/update",method = RequestMethod.POST)
-    public ResponseEntity<Object> update(@RequestBody ResourceTypeEntity resourceTypeEntity){
+    public ResponseEntity<Object> update(@RequestBody ResourceTypeEntity resourceTypeEntity,HttpSession session){
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
         ParentResponse resp = new ParentResponse();
         if(resourceTypeEntity.getId()!=0){
+            //没有编辑资源类型的权限
+            if(privilegeEntity.getTypeEdit()!=1){
+                resp.result = "Fail";
+                resp.msg = "您没有编辑资源类型的权限，请刷新网页！";
+                return new ResponseEntity<Object>(resp, HttpStatus.OK);
+            }
             ResourceTypeEntity resourceTypeEntity1=resourceTypeService.findResourceTypeEntityById(resourceTypeEntity.getId());
             resourceTypeEntity.setCreateTime(resourceTypeEntity1.getCreateTime());
             resourceTypeEntity.setIsDeleted(resourceTypeEntity1.getIsDeleted());
@@ -77,6 +108,12 @@ public class ResourceTypeController {
                 resourceTypeEntity.setDescription((resourceTypeEntity1.getDescription()));
             }
         }else{
+            //没有添加资源类型的权限
+            if(privilegeEntity.getTypeAdd()!=1){
+                resp.result = "Fail";
+                resp.msg = "您没有添加资源类型的权限，请刷新网页！";
+                return new ResponseEntity<Object>(resp, HttpStatus.OK);
+            }
             resourceTypeEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
             resourceTypeEntity.setIsDeleted((byte)0);
         }
@@ -128,12 +165,26 @@ public class ResourceTypeController {
 
     @ResponseBody
     @RequestMapping(value = "/resource/type/delete", method = RequestMethod.POST)
-    public ParentResponse deleteResourceType(@RequestBody IdRequest idRequest) {
+    public ParentResponse deleteResourceType(@RequestBody IdRequest idRequest,HttpSession session) {
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
         ParentResponse resp = new ParentResponse();
         int id = idRequest.id;
         if (id <= 0) {
             resp.result = "Fail";
             resp.msg = "删除失败！";
+            return resp;
+        }
+        if(privilegeEntity.getTypeDelete()!=1){
+            resp.result = "Fail";
+            resp.msg = "您没有删除资源类型的权限，请刷新网页！";
+            return resp;
+        }
+        //当资源类型中存在资源时无法删除
+        if(resourceService.countByTypeId(id)>0){
+            resp.result = "Fail";
+            resp.msg = "有资源属于该资源类型，您无法删除";
             return resp;
         }
         int result = resourceTypeService.deleteResourceTypeById(id);

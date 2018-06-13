@@ -10,6 +10,10 @@ public class UserGroupService {
     @Autowired
     UserGroupRepository userGroupRepository;
 
+    public int countAllByGroupId(int id){
+        return userGroupRepository.countAllByGroupId(id);
+    }
+
     public UserGroupEntity findByUserId(int userId){
         return userGroupRepository.findByUserId(userId);
     }

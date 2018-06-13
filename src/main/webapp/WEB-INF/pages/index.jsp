@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <!doctype html>
 <html lang="en">
@@ -24,20 +25,10 @@
     <div class="left_open">
         <i title="展开左侧栏" class="iconfont">&#xe699;</i>
     </div>
-    <%--<ul class="layui-nav left fast-add" lay-filter="">--%>
-        <%--<li class="layui-nav-item">--%>
-            <%--<a href="javascript:;">+新增</a>--%>
-            <%--<dl class="layui-nav-child"> <!-- 二级菜单 -->--%>
-                <%--<dd><a onclick="layer_show('资讯','http://www.baidu.com')"><i class="iconfont">&#xe6a2;</i>资讯</a></dd>--%>
-                <%--<dd><a onclick="layer_show('图片','http://www.baidu.com')"><i class="iconfont">&#xe6a8;</i>图片</a></dd>--%>
-                <%--<dd><a onclick="tabClick('资源列表')"><i class="iconfont">&#xe6b8;</i>用户</a></dd>--%>
-            <%--</dl>--%>
-        <%--</li>--%>
-    <%--</ul>--%>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
             <a href="javascript:;">${user.account}</a>
-            <dl class="layui-nav-child"> <!-- 二级菜单 -->
+            <dl class="layui-nav-child">
                 <dd><a href="/logout">退出</a></dd>
             </dl>
         </li>
@@ -126,18 +117,20 @@
                             <cite>用户管理</cite>
                         </a>
                     </li>
-                    <li>
-                        <a _href="manage/role">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>角色管理</cite>
-                        </a>
-                    </li>
-                    <li>
-                        <a _href="manage/loginlog">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>登录日志</cite>
-                        </a>
-                    </li>
+                    <c:if test="${role.id==1}">
+                        <li>
+                            <a _href="manage/role">
+                                <i class="iconfont">&#xe6a7;</i>
+                                <cite>角色管理</cite>
+                            </a>
+                        </li>
+                        <li>
+                            <a _href="manage/loginlog">
+                                <i class="iconfont">&#xe6a7;</i>
+                                <cite>登录日志</cite>
+                            </a>
+                        </li>
+                    </c:if>
                 </ul>
             </li>
         </ul>

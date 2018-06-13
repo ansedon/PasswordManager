@@ -20,4 +20,5 @@ public interface RoleRepository extends JpaRepository<RoleEntity,Integer>,JpaSpe
     int deleteRoleById(int id);
 
     List<RoleEntity> findAllByLevelGreaterThan(int level);
+
 }

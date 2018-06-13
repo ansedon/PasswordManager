@@ -45,15 +45,23 @@
             <div id="jstree"></div>
         </div>
         <div class="layui-col-md10">
-            <xblock>
-                <button class="layui-btn" id="addBtn">添加</button>
-                <button class="layui-btn" id="edit">
-                    修改
-                </button>
-                <button class="layui-btn layui-btn-danger" id="delete">
-                    删除
-                </button>
-            </xblock>
+            <c:if test="${privilege.typeAdd==1||privilege.typeEdit==1||privilege.typeDelete==1}">
+                <xblock>
+                    <c:if test="${privilege.typeAdd==1}">
+                        <button class="layui-btn" id="addBtn">添加</button>
+                    </c:if>
+                    <c:if test="${privilege.typeEdit==1}">
+                        <button class="layui-btn" id="edit">
+                            修改
+                        </button>
+                    </c:if>
+                    <c:if test="${privilege.typeDelete==1}">
+                        <button class="layui-btn layui-btn-danger" id="delete">
+                            删除
+                        </button>
+                    </c:if>
+                </xblock>
+            </c:if>
             <form class="layui-form layui-form-pane">
                 <input type="hidden" name="id" id="nodeId" class="layui-input">
                 <div class="layui-form-item">
@@ -107,20 +115,5 @@
         </div>
     </form>
 </div>
-
-<script id="bar" type="text/html">
-    <c:choose>
-        <c:when test="${requestScope.newFlag== '1' || requestScope.newFlag== '2' ||requestScope.newFlag== '3'}">
-        </c:when>
-        <c:otherwise>
-            <a title="编辑" lay-event="edit">
-                <i class="layui-icon">&#xe642;</i>
-            </a>
-        </c:otherwise>
-    </c:choose>
-    <a title="删除" lay-event="delete">
-        <i class="layui-icon">&#xe640;</i>
-    </a>
-</script>
 </body>
 </html>

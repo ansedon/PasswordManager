@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
@@ -44,18 +45,28 @@
             <div id="jstree"></div>
         </div>
         <div class="layui-col-md10">
-            <xblock>
-                <button class="layui-btn" id="addBtn">添加</button>
-                <button class="layui-btn" id="edit">
-                    修改
-                </button>
-                <button class="layui-btn layui-btn-danger" id="delete">
-                    删除
-                </button>
-                <button class="layui-btn" id="allot">
-                    分配资源
-                </button>
-            </xblock>
+            <c:if test="${privilege.groupAdd==1||privilege.groupDelete==1||privilege.groupEdit==1}">
+                <xblock>
+                    <c:if test="${privilege.groupAdd==1}">
+                        <button class="layui-btn" id="addBtn">添加</button>
+                    </c:if>
+                    <c:if test="${privilege.groupEdit==1}">
+                        <button class="layui-btn" id="edit">
+                            修改
+                        </button>
+                    </c:if>
+                    <c:if test="${privilege.groupDelete==1}">
+                        <button class="layui-btn layui-btn-danger" id="delete">
+                            删除
+                        </button>
+                    </c:if>
+                    <c:if test="${privilege.groupEdit==1}">
+                        <button class="layui-btn" id="allot">
+                            分配资源
+                        </button>
+                    </c:if>
+                </xblock>
+            </c:if>
             <form class="layui-form layui-form-pane">
                 <input type="hidden" name="id" id="nodeId" class="layui-input">
                 <div class="layui-form-item">

@@ -2,26 +2,58 @@ $(function () {
     layui.use(['form', 'table', 'laydate'], function () {
         var form = layui.form, laydate = layui.laydate, table = layui.table, mymod = layui.mymod;
         layer=layui.layer;
-        var cols = [[
-            {field: 'id', title: 'ID', sort: true, width: 100}
-            , {field: 'account', title: '账户', sort: true,templet:function (d) {
-                return "<a class='layui-table-link' onclick='layer_show(\""+d.account+"-修改记录\",\"/password/operation/"+d.id+"\")'>"+d.account+"</a>"
-            }}
-            , {field: 'password', title: '口令',minWidth:200, templet: "#psTpl"}
-            , {field: 'resourceName', title: '资源名称', sort: true}
-            , {field: 'modifierName', title: '修改时间', sort: true}
-            , {
-                field: 'expireTime', title: '失效时间', sort: true, templet: function (d) {
-                    if (d.expireTime == null)
-                        return "永久有效";
-                    else if(new Date(d.expireTime)<new Date())
-                        return "已失效"+"<a onclick='resetExpireTime("+d.id+")'><i class=\"layui-icon\">&#xe642;</i></a>";
-                    return d.expireTime;
+        var cols;
+        if($("#passwordTable").attr('bar')==1){
+            cols=[[
+                {field: 'id', title: 'ID', sort: true, width: 100}
+                , {field: 'account', title: '账户', sort: true,templet:function (d) {
+                    return "<a class='layui-table-link' onclick='layer_show(\""+d.account+"-修改记录\",\"/password/operation/"+d.id+"\")'>"+d.account+"</a>"
+                }}
+                , {field: 'password', title: '口令',minWidth:200, templet: "#psTpl"}
+                , {field: 'resourceName', title: '资源名称', sort: true}
+                , {field: 'modifierName', title: '修改时间', sort: true}
+                , {
+                    field: 'expireTime', title: '失效时间', sort: true, templet: function (d) {
+                        if (d.expireTime == null)
+                            return "永久有效";
+                        else if(new Date(d.expireTime)<new Date()){
+                            if($('#passwordTable').attr("eidt")=='1')
+                                return "已失效"+"<a onclick='resetExpireTime("+d.id+")'><i class=\"layui-icon\">&#xe642;</i></a>";
+                            else
+                                return "已失效";
+                        }
+
+                        return d.expireTime;
+                    }
                 }
-            }
-            , {field: 'createTime', title: '创建时间', sort: true}
-            , {field: '', title: '操作', toolbar: '#bar'}
-        ]]
+                , {field: 'createTime', title: '创建时间', sort: true}
+                , {field: '', title: '操作', toolbar: '#bar'}
+            ]]
+        }else{
+            cols=[[
+                {field: 'id', title: 'ID', sort: true, width: 100}
+                , {field: 'account', title: '账户', sort: true,templet:function (d) {
+                    return "<a class='layui-table-link' onclick='layer_show(\""+d.account+"-修改记录\",\"/password/operation/"+d.id+"\")'>"+d.account+"</a>"
+                }}
+                , {field: 'password', title: '口令',minWidth:200, templet: "#psTpl"}
+                , {field: 'resourceName', title: '资源名称', sort: true}
+                , {field: 'modifierName', title: '修改时间', sort: true}
+                , {
+                    field: 'expireTime', title: '失效时间', sort: true, templet: function (d) {
+                        if (d.expireTime == null)
+                            return "永久有效";
+                        else if(new Date(d.expireTime)<new Date()){
+                            if($('#passwordTable').attr("edit")=='1')
+                                return "已失效"+"<a onclick='resetExpireTime("+d.id+")'><i class=\"layui-icon\">&#xe642;</i></a>";
+                            else
+                                return "已失效";
+                        }
+                        return d.expireTime;
+                    }
+                }
+                , {field: 'createTime', title: '创建时间', sort: true}
+            ]]
+        }
 
         table.render({
             elem: '#passwordTable'
@@ -89,7 +121,7 @@ $(function () {
                                     layer.close(index);
                                 })
                             } else {
-                                layer.msg(res.msg, {time: 500});
+                                layer.msg(res.msg, {time: 1000});
                             }
                         })
                         return false;
@@ -130,13 +162,13 @@ $(function () {
                                 $(".layui-laypage-btn").click();
                             })
                         else
-                            layer.msg(msg.msg);
+                            layer.msg(msg.msg,{time:1000});
                     })
                 });
             } else if (layEvent === 'edit') { //编辑
                 $('#id').val(data.id);
                 $("#account").val(data.account);
-                $("#password").val(data.password);
+                $("#password0").val(data.password);
                 $("#expireTime").val(data.expireTime);
                 layer.open({
                     type: 1,
@@ -159,7 +191,7 @@ $(function () {
                                         $(".layui-laypage-btn").click();
                                     })
                                 } else {
-                                    layer.msg(res.msg, {time: 500});
+                                    layer.msg(res.msg, {time: 1000});
                                 }
                             })
                             return false;
@@ -225,7 +257,7 @@ function resetExpireTime(id) {
                             $(".layui-laypage-btn").click();
                         })
                     } else {
-                        layer.msg(res.msg, {time: 500});
+                        layer.msg(res.msg, {time: 1000});
                     }
                 })
                 return false;

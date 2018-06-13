@@ -6,7 +6,7 @@ $(function () {
             {field: 'id', title: 'ID', sort: true, width: 100}
             , {field: 'name', title: '角色名称', sort: true}
             , {field: 'description', title: '角色介绍'}
-            , {field: 'level', title: '角色级别'}
+            , {field: 'level', title: '角色级别',sort:true}
             , {field: 'createTime', title: '创建时间', sort: true}
             , {field: '', title: '操作', toolbar: '#bar'}
         ]]

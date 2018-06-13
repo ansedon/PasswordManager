@@ -87,7 +87,7 @@
                                 table2.reload();
                             })
                         else
-                            layer.msg(msg.msg);
+                            layer.msg(msg.msg,{time:1000});
                     })
                 })
             })
@@ -103,7 +103,7 @@
                                 table2.reload();
                             })
                         else
-                            layer.msg(msg.msg);
+                            layer.msg(msg.msg,{time:1000});
                     })
                 })
             })

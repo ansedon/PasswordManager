@@ -15,4 +15,5 @@ public class PasswordParam {
     public int page;
     public int limit;
     public int isDeleted;
+    public int isExpired;
 }

@@ -27,4 +27,5 @@ public interface PasswordRepository extends JpaRepository<PasswordEntity,Integer
     int countAllByIsDeleted(byte value);
 
     int countAllByIsDeletedAndExpireTimeBefore(byte isDeleted, Timestamp time);
+
 }

@@ -149,7 +149,7 @@
             form.on('submit(edit)', function (data) {
                 ajax('/manage/role/update', data.field, function (res) {
                     if (res.result == "OK") {
-                        layer.msg('添加成功!', {time: 500}, function () {
+                        layer.msg('修改成功!', {time: 500}, function () {
                             //获得frame索引
                             var index = parent.layer.getFrameIndex(window.name);
                             //关闭当前frame

@@ -2,18 +2,33 @@ $(function () {
     layui.use(['form', 'table', 'laydate'], function () {
         var form = layui.form, laydate = layui.laydate, table = layui.table, mymod = layui.mymod;
         layer = layui.layer;
-        var cols = [[
-            {field: 'id', title: 'ID', sort: true, width: 100}
-            , {field: 'account', title: '账号', sort: true}
-            , {field: 'password', title: '密码', minWidth: 200, templet: "#psTpl"}
-            , {field: 'email', title: '电子邮箱', sort: true}
-            , {field: 'roleName', title: '角色名称', sort: true}
-            , {field: 'groupName', title: '所在部门', sort: true}
-            , {field: 'phone', title: '手机号', sort: true}
-            , {field: 'location', title: '位置', sort: true}
-            , {field: 'createTime', title: '创建时间', sort: true}
-            , {field: '', title: '操作', toolbar: '#bar'}
-        ]]
+        var cols;
+        if($('#userTable').attr('bar')==1) {
+            cols = [[
+                {field: 'id', title: 'ID', sort: true, width: 50}
+                , {field: 'account', title: '账号', sort: true}
+                , {field: 'password', title: '密码', minWidth: 100, templet: "#psTpl"}
+                , {field: 'email', title: '电子邮箱', sort: true}
+                , {field: 'roleName', title: '角色名称', sort: true}
+                , {field: 'groupName', title: '所在部门', sort: true}
+                , {field: 'phone', title: '手机号', sort: true}
+                , {field: 'location', title: '位置', sort: true}
+                , {field: 'createTime', title: '创建时间', sort: true}
+                , {field: '', title: '操作', toolbar: '#bar'}
+            ]]
+        }else {
+            cols = [[
+                {field: 'id', title: 'ID', sort: true, width: 50}
+                , {field: 'account', title: '账号', sort: true}
+                , {field: 'password', title: '密码', minWidth: 100, templet: "#psTpl"}
+                , {field: 'email', title: '电子邮箱', sort: true}
+                , {field: 'roleName', title: '角色名称', sort: true}
+                , {field: 'groupName', title: '所在部门', sort: true}
+                , {field: 'phone', title: '手机号', sort: true}
+                , {field: 'location', title: '位置', sort: true}
+                , {field: 'createTime', title: '创建时间', sort: true}
+            ]]
+        }
 
         table.render({
             elem: '#userTable'
@@ -55,7 +70,7 @@ $(function () {
 
         $('#jstree').on("changed.jstree", function (e, data) {
             var id = data.instance.get_node(data.selected).id;
-            if(id<=0)
+            if(id<=0||id==undefined)
                 $('#groupId').val(0);
             else
                 $('#groupId').val(id);
@@ -98,7 +113,7 @@ $(function () {
                                     layer.close(index);
                                 })
                             } else {
-                                layer.msg(res.msg, {time: 500});
+                                layer.msg(res.msg, {time: 1000});
                             }
                         })
                         return false;
@@ -152,7 +167,7 @@ $(function () {
                                 $(".layui-laypage-btn").click();
                             })
                         else
-                            layer.msg(msg.msg);
+                            layer.msg(msg.msg,{time:1000});
                     })
                 });
             } else if (layEvent === 'edit') { //编辑
@@ -191,7 +206,7 @@ $(function () {
                                         $(".layui-laypage-btn").click();
                                     })
                                 } else {
-                                    layer.msg(res.msg, {time: 500});
+                                    layer.msg(res.msg, {time: 1000});
                                 }
                             })
                             return false;

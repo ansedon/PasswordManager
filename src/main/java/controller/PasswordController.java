@@ -1,9 +1,7 @@
 package controller;
 
 import json.*;
-import model.OperationEntity;
-import model.PasswordEntity;
-import model.UserEntity;
+import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -11,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import service.OperationService;
-import service.PasswordService;
-import service.UserService;
+import service.*;
 import tool.PasswordUtils.Nbvcxz;
 import tool.PasswordUtils.resources.Configuration;
 import tool.PasswordUtils.resources.ConfigurationBuilder;
@@ -47,6 +43,12 @@ public class PasswordController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+    PrivilegeService privilegeService;
 
     @RequestMapping(value = "/password/eval", method = RequestMethod.GET)
     public String eval() {
@@ -93,8 +95,9 @@ public class PasswordController {
             resp.msg = "无";
         else {
             List<String> strs = result.getFeedback().getSuggestion();
+            resp.msg+= "1. "+result.getFeedback().getWarning()+"\n";
             for (int i = 0; i < strs.size(); i++) {
-                String s = (i + 1) + ". " + strs.get(i) + "\n";
+                String s = (i + 2) + ". " + strs.get(i) + "\n";
                 resp.msg += s;
             }
         }
@@ -190,8 +193,13 @@ public class PasswordController {
 
 
     @RequestMapping(value = "/password/list", method = RequestMethod.GET)
-    public String index() {
-        return "password_list";
+    public String index(ModelMap modelMap,HttpSession session) {
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
+        modelMap.addAttribute("user",session.getAttribute(Session.USER));
+        modelMap.addAttribute("role",roleEntity);
+        modelMap.addAttribute("privilege",privilegeEntity);return "password_list";
     }
 
     @ResponseBody
@@ -199,7 +207,15 @@ public class PasswordController {
     public ResponseEntity<Object> update(@RequestBody PasswordEntity passwordEntity, HttpSession session) {
         ParentResponse resp = new ParentResponse();
         UserEntity user = (UserEntity) session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(user.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
         if (passwordEntity.getId() != 0) {
+            //没有编辑口令权限
+            if(privilegeEntity.getPwdEdit()!=1){
+                resp.result = "Fail";
+                resp.msg = "您没有编辑口令的权限，请刷新网页！";
+                return new ResponseEntity<Object>(resp, HttpStatus.OK);
+            }
             PasswordEntity passwordEntity1 = passwordService.findPasswordEntityById(passwordEntity.getId());
             passwordEntity.setCreatorId(passwordEntity1.getCreatorId());
             passwordEntity.setModifiedTime(new Timestamp(System.currentTimeMillis()));
@@ -239,6 +255,12 @@ public class PasswordController {
                 }
             }
         } else {
+            //没有添加口令的权限
+            if(privilegeEntity.getResAdd()!=1){
+                resp.result = "Fail";
+                resp.msg = "您没有添加口令的权限，请刷新网页！";
+                return new ResponseEntity<Object>(resp, HttpStatus.OK);
+            }
             try {
                 passwordEntity.setPassword(RSAUtils.encryptByPublicKey(passwordEntity.getPassword(), publicKey));
             } catch (Exception e) {
@@ -283,6 +305,8 @@ public class PasswordController {
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
 
+
+    //口令表格数据
     @ResponseBody
     @RequestMapping(value = "/password/list/all", method = RequestMethod.GET)
     public ResponseEntity<Object> getPasswordList(HttpServletRequest request, HttpSession session) {
@@ -318,12 +342,20 @@ public class PasswordController {
 
     @ResponseBody
     @RequestMapping(value = "/password/list/delete", method = RequestMethod.POST)
-    public ParentResponse deletePassword(@RequestBody IdRequest idRequest) {
+    public ParentResponse deletePassword(@RequestBody IdRequest idRequest,HttpSession session) {
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
         ParentResponse resp = new ParentResponse();
         int id = idRequest.id;
         if (id <= 0) {
             resp.result = "Fail";
             resp.msg = "删除失败！";
+            return resp;
+        }
+        if(privilegeEntity.getPwdDelete()!=1){
+            resp.result = "Fail";
+            resp.msg = "您没有删除口令的权限，请刷新网页！";
             return resp;
         }
         int result = passwordService.deletePasswordById(id);

@@ -27,6 +27,7 @@ public class ResourceEntity {
     private Collection<ResourceGroupEntity> resourceGroupsById_1;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

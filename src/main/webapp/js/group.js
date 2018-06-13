@@ -41,7 +41,11 @@ $(function () {
             layer.confirm('确定移动部门？', {icon: 3, title: '提示'}, function (index) {
                 var d = {id: data.node.id, fatherGroupId: data.parent};
                 ajax('/group/list/update', d, function (res) {
-                    layer.msg("移动成功", {time: 500});
+                    layer.msg(res.msg, {time: 1000});
+                    ajax("/group/tree", '', function (json) {
+                        $("#jstree").jstree(true).settings.core.data = json;
+                        $("#jstree").jstree(true).refresh();
+                    })
                 })
             }, function (index) {
                 ajax("/group/tree", '', function (json) {
@@ -76,7 +80,7 @@ $(function () {
                                 $("#location1").val("");
                                 //关闭当前frame
                                 layer.close(index);
-                                layer.msg(res.msg, {time: 500});
+                                layer.msg(res.msg, {time: 1000});
                             }
                             ajax("/group/tree", '', function (json) {
                                 $("#jstree").jstree(true).settings.core.data = json;
@@ -134,7 +138,7 @@ $(function () {
                                 $('#add')[0].innerHTML = "添加";
                                 //关闭当前frame
                                 layer.close(index);
-                                layer.msg(res.msg, {time: 500});
+                                layer.msg(res.msg, {time: 1000});
                             }
                             ajax("/group/tree", '', function (json) {
                                 $("#jstree").jstree(true).settings.core.data = json;
@@ -170,7 +174,7 @@ $(function () {
                     if (msg.result == "OK")
                         layer.msg("删除成功！", {time: 500})
                     else
-                        layer.msg(msg.msg);
+                        layer.msg(msg.msg,{time:1000});
                     ajax("/group/tree", '', function (json) {
                         $("#jstree").jstree(true).settings.core.data = json;
                         $("#jstree").jstree(true).refresh();

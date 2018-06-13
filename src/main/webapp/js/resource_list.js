@@ -47,7 +47,7 @@ $(function  () {
 
         $('#jstree').on("changed.jstree", function (e, data) {
             var id = data.instance.get_node(data.selected).id;
-            if(id<=0)
+            if(id<=0||id==undefined)
                 $('#typeId').val(0);
             else
                 $('#typeId').val(id);

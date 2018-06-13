@@ -49,7 +49,7 @@ public class OperationEntity {
     }
 
     @Basic
-    @Column(name = "origin_pwd", nullable = false, length = 200)
+    @Column(name = "origin_pwd", nullable = false, length = 5000)
     public String getOriginPwd() {
         return originPwd;
     }

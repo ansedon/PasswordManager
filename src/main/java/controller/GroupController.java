@@ -2,6 +2,8 @@ package controller;
 
 import json.*;
 import model.CpGroupEntity;
+import model.PrivilegeEntity;
+import model.RoleEntity;
 import model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import service.GroupService;
+import service.PrivilegeService;
+import service.RoleService;
+import service.UserGroupService;
 import tool.ReflectUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +28,15 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+    PrivilegeService privilegeService;
+
+    @Autowired
+    UserGroupService userGroupService;
+
     @ResponseBody
     @RequestMapping(value = "/group/tree",method = RequestMethod.POST)
     public ResponseEntity<Object> getGroupTree(HttpSession session){
@@ -35,13 +49,14 @@ public class GroupController {
         if(groupId!=1){
             groupIds.add(groupId);
             List<CpGroupEntity> list=groupService.findAllByFatherGroupIds(ids);
+            ids.clear();
             while(list!=null&&list.size()>0){
                 for(CpGroupEntity cpGroupEntity:list){
-                    ids.clear();
                     groupIds.add(cpGroupEntity.getId());
                     ids.add(cpGroupEntity.getId());
                 }
                 list=groupService.findAllByFatherGroupIds(ids);
+                ids.clear();
             }
         }
         for(CpGroupEntity cpGroupEntity:groupEntities){
@@ -62,7 +77,13 @@ public class GroupController {
     }
 
     @RequestMapping(value = "/group/list", method = RequestMethod.GET)
-    public String index() {
+    public String index(ModelMap modelMap,HttpSession session) {
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
+        modelMap.addAttribute("user",session.getAttribute(Session.USER));
+        modelMap.addAttribute("role",roleEntity);
+        modelMap.addAttribute("privilege",privilegeEntity);
         return "group";
     }
 
@@ -92,8 +113,16 @@ public class GroupController {
     public ResponseEntity<Object> update(@RequestBody CpGroupEntity groupEntity, HttpSession session) {
         ParentResponse resp = new ParentResponse();
         UserEntity user = (UserEntity) session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(user.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
         //修改
         if (groupEntity.getId() != 0) {
+            //没有编辑部门权限
+            if(privilegeEntity.getGroupEdit()!=1){
+                resp.result = "Fail";
+                resp.msg = "您没有编辑部门的权限，请刷新网页！";
+                return new ResponseEntity<Object>(resp, HttpStatus.OK);
+            }
             CpGroupEntity groupEntity1 = groupService.findGroupById(groupEntity.getId());
             groupEntity.setCreatorId(groupEntity1.getCreatorId());
             groupEntity.setModifiedTime(new Timestamp(System.currentTimeMillis()));
@@ -108,7 +137,13 @@ public class GroupController {
                 groupEntity.setDescription(groupEntity1.getDescription());
                 groupEntity.setLocation(groupEntity1.getLocation());
             }
-        } else {//添加
+        } else {
+            //没有添加资源的权限
+            if(privilegeEntity.getGroupAdd()!=1){
+                resp.result = "Fail";
+                resp.msg = "您没有添加部门的权限，请刷新网页！";
+                return new ResponseEntity<Object>(resp, HttpStatus.OK);
+            }
             groupEntity.setCreatorId(user.getId());
             groupEntity.setModifierId(user.getId());
             groupEntity.setModifiedTime(new Timestamp(System.currentTimeMillis()));
@@ -205,12 +240,27 @@ public class GroupController {
 
     @ResponseBody
     @RequestMapping(value = "/group/list/delete", method = RequestMethod.POST)
-    public ParentResponse deleteGroup(@RequestBody IdRequest idRequest) {
+    public ParentResponse deleteGroup(@RequestBody IdRequest idRequest,HttpSession session) {
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
         ParentResponse resp = new ParentResponse();
         int id = idRequest.id;
         if (id <= 0) {
             resp.result = "Fail";
             resp.msg = "删除失败！";
+            return resp;
+        }
+        //没有删除部门权限
+        if(privilegeEntity.getGroupDelete()!=1){
+            resp.result = "Fail";
+            resp.msg = "您没有删除部门的权限，请刷新网页！";
+            return resp;
+        }
+        //部门下有用户,无法删除
+        if(userGroupService.countAllByGroupId(id)>0){
+            resp.result = "Fail";
+            resp.msg = "该部门下还有用户，无法删除！";
             return resp;
         }
         int result = groupService.deleteGroupById(id);

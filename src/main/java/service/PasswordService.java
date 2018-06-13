@@ -128,6 +128,9 @@ public class PasswordService {
                         list.add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(Timestamp.class), param.endTime));
                     }
                 }
+                if(param.isExpired==1){
+                    list.add(criteriaBuilder.lessThanOrEqualTo(root.get("expireTime").as(Timestamp.class),new Timestamp(System.currentTimeMillis())));
+                }
                 list.add(criteriaBuilder.equal(root.get("isDeleted").as(Byte.class), (byte) param.isDeleted));
                 Predicate[] p = new Predicate[list.size()];
                 return criteriaBuilder.and(list.toArray(p));

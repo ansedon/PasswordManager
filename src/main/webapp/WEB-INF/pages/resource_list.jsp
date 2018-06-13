@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
@@ -53,10 +54,12 @@
                     <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
                 </form>
             </div>
-            <xblock>
-                <button class="layui-btn" onclick="layer_show('添加','/resource/list/add')"><i class="layui-icon"></i>添加
-                </button>
-            </xblock>
+            <c:if test="${privilege.resAdd==1}">
+                <xblock>
+                    <button class="layui-btn" onclick="layer_show('添加','/resource/list/add')"><i class="layui-icon"></i>添加
+                    </button>
+                </xblock>
+            </c:if>
             <table class="layui-table" id="resourceTable" lay-filter="resourceTable"></table>
         </div>
     </div>
@@ -126,12 +129,16 @@
     <a title="查看" lay-event="view">
         <i class="iconfont">&#xe6e6;</i>
     </a>
-    <a title="编辑" lay-event="edit">
-        <i class="layui-icon">&#xe642;</i>
-    </a>
-    <a title="删除" lay-event="delete">
-        <i class="layui-icon">&#xe640;</i>
-    </a>
+    <c:if test="${privilege.resEdit==1}">
+        <a title="编辑" lay-event="edit">
+            <i class="layui-icon">&#xe642;</i>
+        </a>
+    </c:if>
+    <c:if test="${privilege.resDelete==1}">
+        <a title="删除" lay-event="delete">
+            <i class="layui-icon">&#xe640;</i>
+        </a>
+    </c:if>
 </script>
 </body>
 </html>

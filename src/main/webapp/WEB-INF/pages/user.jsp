@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
@@ -56,11 +57,13 @@
           <button class="layui-btn" lay-submit lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
         </form>
       </div>
-      <xblock>
-        <button class="layui-btn" id="addBtn"><i class="layui-icon"></i>添加
-        </button>
-      </xblock>
-      <table class="layui-table" id="userTable" lay-filter="userTable"></table>
+      <c:if test="${privilege.userAdd==1}">
+        <xblock>
+          <button class="layui-btn" id="addBtn"><i class="layui-icon"></i>添加
+          </button>
+        </xblock>
+      </c:if>
+      <table class="layui-table" id="userTable" lay-filter="userTable" <c:if test="${privilege.userEdit==1||privilege.userDelete==1}">bar="1"</c:if>></table>
     </div>
   </div>
 </div>
@@ -126,15 +129,18 @@
 </div>
 
 <script id="bar" type="text/html">
-  <a title="编辑" lay-event="edit">
-    <i class="layui-icon">&#xe642;</i>
-  </a>
-
-  {{#  if(d.id != 1){ }}
-  <a title="删除" lay-event="delete">
-    <i class="layui-icon">&#xe640;</i>
-  </a>
-  {{#  } }}
+  <c:if test="${privilege.userEdit==1}">
+    <a title="编辑" lay-event="edit">
+      <i class="layui-icon">&#xe642;</i>
+    </a>
+  </c:if>
+  <c:if test="${privilege.userDelete==1}">
+    {{#  if(d.id != 1){ }}
+    <a title="删除" lay-event="delete">
+      <i class="layui-icon">&#xe640;</i>
+    </a>
+    {{#  } }}
+  </c:if>
 </script>
 
 <script id="psTpl" type="text/html">

@@ -1,18 +1,14 @@
 package controller;
 
 import json.*;
-import model.CpGroupEntity;
-import model.ResourceEntity;
-import model.ResourceGroupEntity;
+import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import service.GroupService;
-import service.ResourceGroupService;
-import service.ResourceService;
+import service.*;
 import tool.ReflectUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +28,23 @@ public class ResourceController {
     @Autowired
     ResourceGroupService resourceGroupService;
 
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+    PrivilegeService privilegeService;
+
+    @Autowired
+    PasswordService passwordService;
+
     @RequestMapping(value = "/resource/list", method = RequestMethod.GET)
-    public String resource() {
+    public String resource(ModelMap modelMap,HttpSession session) {
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
+        modelMap.addAttribute("user",session.getAttribute(Session.USER));
+        modelMap.addAttribute("role",roleEntity);
+        modelMap.addAttribute("privilege",privilegeEntity);
         return "resource_list";
     }
 
@@ -51,17 +62,38 @@ public class ResourceController {
     }
 
     @RequestMapping(value = "/resource/list/update", method = RequestMethod.POST)
-    public ResponseEntity<Object> update(@RequestBody ResourceEntity resourceEntity) {
+    public ResponseEntity<Object> update(@RequestBody ResourceEntity resourceEntity,HttpSession session) {
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
         ParentResponse resp = new ParentResponse();
         if (resourceEntity.getId() != 0) {
+            //没有编辑资源权限
+            if(privilegeEntity.getResEdit()!=1){
+                resp.result = "Fail";
+                resp.msg = "您没有编辑资源的权限，请刷新网页！";
+                return new ResponseEntity<Object>(resp, HttpStatus.OK);
+            }
             ResourceEntity resourceEntity1 = resourceService.findResourceEntityById(resourceEntity.getId());
             resourceEntity.setCreateTime(resourceEntity1.getCreateTime());
             resourceEntity.setIsDeleted(resourceEntity1.getIsDeleted());
+            resourceService.update(resourceEntity);
         } else {
+            //没有添加资源的权限
+            if(privilegeEntity.getResAdd()!=1){
+                resp.result = "Fail";
+                resp.msg = "您没有添加资源的权限，请刷新网页！";
+                return new ResponseEntity<Object>(resp, HttpStatus.OK);
+            }
             resourceEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
             resourceEntity.setIsDeleted((byte) 0);
+            resourceService.update(resourceEntity);
+            //资源为部门资源
+            ResourceGroupEntity resourceGroupEntity=new ResourceGroupEntity();
+            resourceGroupEntity.setResId(resourceEntity.getId());
+            resourceGroupEntity.setGroupId((int)session.getAttribute(Session.GROUPID));
+            resourceGroupService.insert(resourceGroupEntity);
         }
-        resourceService.update(resourceEntity);
         resp.result = "OK";
         resp.msg = "操作成功！";
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
@@ -83,25 +115,29 @@ public class ResourceController {
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
 
+    //资源表格数据
     @ResponseBody
     @RequestMapping(value = "/resource/list/all", method = RequestMethod.GET)
     public ResponseEntity<Object> getResourceList(HttpServletRequest request, HttpSession session) {
         ResourceParam resourceParam = new ResourceParam();
+        resourceParam.groupList=new ArrayList<>();
         ReflectUtils.convert(resourceParam, request);
         if (resourceParam.page > 0)
             resourceParam.page -= 1;
         resourceParam.groupId = (int) session.getAttribute(Session.GROUPID);
         List<Integer> ids = new ArrayList<Integer>();
         ids.add(resourceParam.groupId);
+        resourceParam.groupList.add(resourceParam.groupId);
         if (resourceParam.groupId != 1) {
             List<CpGroupEntity> lists = groupService.findAllByFatherGroupIds(ids);
+            ids.clear();
             while (lists != null && lists.size() != 0) {
-                ids.clear();
                 for (CpGroupEntity g : lists) {
                     ids.add(g.getId());
                     resourceParam.groupList.add(g.getId());
                 }
                 lists = groupService.findAllByFatherGroupIds(ids);
+                ids.clear();
             }
         }
         ParentResponse resp = new ParentResponse();
@@ -138,13 +174,14 @@ public class ResourceController {
         ids.add(id);
         if (id != 1) {
             List<CpGroupEntity> lists = groupService.findAllByFatherGroupIds(ids);
+            ids.clear();
             while (lists != null && lists.size() != 0) {
-                ids.clear();
                 for (CpGroupEntity g : lists) {
                     ids.add(g.getId());
                     groupIds.add(g.getId());
                 }
                 lists = groupService.findAllByFatherGroupIds(ids);
+                ids.clear();
             }
             List<ResourceEntity> resourceEntities = resourceService.getResourceEntitiesByGroupIds(groupIds);
             if (resourceEntities != null) {
@@ -169,12 +206,20 @@ public class ResourceController {
 
     @ResponseBody
     @RequestMapping(value = "/resource/list/delete", method = RequestMethod.POST)
-    public ParentResponse deleteResource(@RequestBody IdRequest idRequest) {
+    public ParentResponse deleteResource(@RequestBody IdRequest idRequest,HttpSession session) {
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
         ParentResponse resp = new ParentResponse();
         int id = idRequest.id;
         if (id <= 0) {
             resp.result = "Fail";
             resp.msg = "删除失败！";
+            return resp;
+        }
+        if(privilegeEntity.getResDelete()!=1){
+            resp.result = "Fail";
+            resp.msg = "您没有删除资源的权限，请刷新网页！";
             return resp;
         }
         int result = resourceService.deleteResourceById(id);
@@ -201,13 +246,14 @@ public class ResourceController {
         ids.add(resourceParam.groupId);
         resourceParam.groupList.add(resourceParam.groupId);
         List<CpGroupEntity> lists = groupService.findAllByFatherGroupIds(ids);
+        ids.clear();
         while (lists != null && lists.size() != 0) {
-            ids.clear();
             for (CpGroupEntity g : lists) {
                 ids.add(g.getId());
                 resourceParam.groupList.add(g.getId());
             }
             lists = groupService.findAllByFatherGroupIds(ids);
+            ids.clear();
         }
         List<ResourceEntity> resourceEntities = resourceService.findByCondition(resourceParam);
         if (resourceEntities != null) {
@@ -301,7 +347,16 @@ public class ResourceController {
     @ResponseBody
     @RequestMapping(value = "/resource/list/change", method = RequestMethod.POST)
     public ResponseEntity<Object> getRemovedResource(@RequestBody ChangeRequest changeRequest, HttpSession session) {
+        UserEntity userEntity=(UserEntity)session.getAttribute(Session.USER);
+        RoleEntity roleEntity=roleService.findById(userEntity.getRoleId());
+        PrivilegeEntity privilegeEntity=privilegeService.findById(roleEntity.getPrivilegeId());
         ParentResponse resp = new ParentResponse();
+        //没有分配权限
+        if(privilegeEntity.getGroupEdit()!=1){
+            resp.result="Fail";
+            resp.msg="没有分配资源的权限，请刷新网页！";
+            return new ResponseEntity<Object>(resp, HttpStatus.OK);
+        }
        if(changeRequest.isRemove==0){
            if(resourceGroupService.findByResIdAndGroupId(changeRequest.resId,changeRequest.groupId)!=null){
                resp.result="Fail";

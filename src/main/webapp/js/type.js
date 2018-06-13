@@ -35,7 +35,11 @@ $(function () {
             layer.confirm('确定移动该资源类型？', {icon: 3, title: '提示'}, function (index) {
                 var d = {id: data.node.id, fatherTypeId: data.parent};
                 ajax('/resource/type/update', d, function (res) {
-                    layer.msg("移动成功", {time: 500});
+                    layer.msg(res.msg, {time: 1000});
+                    ajax("/resource/type/tree", '', function (json) {
+                        $("#jstree").jstree(true).settings.core.data = json;
+                        $("#jstree").jstree(true).refresh();
+                    })
                 })
             }, function (index) {
                 ajax("/resource/type/tree", '', function (json) {
@@ -68,7 +72,7 @@ $(function () {
                                 $("#description1").val("");
                                 //关闭当前frame
                                 layer.close(index);
-                                layer.msg(res.msg, {time: 500});
+                                layer.msg(res.msg,{time:1000});
                             }
                             ajax("/resource/type/tree", '', function (json) {
                                 $("#jstree").jstree(true).settings.core.data = json;
@@ -123,7 +127,7 @@ $(function () {
                                 $('#add')[0].innerHTML = "添加";
                                 //关闭当前frame
                                 layer.close(index);
-                                layer.msg(res.msg, {time: 500});
+                                layer.msg(res.msg,{time:1000});
                             }
                             ajax("/resource/type/tree", '', function (json) {
                                 $("#jstree").jstree(true).settings.core.data = json;
@@ -159,7 +163,7 @@ $(function () {
                     if (msg.result == "OK")
                         layer.msg("删除成功！", {time: 500})
                     else
-                        layer.msg(msg.msg);
+                        layer.msg(msg.msg,{time:1000});
                     ajax("/resource/type/tree", '', function (json) {
                         $("#jstree").jstree(true).settings.core.data = json;
                         $("#jstree").jstree(true).refresh();

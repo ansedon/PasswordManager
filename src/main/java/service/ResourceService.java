@@ -22,6 +22,10 @@ public class ResourceService {
     @Autowired
     ResourceRepository resourceRepository;
 
+    public int countByTypeId(int id){
+        return resourceRepository.countAllByTypeIdAndIsDeleted(id,(byte)0);
+    }
+
     public int countAll(){
         return resourceRepository.countAllByIsDeleted((byte)0);
     }
