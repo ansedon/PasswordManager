@@ -5,9 +5,6 @@ import json.ParentResponse;
 import json.Session;
 import model.LoginLogEntity;
 import model.UserEntity;
-import nl.bitwalker.useragentutils.Browser;
-import nl.bitwalker.useragentutils.OperatingSystem;
-import nl.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -91,34 +88,89 @@ public class LoginController {
         LoginLogEntity loginLogEntity = new LoginLogEntity();
         loginLogEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
         //获取浏览器信息
-        String ua = request.getHeader("User-Agent");
-        //转成UserAgent对象
-        UserAgent userAgent = UserAgent.parseUserAgentString(ua);
-        //获取浏览器信息
-        Browser browser = userAgent.getBrowser();
-        //获取系统信息
-        OperatingSystem os = userAgent.getOperatingSystem();
-        //系统名称
-        String system = os.getName();
-        //浏览器名称
-        String browserName = browser.getName();
+        String browserDetails = request.getHeader("User-Agent");
+        String userAgent = browserDetails;
+        String user = userAgent.toLowerCase();
+
+        String os = "";
+        String browser = "";
+
+        //=================OS Info=======================
+        if (userAgent.toLowerCase().indexOf("windows") >= 0) {
+            os = "Windows";
+        } else if (userAgent.toLowerCase().indexOf("mac") >= 0) {
+            os = "Mac";
+        } else if (userAgent.toLowerCase().indexOf("x11") >= 0) {
+            os = "Unix";
+        } else if (userAgent.toLowerCase().indexOf("android") >= 0) {
+            os = "Android";
+        } else if (userAgent.toLowerCase().indexOf("iphone") >= 0) {
+            os = "IPhone";
+        } else {
+            os = "UnKnown, More-Info: " + userAgent;
+        }
+        //===============Browser===========================
+        if (user.contains("edge")) {
+            browser = (userAgent.substring(userAgent.indexOf("Edge")).split(" ")[0]).replace("/", "-");
+        } else if (user.contains("msie")) {
+            String substring = userAgent.substring(userAgent.indexOf("MSIE")).split(";")[0];
+            browser = substring.split(" ")[0].replace("MSIE", "IE") + "-" + substring.split(" ")[1];
+        } else if (user.contains("safari") && user.contains("version")) {
+            browser = (userAgent.substring(userAgent.indexOf("Safari")).split(" ")[0]).split("/")[0]
+                    + "-" + (userAgent.substring(userAgent.indexOf("Version")).split(" ")[0]).split("/")[1];
+        } else if (user.contains("opr") || user.contains("opera")) {
+            if (user.contains("opera")) {
+                browser = (userAgent.substring(userAgent.indexOf("Opera")).split(" ")[0]).split("/")[0]
+                        + "-" + (userAgent.substring(userAgent.indexOf("Version")).split(" ")[0]).split("/")[1];
+            } else if (user.contains("opr")) {
+                browser = ((userAgent.substring(userAgent.indexOf("OPR")).split(" ")[0]).replace("/", "-"))
+                        .replace("OPR", "Opera");
+            }
+
+        } else if (user.contains("chrome")) {
+            browser = (userAgent.substring(userAgent.indexOf("Chrome")).split(" ")[0]).replace("/", "-");
+        } else if ((user.indexOf("mozilla/7.0") > -1) || (user.indexOf("netscape6") != -1) ||
+                (user.indexOf("mozilla/4.7") != -1) || (user.indexOf("mozilla/4.78") != -1) ||
+                (user.indexOf("mozilla/4.08") != -1) || (user.indexOf("mozilla/3") != -1)) {
+            browser = "Netscape-?";
+
+        } else if (user.contains("firefox")) {
+            browser = (userAgent.substring(userAgent.indexOf("Firefox")).split(" ")[0]).replace("/", "-");
+        } else if (user.contains("rv")) {
+            String IEVersion = (userAgent.substring(userAgent.indexOf("rv")).split(" ")[0]).replace("rv:", "-");
+            browser = "IE" + IEVersion.substring(0, IEVersion.length() - 1);
+        } else {
+            browser = "UnKnown, More-Info: " + userAgent;
+        }
+
+
+//        //转成UserAgent对象
+//        UserAgent userAgent = UserAgent.parseUserAgentString(ua);
+//        //获取浏览器信息
+//        Browser browser = userAgent.getBrowser();
+//        //获取系统信息
+//        OperatingSystem os = userAgent.getOperatingSystem();
+//        //系统名称
+//        String system = os.getName();
+//        //浏览器名称
+//        String browserName = browser.getName();
         //ip地址
         String ip = IpAddressUtils.getIpAdrress(request);
-        loginLogEntity.setBrowserInfo(browserName);
+        loginLogEntity.setBrowserInfo(browser);
         loginLogEntity.setIp(ip);
-        loginLogEntity.setOsInfo(system);
+        loginLogEntity.setOsInfo(os);
         loginLogEntity.setUserId(userEntity.getId());
         loginLogEntity.setRoleId(userEntity.getRoleId());
         loginLogService.insert(loginLogEntity);
         //该账号已经被登陆
         if (null != SessionManageListener.sessionMap.get(userEntity.getAccount())) {
             //如果不是同一个浏览器
-            if(SessionManageListener.sessionMap.get(userEntity.getAccount()).getId()!=session.getId())
+            if (SessionManageListener.sessionMap.get(userEntity.getAccount()).getId() != session.getId())
                 // 将已经登陆的信息拿掉,将新的用户登录信息放进去
                 ForceLogoutUtils.forceUserLogout(userEntity.getAccount());
         }
         session.setAttribute(Session.USER, userEntity);
-        session.setAttribute(Session.GROUPID,userGroupService.findByUserId(userEntity.getId()).getGroupId());
+        session.setAttribute(Session.GROUPID, userGroupService.findByUserId(userEntity.getId()).getGroupId());
         SessionManageListener.sessionMap.put(userEntity.getAccount(), session);
         checkLoginResponse.result = "OK";
         return checkLoginResponse;

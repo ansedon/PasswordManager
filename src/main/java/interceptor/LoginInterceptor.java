@@ -38,13 +38,14 @@ public class LoginInterceptor implements HandlerInterceptor {
         //获取请求的URL
         String url = request.getRequestURI();
         //除了login.jsp和静态文件是可以公开访问的，其它的URL都进行拦截控制
-        if(url.indexOf("login")>=0||url.indexOf("css")>0||url.indexOf("js")>0||url.indexOf("lib")>0||url.indexOf("fonts")>0||url.indexOf("images")>0){
+        if (url.indexOf("login") >= 0 || url.indexOf("css") > 0 || url.indexOf("js") > 0
+                || url.indexOf("lib") > 0 || url.indexOf("fonts") > 0 || url.indexOf("images") > 0) {
             return true;
         }
         //获取Session
         HttpSession session = request.getSession();
-        UserEntity userEntity = (UserEntity)session.getAttribute(Session.USER);
-        if(userEntity != null){
+        UserEntity userEntity = (UserEntity) session.getAttribute(Session.USER);
+        if (userEntity != null) {
             return true;
         }
         //不符合条件的，跳转到登录界面

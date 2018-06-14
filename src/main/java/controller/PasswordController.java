@@ -252,11 +252,13 @@ public class PasswordController {
                     operationEntity.setModifierId(user.getId());
                     operationEntity.setModifiedTime(new Timestamp(System.currentTimeMillis()));
                     operationService.update(operationEntity);
+                }else{
+                    passwordService.update(passwordEntity);
                 }
             }
         } else {
             //没有添加口令的权限
-            if(privilegeEntity.getResAdd()!=1){
+            if(privilegeEntity.getPwdAdd()!=1){
                 resp.result = "Fail";
                 resp.msg = "您没有添加口令的权限，请刷新网页！";
                 return new ResponseEntity<Object>(resp, HttpStatus.OK);
